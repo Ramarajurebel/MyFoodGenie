@@ -1,0 +1,148 @@
+<section>
+  
+    <div class="flex flex-row py-8 px-6 md:px-8">
+        <div>
+            <div
+                class="text-4xl font-extrabold tracking-tight leading-none"
+            >
+                QR Code Generator
+            </div>
+            <div class="flex mt-5 ">
+                <mat-form-field appearance="fill">
+                  <mat-label><strong>QR type:</strong></mat-label>
+                  <mat-select [(ngModel)]="selectedOption" (selectionChange)="onChange()" >
+                    <mat-option *ngFor="let option of qrtypeData" [value]="option.name">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                
+              <!-- <select id="qrtype" [(ngModel)]="selectedOption" (change)="onChange()">
+                <option *ngFor="let option of qrtypeData" [value]="option.name">
+                  {{ option.name }}
+                </option>
+              </select> -->
+              </div>
+              <ng-container >
+                <div class="form-container">
+                <div class="dform">
+                  <form [formGroup]="dynamicForm">
+                    <div *ngIf="selectedOption === 'Link/Url'" class="form-group">
+                      <div class="bottom input-group">
+                        <label for="linkName">Link Name :  </label>
+                      <input type="text" id="linkName" formControlName="linkName" class="input-box">
+                      </div>
+                     <div class="bottom input-group">
+                      <label for="url">URL :  </label>
+                      <input type="text" id="url" formControlName="url" class="input-box">
+                     </div>
+                      
+                    </div>
+                    <div *ngIf="selectedOption === 'Wi-fi'" class="form-group">
+                      <div class="bottom input-group">
+                      <label for="wifiName">Wi-fi Name:</label>
+                      <input type="text" id="wifiName" formControlName="wifiName" class="input-box">
+                      </div>
+                      <div class="input-group">
+                      <label for="wifiKey" >Key :</label>
+                      <input type="text" id="wifiKey" formControlName="wifiKey" class="input-box">
+                    </div>
+                    </div>
+                    <div *ngIf="selectedOption === 'PDF'" class="form-group">
+                      <div class="bottom">
+                      
+                      <input type="file" id="pdf" formControlName="pdffile" (change)="onFileChange($event)">
+                      </div>
+                     
+                    </div>
+                    <div *ngIf="selectedOption === 'Application'" class="form-group">
+                      <div class="bottom input-group">
+                      <label for="LinkAppStore">Link for AppStore :  </label>
+                      <input type="text" id="LinkAppStore" formControlName="LinkAppStore">
+                      </div>
+                      <div  class="bottom input-group">
+                      <label for="LinkGpay">Link for Googelpay :  </label>
+                      <input type="text" id="LinkGpay" formControlName="LinkGpay">
+                    </div>
+                    <div class="input-group">
+                      <label for="LinkOther">Link for Others :  </label>
+                      <input type="text" id="LinkOther" formControlName="LinkOther">
+                    </div>
+                    </div>
+                    <div *ngIf="selectedOption === 'E-mail'" class="form-group">
+                      <div class="bottom input-group">
+                      <label for="emailto">Mail To :  </label>
+                      <input type="text" id="emailto" formControlName="emailto">
+                      </div>
+                      <div  class="bottom input-group">
+                      <label for="subject">Subject :  </label>
+                      <input type="text" id="subject" formControlName="subject">
+                    </div>
+                    <div class="input-group">
+                      <label for="body">Body :  </label>
+                      <textarea type="text" id="body" formControlName="body"></textarea>
+                    </div>
+                    </div>
+                    <div *ngIf="selectedOption === 'WhatsApp'" class="form-group">
+                      <div class="bottom input-group">
+                      <label for="phn">Phone No :  </label>
+                      <input type="number" id="phn" formControlName="phn">
+                      </div>
+                      <div  class="bottom input-group">
+                      <label for="message">Message :  </label>
+                      <input type="text" id="message" formControlName="message">
+                    </div>
+                   
+                    </div>
+                    <div *ngIf="selectedOption">
+                      <button class="btn btn-primary" (click)="onSave()">Save</button>
+                    </div>
+                    <!-- Add more div blocks for other options -->
+                  </form>
+                  <ng-container *ngIf="showQRCode">
+                    <ngx-qrcode
+                      
+                      [value]="qrCode"
+                    ></ngx-qrcode>
+                    <button class="btn btn-primary" (click)="downloadQRCode()">Download QR Code</button>
+                    <button class="btn btn-primary scannerbuon" (click)="OnScanPress(qrScannerModal)">OpenScanner</button>
+                  </ng-container>
+                </div>
+                </div>
+              </ng-container>
+        </div>
+    </div>
+
+</section>
+<ng-template #qrScannerModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Scan QR Code</h5>
+        <button type="button" class="close" (click)="onClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- <div class="form-group" *ngIf="currentDevice">
+            <label for="" class="mb-1">Choose Camera</label>
+            <select class="form-control mb-1" >
+                <option value="" [selected]="!currentDevice">No Device Selected</option>
+                <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+                   >{{device.label}}</option>
+            </select>
+        </div> -->
+  
+        <!-- QR scanner component here -->
+        <div class="scanner-container absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+  
+            <zxing-scanner (scanSuccess)="onScanSuccess($event)" 
+                
+               ></zxing-scanner>
+  
+  
+            <div *ngIf="isContainerVisible" class="rectangle-overlay">
+                <div class="line" [style.top.%]="linePosition"></div>
+            </div>
+        </div>
+    </div>
+  
+  </ng-template>

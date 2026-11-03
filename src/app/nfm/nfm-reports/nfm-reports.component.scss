@@ -1,0 +1,46 @@
+@use '@angular/material';
+
+select {
+    -webkit-appearance: listbox !important;
+}
+.stockItem{
+    color:blue !important
+}
+.card-width {
+    width: 60% !important;
+    height: 60% !important;
+}
+
+::ng-deep .cdk-overlay-container {
+    z-index: 9999;
+}
+.MultipleField{
+    width: 100% !important
+}
+.vms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: .4rem;
+    @media (min-width: 768px) { // Adjust breakpoint as needed
+        grid-template-columns: 1fr 1fr; // Keep the current grid layout for larger screens
+    }
+
+    @media (max-width: 450px) { // Adjust breakpoint as needed
+        grid-template-columns: 1fr; // Set grid layout to one column for smaller screens (e.g., mobile)
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-view {
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px;
+    }
+
+    .card-width {
+        width: 100% !important;
+        height: 100% !important;
+        flex: 1;
+    }
+}

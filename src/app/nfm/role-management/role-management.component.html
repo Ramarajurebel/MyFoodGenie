@@ -1,0 +1,345 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="TableFieldsForm"
+                >
+                    <!-- Header -->
+                    <div class="flex justify-between -mt-3 -ml-4">
+                        <div class="flex items-center">
+                            <!-- Close button -->
+                            <a mat-icon-button (click)="OnClose()">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Role Name:</label
+                        >
+                        <input
+                            type="text"
+                            formControlName="roleName"
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Description:</label
+                        >
+                        <textarea
+                            rows="6"
+                            class="form-control"
+                            formControlName="description"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Status:</label
+                        >
+                        <select
+                            class="form-control"
+                            required=""
+                            formControlName="status"
+                        >
+                            <option value="">--Select--</option>
+                            <option *ngFor="let all of Status" [value]="all">
+                                {{ all }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Start Time:</label
+                        >
+                        <input
+                            type="time"
+                            formControlName="startTime"
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >End Time:</label
+                        >
+                        <input
+                            type="time"
+                            formControlName="endTime"
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Duration :</label
+                        >
+                        <input
+                            class="form-control"
+                            type="number"
+                            formControlName="duration"
+                        />
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="d-flex flex-row justify-content-between">
+                        <button class="btn btn-primary" (click)="OnSavePopup()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Role Management
+                        </div>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <ng-container>
+                        <div class="table-responsive">
+                            <table class="table table-bordernone">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Role ID</th>
+                                        <!-- <th>Event Type</th> -->
+                                        <th>Role Name</th>
+                                        <!-- <th>No of Platters</th> -->
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Duration</th>
+
+                                        <!-- <th>VG/NV</th>
+                                                      <th>No of Platters</th> -->
+
+                                        <th
+                                            (click)="
+                                                isMatDrawerOpened = !isMatDrawerOpened
+                                            "
+                                        >
+                                            <mat-icon
+                                                svgIcon="heroicons_solid:document-add"
+                                            ></mat-icon>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let table of roleManagementData"
+                                    >
+                                        <td class="text-center">
+                                            <label>{{ table.roleId }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{ table.roleName }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{
+                                                table.description
+                                            }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{ table.status }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{ table.startTime }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{ table.endTime }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{ table.duration }}</label>
+                                        </td>
+                                        <td>
+                                            <div class="all-icons">
+                                                <mat-icon
+                                                    color="accent"
+                                                    (click)="OnEdit(table)"
+                                                    >edit</mat-icon
+                                                >
+                                                <mat-icon
+                                                    color="primary"
+                                                    (click)="
+                                                        onDelPopup(
+                                                            deleteDialog,
+                                                            table
+                                                        )
+                                                    "
+                                                    >delete</mat-icon
+                                                >
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mobile-view">
+                            <div class="row-data w-full">
+                                <div
+                                    class="flex flex-col"
+                                    *ngFor="let data of roleManagementData"
+                                >
+                                    <div
+                                        class="flex flex-row justify-between p-2"
+                                    >
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0"
+                                                >Role Id</label
+                                            >
+                                        </div>
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0">{{
+                                                data.roleId
+                                            }}</label>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-row justify-between p-2"
+                                    >
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0"
+                                                >Role Name</label
+                                            >
+                                        </div>
+
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0">{{
+                                                data.roleName
+                                            }}</label>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-row justify-between p-2"
+                                    >
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0"
+                                                >Description</label
+                                            >
+                                        </div>
+
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0">{{
+                                                data.description
+                                            }}</label>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-row justify-between p-2"
+                                    >
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0"
+                                                >Status</label
+                                            >
+                                        </div>
+
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0">{{
+                                                data.status
+                                            }}</label>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-row justify-between p-2"
+                                    >
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0"
+                                                >Start Time</label
+                                            >
+                                        </div>
+
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0">{{
+                                                data.startTime
+                                            }}</label>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-row justify-between p-2"
+                                    >
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0"
+                                                >End Time</label
+                                            >
+                                        </div>
+
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0">{{
+                                                data.endTime
+                                            }}</label>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex flex-row justify-between p-2"
+                                    >
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0"
+                                                >Duration</label
+                                            >
+                                        </div>
+
+                                        <div class="col w-6/12">
+                                            <label for="" class="mr-0">{{
+                                                data.duration
+                                            }}</label>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- dialog  -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,860 @@
+<div class="row main-card">
+    <div class="col one">
+        <div class="card" *ngIf="tiffinRecipes.length > 0">
+            <label class="card-header">
+                Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} {{ eventName }}</span
+                ><span class="h6" style="font-weight: bold">
+                    Tiffins</span
+                ></label
+            >
+            <div class="card-body">
+                <div *ngFor="let rcp of tiffinRecipes; let i = index">
+                    <div class="row mb-2 p-1">
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col rcp p-0" (click)="OnRowClick(rcp)">
+                            {{ rcp.RecipeName }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                        </div>
+                    </div>
+                    <!-- <div class="row mb-1">
+                        <div class="d-flex flex-row">
+                            <div class="col-4 box chef">Chef:</div>
+                            <div class="col-4 box font-weight-bolder">
+                                {{ rcp.chefname }}
+                            </div>
+                            <div
+                                class="col-4 box"
+                                [ngClass]="{
+                                    red: rcp.status === 'Open',
+                                    green: rcp.status === 'Cooking Completed',
+                                    orange: rcp.status === 'Cooking InProgress',
+                                    orange: rcp.status === 'Ingredients Ready',
+                                    orange: rcp.status === 'Packing InProgress',
+                                    green: rcp.status === 'Packing Completed'
+                                }"
+                            >
+                                {{ rcp.status }}
+                            </div>
+                        </div>
+                    </div>
+                    <hr /> -->
+                </div>
+            </div>
+            <div class="card" *ngIf="tiffinsVegetables.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Vegetables-Tiffins</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of tiffinsVegetables; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="tiffinsGroceries.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Groceries-Tiffins</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of tiffinsGroceries; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="tiffinsNonVeg.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        NonVeg-Tiffins</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of tiffinsNonVeg; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="tiffinsOthers.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Others-Tiffins</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of tiffinsOthers; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="tiffinsPaste.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Paste-Tiffins</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of tiffinsPaste; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname
+                            }}<span *ngIf="item.style">({{ item.style }})</span>
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="snacksRecipes.length > 0">
+                <label class="card-header">
+                    Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} {{ eventName }}</span
+                    ><span class="h6" style="font-weight: bold">
+                        Snacks</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div *ngFor="let rcp of snacksRecipes; let i = index">
+                        <div class="row mb-2 p-1">
+                            <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                            <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                            <div class="col rcp p-0" (click)="OnRowClick(rcp)">
+                                {{ rcp.RecipeName }}
+                            </div>
+                            <div class="col-4 p-0">
+                                {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                            </div>
+                        </div>
+                        <!-- <div class="row mb-1">
+                            <div class="d-flex flex-row">
+                                <div class="col-4 box chef">Chef:</div>
+                                <div class="col-4 box font-weight-bolder">
+                                    {{ rcp.chefname }}
+                                </div>
+                                <div
+                                    class="col-4 box"
+                                    [ngClass]="{
+                                        red: rcp.status === 'Open',
+                                        green:
+                                            rcp.status === 'Cooking Completed',
+                                        orange:
+                                            rcp.status === 'Cooking InProgress',
+                                        orange:
+                                            rcp.status === 'Ingredients Ready',
+                                        orange:
+                                            rcp.status === 'Packing InProgress',
+                                        green:
+                                            rcp.status === 'Packing Completed'
+                                    }"
+                                >
+                                    {{ rcp.status }}
+                                </div>
+                            </div>
+                        </div>
+                        <hr /> -->
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="snacksVegetables.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Vegetables-Snacks</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of snacksVegetables; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="snacksGroceries.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Groceries-Snacks</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of snacksGroceries; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="snacksNonVeg.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        NonVeg-Snacks</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of snacksNonVeg; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="snacksOthers.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Others-Snacks</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of snacksOthers; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" *ngIf="snacksPaste.length > 0">
+                <label class="card-header"
+                    >Event Date:
+                    <span class="h6" style="font-weight: bold">
+                        {{ eventDate }} </span
+                    ><span class="h6" style="font-weight: bold">
+                        Paste-Snacks</span
+                    ></label
+                >
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let item of snacksPaste; let i = index"
+                    >
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col-6 ingr p-0">
+                            {{ item.ingrname }}-{{ item.tname
+                            }}<span *ngIf="item.style">({{ item.style }})</span>
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ item.totalQuantity }} {{ item.uom }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col two">
+        <div class="card" *ngIf="lunchRecipes.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} {{ eventName }}</span
+                ><span class="h6" style="font-weight: bold"> Lunch</span></label
+            >
+            <div class="card-body">
+                <div *ngFor="let rcp of lunchRecipes; let i = index">
+                    <div class="row mb-2 p-1">
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col rcp p-0" (click)="OnRowClick(rcp)">
+                            {{ rcp.RecipeName }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                        </div>
+                    </div>
+                    <!-- <div class="row mb-1">
+                        <div class="d-flex flex-row">
+                            <div class="col-4 box chef">Chef:</div>
+                            <div class="col-4 box font-weight-bolder">
+                                {{ rcp.chefname }}
+                            </div>
+                            <div
+                                class="col-4 box"
+                                [ngClass]="{
+                                    red: rcp.status === 'Open',
+                                    green: rcp.status === 'Cooking Completed',
+                                    orange: rcp.status === 'Cooking InProgress',
+                                    orange: rcp.status === 'Ingredients Ready',
+                                    orange: rcp.status === 'Packing InProgress',
+                                    green: rcp.status === 'Packing Completed'
+                                }"
+                            >
+                                {{ rcp.status }}
+                            </div>
+                        </div>
+                    </div>
+                    <hr /> -->
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="lunchVegetables.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Vegetables-Lunch</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of lunchVegetables; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="lunchGroceries.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Groceries-Lunch</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of lunchGroceries; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="lunchNonVeg.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    NonVeg-Lunch</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of lunchNonVeg; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="lunchOthers.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Others-Lunch</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of lunchOthers; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="lunchPaste.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Paste-Lunch</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of lunchPaste; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname
+                        }}<span *ngIf="item.style">({{ item.style }})</span>
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col four">
+        <div class="card" *ngIf="dinnerRecipes.length > 0">
+            <label class="card-header">
+                Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} {{ eventName }}</span
+                ><span class="h6" style="font-weight: bold">
+                    Dinner</span
+                ></label
+            >
+            <div class="card-body">
+                <div *ngFor="let rcp of dinnerRecipes; let i = index">
+                    <div class="row mb-2 p-1">
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div class="col rcp p-0" (click)="OnRowClick(rcp)">
+                            {{ rcp.RecipeName }}
+                        </div>
+                        <div class="col-4 p-0">
+                            {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                        </div>
+                    </div>
+                    <!-- <div class="row mb-1">
+                        <div class="d-flex flex-row">
+                            <div class="col-4 box chef">Chef:</div>
+                            <div class="col-4 box font-weight-bolder">
+                                {{ rcp.chefname }}
+                            </div>
+                            <div
+                                class="col-4 box"
+                                [ngClass]="{
+                                    red: rcp.status === 'Open',
+                                    green: rcp.status === 'Cooking Completed',
+                                    orange: rcp.status === 'Cooking InProgress',
+                                    orange: rcp.status === 'Ingredients Ready',
+                                    orange: rcp.status === 'Packing InProgress',
+                                    green: rcp.status === 'Packing Completed'
+                                }"
+                            >
+                                {{ rcp.status }}
+                            </div>
+                        </div>
+                    </div>
+                    <hr /> -->
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="dinnerVegetables.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Vegetables-Dinner</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of dinnerVegetables; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="dinnerGroceries.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Groceries-Dinner</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of dinnerGroceries; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="dinnerNonVeg.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    NonVeg-Dinner</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of dinnerNonVeg; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="dinnerOthers.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Others-Dinner</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of dinnerOthers; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname }}
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="dinnerPaste.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} </span
+                ><span class="h6" style="font-weight: bold">
+                    Paste-Dinner</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of dinnerPaste; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname
+                        }}<span *ngIf="item.style">({{ item.style }})</span>
+                    </div>
+                    <div class="col-4 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #modal>
+    <div mat-dialog-title class="dialog-title">
+        <h4>Recipe Ingredients</h4>
+        <button mat-icon-button aria-label="close dialog" matDialogClose>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography">
+        <mat-tab-group>
+            <mat-tab label="Instructions">
+                <ng-template matTabContent>
+                    <textarea rows="5" style="width: 90%" readonly>{{
+                        recipeInstructions
+                    }}</textarea>
+                </ng-template>
+            </mat-tab>
+            <mat-tab label="Ingredients">
+                <ng-template matTabContent>
+                    <ng-container *ngFor="let ingrid of selectedRcpIngredients">
+                        <div
+                            class="d-flex flex-row justify-between items-center pl-3 group-ingr"
+                            (click)="ingrid.childActive = !ingrid.childActive"
+                        >
+                            <div class="h-8 text-lg font-semibold">
+                                Pack: {{ ingrid?.groupid }}
+                            </div>
+                            <div>
+                                <button mat-icon-button>
+                                    <mat-icon>keyboard_arrow_down</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <ng-container
+                            *ngFor="let group of ingrid.groupData"
+                            class="accordion-body"
+                        >
+                            <div
+                                class="row align-items-center mb-1"
+                                *ngIf="ingrid.childActive"
+                                style="height: max-content"
+                            >
+                                <!-- <div class="h-12"> -->
+                                <div
+                                    class="d-flex flex-row align-self-center align-items-center full-task-row"
+                                >
+                                    <div class="assigned-to">
+                                        <div class="col">
+                                            <span class="text-start">{{
+                                                group?.ingrname
+                                            }}</span
+                                            ><span *ngIf="group.telname"
+                                                >-{{ group.telname }}</span
+                                            >
+                                            <span *ngIf="group.style"
+                                                >-{{ group.style }}</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="d-flex main-tasks-duration">
+                                        <div class="duration">
+                                            <span>{{ group?.quantity }} </span>
+                                            <span> {{ group.uom }}</span>
+                                        </div>
+                                        <!-- <div class="date">
+                                            <span
+                                                >{{
+                                                    group?.duedate
+                                                        | date: "LLL dd"
+                                                }}
+                                            </span>
+                                        </div> -->
+                                    </div>
+                                    <div class="name">
+                                        <span>{{ group?.category }}</span>
+                                    </div>
+                                    <!-- <div
+                                            class="d-flex flex-row justify-content-center"
+                                        >
+                                            <div class="start-time pt-8">
+                                                <span
+                                                    >{{ subtask?.starttime }}
+                                                </span>
+                                            </div>
+                                            <div class="end-time pr-3">
+                                                <span>{{
+                                                    subtask?.endtime
+                                                }}</span>
+                                            </div>
+                                        </div> -->
+                                </div>
+                                <hr />
+                                <!-- </div> -->
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-template>
+            </mat-tab>
+        </mat-tab-group>
+        <!-- <div class="actions">
+            <form [formGroup]="chefFormGroup">
+                <div class="first-div">
+                    <div class="form-group mb-0">
+                        <label for="">Chef: </label>
+                        <select class="form-control" formControlName="chef">
+                            <option value="">--Chef--</option>
+                            <option
+                                *ngFor="let chef of chefOperator"
+                                [value]="chef.stalloperatorid"
+                            >
+                                {{ chef.stalloperatorid }}-{{ chef.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="first-div">
+                    <div class="form-group mb-0">
+                        <label for="">Status: </label>
+                        <select class="form-control" formControlName="status">
+                            <option value="">--Status--</option>
+                            <option
+                                *ngFor="let stat of statusData"
+                                [value]="stat"
+                            >
+                                {{ stat }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="first-div">
+                    <div class="form-group mb-0">
+                        <label for="">Sequence: </label>
+                        <input
+                            class="form-control"
+                            type="number"
+                            formControlName="sequence"
+                        />
+                    </div>
+                </div>
+            </form>
+            <div class="first-div">
+                <div class="save-btn">
+                    <button class="btn btn-primary" (click)="OnStatusUpdate()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div> -->
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button
+            mat-raised-button
+            color="primary"
+            matDialogClose
+            (cilck)="OnClose()"
+        >
+            Close
+        </button>
+    </mat-dialog-actions>
+</ng-template>

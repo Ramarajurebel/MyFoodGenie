@@ -1,0 +1,62 @@
+export const StallFoodInvTable = [
+    {
+        key: 'stallIdName',
+        type: 'StallId/Name',
+        label: 'Stall Id/Name',
+        disabled: true,
+        controlName: 'category',
+        columnActive: true,
+    },
+    {
+        key: 'itemid/name',
+        type: 'Item Id/Name',
+        label: 'Inventory ID',
+        disabled: true,
+        controlName: 'category',
+        columnActive: true,
+    },
+    {
+        key: 'date',
+        type: 'date',
+        label: 'Date',
+        disabled: false,
+        controlName: 'productlist',
+        columnActive: true,
+    },
+    {
+        key: 'packedCount',
+        type: 'number',
+        label: 'Packed Count',
+        disabled: false,
+        controlName: 'recstatus',
+        columnActive: true,
+    },
+    // {
+    //     key: 'purchasedDate',
+    //     type: 'uom',
+    //     label: 'Date',
+    //     disabled: true,
+    //     controlName: 'uom',
+    // },
+    {
+        key: 'saleCount',
+        type: 'number',
+        label: 'Sale Count',
+        disabled: false,
+        controlName: 'price',
+    },
+    {
+        key: 'balance',
+        type: 'balance',
+        label: 'Balance',
+        disabled: false,
+        controlName: 'price',
+    },
+
+    {
+        key: 'isEdit',
+        type: 'isEdit',
+        label: 'is Edit',
+        columnActive: true,
+    },
+];

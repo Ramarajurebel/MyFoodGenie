@@ -1,0 +1,15 @@
+<div class="container">
+  <h1>Scan The Text</h1>
+  <button class="btn btn-primary" (click)="fileInput.click()">Scan Me</button>
+  <input
+    type="file"
+    accept=".png,.pdf"
+    #fileInput
+    (change)="onFileSelected($event)"
+    style="display: none;"
+  />
+  <div *ngIf="scannedText">
+    <h3>Scanned Text:</h3>
+    <p>{{ scannedText }}</p>
+  </div>
+</div>

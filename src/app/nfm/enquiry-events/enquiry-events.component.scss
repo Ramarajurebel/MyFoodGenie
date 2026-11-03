@@ -1,0 +1,160 @@
+@use '@angular/material';
+.align-right {
+    display: flex;
+    align-self: flex-end;
+    padding-right: 10px;
+}
+.modal-xl .modal-lg {
+    max-width: 90%;
+}
+.all-icons {
+    display: inline;
+    justify-content: space-between;
+}
+.form-control {
+    width: 100%;
+}
+.custom-datatable input {
+    padding: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #eff0f1;
+    width: 100%;
+    color: #999;
+}
+
+select {
+    -webkit-appearance: listbox !important;
+}
+// header buttons
+.header-btns {
+    margin-left: auto;
+}
+.adhoc-po {
+    gap: 40px;
+    background-color: #8080804a;
+}
+.name {
+    width: 40%;
+    height: max-content;
+    word-wrap: break-word;
+}
+
+// .description:hover {
+//     cursor: pointer;
+//     text-decoration: underline;
+//     color: red !important;
+// }
+.product-name {
+    width: 75%;
+    word-wrap: break-word;
+}
+.quantity-uom {
+    justify-self: end;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.qty-uom {
+    width: 50%;
+    word-wrap: break-word;
+}
+// below is for table css
+table {
+    width: 90%;
+    margin: auto;
+    margin-top: 25px;
+}
+// .btn-edit {
+//     text-align: right;
+// }
+h2 {
+    text-align: center;
+    padding-top: 20px;
+}
+.isAvailable {
+    text-decoration: line-through;
+}
+.table-header {
+    width: 90%;
+    margin: auto;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.button-add-row {
+    background: #1b9e1b;
+    color: #ffffff;
+}
+
+.button-remove-rows {
+    background: red;
+    color: #ffffff;
+    margin-right: 5px;
+}
+
+.button-remove {
+    color: red;
+}
+
+::ng-deep .mat-form-field-infix {
+    width: 100% !important;
+}
+
+.form-input {
+    padding-right: 5px;
+}
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+    overflow: auto;
+}
+.mobile-label {
+    visibility: hidden;
+}
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}
+.td {
+    padding-right: 10px;
+}
+mat-form-field {
+    width: 100% !important;
+}
+.table-mobile-view {
+    display: none;
+}
+.searchform {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+.mainForm {
+    padding: 1.5rem;
+}
+// table css completed here
+@media only screen and (max-width: 480px) {
+    .adhoc-po {
+        gap: 15px;
+        background-color: #8080804a;
+    }
+    .mainForm {
+        padding: 0.4rem;
+    }
+    .searchform {
+        display: flex;
+        flex-direction: column;
+    }
+    .p-3 {
+        padding: 1.5rem;
+    }
+    .example-container {
+        display: none;
+    }
+    .table-mobile-view {
+        display: flex;
+        flex-direction: column;
+    }
+}

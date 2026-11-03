@@ -1,0 +1,20 @@
+::ng-deep .cdk-overlay-container {
+    z-index: 9999;
+}
+.modal-body .mat-form-field {
+    z-index: 9999 !important;
+}
+.desktop-view {
+    display: flex !important;
+}
+.mobile-view {
+    display: none !important;
+}
+@media (max-width: 480px) {
+    .desktop-view {
+        display: none !important;
+    }
+    .mobile-view {
+        display: block !important;
+    }
+}

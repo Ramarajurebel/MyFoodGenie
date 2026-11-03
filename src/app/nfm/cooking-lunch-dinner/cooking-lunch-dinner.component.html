@@ -1,0 +1,875 @@
+<div class="row main-card">
+    <div class="col-6 one">
+        <div class="card" *ngIf="typeOneRecipes.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} {{ eventName }},</span
+                ><span class="h6" style="font-weight: bold">
+                    {{ typeOneName }},Count : {{ typeOneRecipes.length }}</span
+                ></label
+            >
+            <div class="card-body">
+                <div *ngFor="let rcp of typeOneRecipes; let i = index">
+                    <div class="row mb-2 p-1">
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div
+                            class="col rcp p-0"
+                            (click)="OnRowClick(rcp, 'typeOne')"
+                        >
+                            {{ rcp.rcpname }}-{{ rcp.rcpteluguname }}
+                        </div>
+                        <div class="col-3 p-0">
+                            {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="d-flex flex-row">
+                            <div class="col-4 box font-weight-bolder box">
+                                {{ rcp.chefname }}
+                            </div>
+                            <div
+                                class="col-4 box"
+                                [ngClass]="{
+                                    red: rcp.status === 'Open',
+                                    green:
+                                        rcp.status === 'Cooking Completed' ||
+                                        rcp.status === 'Packing Completed',
+                                    orange:
+                                        rcp.status === 'Cooking InProgress' ||
+                                        rcp.status === 'Packing InProgress' ||
+                                        rcp.status === 'Ingredients Ready'
+                                }"
+                            >
+                                {{ rcp.status }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="d-flex flex-row">
+                            <div class="col" *ngIf="!rcp.settimer">
+                                Time:{{ rcp?.clock }} min
+                            </div>
+                            <div class="col" *ngIf="rcp.settimer">
+                                Time:<span class="timer">{{ rcp?.clock }}</span>
+                            </div>
+                            <div class="col">
+                                <button
+                                    class="start-btn"
+                                    style="color: green"
+                                    *ngIf="!rcp.settimer"
+                                    (click)="OnStartBtnPress(rcp, 'One')"
+                                >
+                                    Start
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button
+                                    class="stop-btn"
+                                    style="color: red"
+                                    *ngIf="rcp.settimer"
+                                    (click)="OnStopTimer(rcp, 'One')"
+                                >
+                                    Stop
+                                </button>
+                            </div>
+                            <div class="col">
+                                <div class="col cooking-type">
+                                    {{ rcp?.cookingtype
+                                    }}<span
+                                        *ngIf="rcp.cookingtype == 'Cooker'"
+                                        style="padding-left: 5px"
+                                        >({{ rcp.whistles }})</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeTwoRecipes.length > 0">
+            <label class="card-header"
+                >Event Date:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} {{ eventName }},</span
+                ><span class="h6" style="font-weight: bold">
+                    {{ typeTwoName }}, Count :{{ typeTwoRecipes.length }}</span
+                ></label
+            >
+            <div class="card-body">
+                <div *ngFor="let rcp of typeTwoRecipes; let i = index">
+                    <div class="row mb-2 p-1">
+                        <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                        <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                        <div
+                            class="col rcp p-0"
+                            (click)="OnRowClick(rcp, 'typeTwo')"
+                        >
+                            {{ rcp.rcpname }}-{{ rcp.rcpteluguname }}
+                        </div>
+                        <div class="col-3 p-0">
+                            {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="d-flex flex-row">
+                            <div class="font-weight-bolder col-4 box">
+                                {{ rcp.chefname }}
+                            </div>
+                            <div
+                                class="col-4 box"
+                                [ngClass]="{
+                                    red: rcp.status === 'Open',
+                                    green:
+                                        rcp.status === 'Cooking Completed' ||
+                                        rcp.status === 'Packing Completed',
+                                    orange:
+                                        rcp.status === 'Cooking InProgress' ||
+                                        rcp.status === 'Packing InProgress' ||
+                                        rcp.status === 'Ingredients Ready'
+                                }"
+                            >
+                                {{ rcp.status }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="d-flex flex-row">
+                            <div class="col" *ngIf="!rcp.settimer">
+                                Time:{{ rcp?.clock }} min
+                            </div>
+                            <div class="col" *ngIf="rcp.settimer">
+                                Time:<span class="timer">{{ rcp?.clock }}</span>
+                            </div>
+                            <div class="col">
+                                <button
+                                    class="start-btn"
+                                    style="color: green"
+                                    *ngIf="!rcp.settimer"
+                                    (click)="OnStartBtnPress(rcp, 'Two')"
+                                >
+                                    Start
+                                </button>
+                                <button
+                                    class="stop-btn"
+                                    style="color: red"
+                                    *ngIf="rcp.settimer"
+                                    (click)="OnStopTimer(rcp, 'Two')"
+                                >
+                                    Stop
+                                </button>
+                            </div>
+                            <div class="col">
+                                <div class="col cooking-type">
+                                    {{ rcp?.cookingtype
+                                    }}<span
+                                        *ngIf="rcp.cookingtype == 'Cooker'"
+                                        style="padding-left: 5px"
+                                        >({{ rcp.whistles }})</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+        <!-- <div class="card" *ngIf="typeOneOthers.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span>Others-{{ typeOneName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let ot of typeOneOthers; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ ot.ingrname }}-{{ ot.tname
+                        }}<span *ngIf="ot.style">({{ ot.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ ot.totalQuantity }} {{ ot.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="typeTwoGroceries.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span> Groceries-{{ typeTwoName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of typeTwoGroceries; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname
+                        }}<span *ngIf="item.style">({{ item.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeTwoPaste.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span>Paste-{{ typeTwoName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let ot of typeTwoPaste; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ ot.ingrname }}-{{ ot.tname
+                        }}<span *ngIf="ot.style">({{ ot.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ ot.totalQuantity }} {{ ot.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeOneGroceries.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span>Groceries-{{ typeOneName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let item of typeOneGroceries; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ item.ingrname }}-{{ item.tname
+                        }}<span *ngIf="item.style">({{ item.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ item.totalQuantity }} {{ item.uom }}
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <!-- <div class="col-5 two">
+        <div class="card" *ngIf="typeOneVegetables.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span> Vegetables-{{ typeOneName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let veg of typeOneVegetables; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+
+                    <div class="col-6 ingr p-0">
+                        {{ veg.ingrname }}-{{ veg.tname
+                        }}<span *ngIf="veg.style">({{ veg.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ veg.totalQuantity }} {{ veg.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeTwoVegetables.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span> Vegetables-{{ typeTwoName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let veg of typeTwoVegetables; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+
+                    <div class="col-6 ingr p-0">
+                        {{ veg.ingrname }}-{{ veg.tname
+                        }}<span *ngIf="veg.style">({{ veg.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ veg.totalQuantity }} {{ veg.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeTwoNonVeg.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span> Non Veg-{{ typeTwoName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-1"
+                    *ngFor="let nv of typeTwoNonVeg; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ nv.ingrname }}-{{ nv.tname
+                        }}<span *ngIf="nv.style">({{ nv.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ nv.totalQuantity }} {{ nv.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeTwoOthers.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span> Others-{{ typeTwoName }}</label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let ot of typeTwoOthers; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ ot.ingrname }}-{{ ot.tname
+                        }}<span *ngIf="ot.style">({{ ot.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ ot.totalQuantity }} {{ ot.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="typeOneNonVeg.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span> Non Veg-{{ typeTwoName }}</label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-1"
+                    *ngFor="let nv of typeOneNonVeg; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ nv.ingrname }}-{{ nv.tname
+                        }}<span *ngIf="nv.style">({{ nv.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ nv.totalQuantity }} {{ nv.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeOnePaste.length > 0">
+            <label class="card-header text-center h4"
+                ><span>{{ eventDate }},</span>Paste-{{ typeOneName }}
+            </label>
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let ot of typeOnePaste; let i = index"
+                >
+                    <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                    <div class="col-6 ingr p-0">
+                        {{ ot.ingrname }}-{{ ot.tname
+                        }}<span *ngIf="ot.style">({{ ot.style }})</span>
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ ot.totalQuantity }} {{ ot.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="col-5 two" *ngIf="chefsRecipesListTypeOne.length > 0">
+        <div *ngFor="let chefs of chefsRecipesListTypeOne">
+            <div class="card">
+                <label class="card-header text-center h4">
+                    <span>{{ chefs?.chefName }}, {{ typeOneName }}</span>
+                </label>
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let rcp of chefs.assignedRecipes; let i = index"
+                    >
+                        <div class="row mb-2 p-1">
+                            <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                            <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                            <div
+                                class="col rcp p-0"
+                                (click)="OnRowClick(rcp, 'typeOne')"
+                            >
+                                {{ rcp.rcpname }}-{{ rcp.rcpteluguname }}
+                            </div>
+                            <div class="col-3 p-0">
+                                {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="d-flex flex-row">
+                                <div class="col-4 box font-weight-bolder box">
+                                    {{ rcp.chefname }}
+                                </div>
+                                <div
+                                    class="col-4 box"
+                                    [ngClass]="{
+                                        red: rcp.status === 'Open',
+                                        green:
+                                            rcp.status ===
+                                                'Cooking Completed' ||
+                                            rcp.status === 'Packing Completed',
+                                        orange:
+                                            rcp.status ===
+                                                'Cooking InProgress' ||
+                                            rcp.status ===
+                                                'Packing InProgress' ||
+                                            rcp.status === 'Ingredients Ready'
+                                    }"
+                                >
+                                    {{ rcp.status }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="d-flex flex-row">
+                                <div class="col" *ngIf="!rcp.settimer">
+                                    Time:{{ rcp?.clock }} min
+                                </div>
+                                <div class="col" *ngIf="rcp.settimer">
+                                    Time:<span class="timer">{{
+                                        rcp?.clock
+                                    }}</span>
+                                </div>
+                                <div class="col">
+                                    <button
+                                        class="start-btn"
+                                        style="color: green"
+                                        *ngIf="!rcp.settimer"
+                                        (click)="OnStartBtnPress(rcp, 'One')"
+                                    >
+                                        Start
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <button
+                                        class="stop-btn"
+                                        style="color: red"
+                                        *ngIf="rcp.settimer"
+                                        (click)="OnStopTimer(rcp, 'One')"
+                                    >
+                                        Stop
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <div class="col cooking-type">
+                                        {{ rcp?.cookingtype
+                                        }}<span
+                                            *ngIf="rcp.cookingtype == 'Cooker'"
+                                            style="padding-left: 5px"
+                                            >({{ rcp.whistles }})</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngFor="let chefs of chefsRecipesListTypeTwo">
+            <div class="card">
+                <label class="card-header text-center h4">
+                    <span>{{ chefs?.chefName }}, {{ typeTwoName }}</span>
+                </label>
+                <div class="card-body">
+                    <div
+                        class="row mb-2 p-1"
+                        *ngFor="let rcp of chefs.assignedRecipes; let i = index"
+                    >
+                        <div class="row mb-2 p-1">
+                            <div class="col-1 p-0 index">{{ i + 1 }})</div>
+                            <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                            <div
+                                class="col rcp p-0"
+                                (click)="OnRowClick(rcp, 'typeOne')"
+                            >
+                                {{ rcp.rcpname }}-{{ rcp.rcpteluguname }}
+                            </div>
+                            <div class="col-3 p-0">
+                                {{ rcp.newTotalReqQty }} {{ rcp.uom }}
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="d-flex flex-row">
+                                <div class="col-4 box font-weight-bolder box">
+                                    {{ rcp.chefname }}
+                                </div>
+                                <div
+                                    class="col-4 box"
+                                    [ngClass]="{
+                                        red: rcp.status === 'Open',
+                                        green:
+                                            rcp.status ===
+                                                'Cooking Completed' ||
+                                            rcp.status === 'Packing Completed',
+                                        orange:
+                                            rcp.status ===
+                                                'Cooking InProgress' ||
+                                            rcp.status ===
+                                                'Packing InProgress' ||
+                                            rcp.status === 'Ingredients Ready'
+                                    }"
+                                >
+                                    {{ rcp.status }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="d-flex flex-row">
+                                <div class="col" *ngIf="!rcp.settimer">
+                                    Time:{{ rcp?.clock }} min
+                                </div>
+                                <div class="col" *ngIf="rcp.settimer">
+                                    Time:<span class="timer">{{
+                                        rcp?.clock
+                                    }}</span>
+                                </div>
+                                <div class="col">
+                                    <button
+                                        class="start-btn"
+                                        style="color: green"
+                                        *ngIf="!rcp.settimer"
+                                        (click)="OnStartBtnPress(rcp, 'One')"
+                                    >
+                                        Start
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <button
+                                        class="stop-btn"
+                                        style="color: red"
+                                        *ngIf="rcp.settimer"
+                                        (click)="OnStopTimer(rcp, 'One')"
+                                    >
+                                        Stop
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <div class="col cooking-type">
+                                        {{ rcp?.cookingtype
+                                        }}<span
+                                            *ngIf="rcp.cookingtype == 'Cooker'"
+                                            style="padding-left: 5px"
+                                            >({{ rcp.whistles }})</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  Vegetables -->
+    <!-- <div class="col-4 three"></div> -->
+
+    <!-- For recipe ingredients in modal -->
+    <ng-template #modal>
+        <div mat-dialog-title class="dialog-title">
+            <h4>{{ recipeName }} Ingredients</h4>
+            <button mat-icon-button aria-label="close dialog" matDialogClose>
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <mat-dialog-content class="mat-typography">
+            <mat-tab-group>
+                <mat-tab label="Instructions">
+                    <ng-template matTabContent>
+                        <!-- <textarea rows="5" style="width: 90%" readonly>{{
+                            recipeInstructions
+                        }}</textarea> -->
+                        <div *ngIf="instructions" class="form-group mb-2 mt-2">
+                            <ng-container
+                                *ngFor="
+                                    let instr of instructions;
+                                    let i = index
+                                "
+                            >
+                                <div class="group flex items-center mb-2">
+                                    <mat-checkbox
+                                        class="flex items-center"
+                                        [color]="'primary'"
+                                        [(ngModel)]="instr.checked"
+                                        (change)="
+                                            instructionsCheckbox(
+                                                $event.checked,
+                                                instr
+                                            )
+                                        "
+                                        [ngModelOptions]="{ standalone: true }"
+                                    ></mat-checkbox>
+                                    <div
+                                        [ngClass]="{
+                                            'text-secondary line-through':
+                                                instr.checked
+                                        }"
+                                    >
+                                        {{ instr.value }}
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab label="Ingredients">
+                    <ng-template matTabContent>
+                        <ng-container *ngFor="let ingrid of groupIdsList">
+                            <div
+                                class="d-flex flex-row justify-between items-center pl-3 group-ingr"
+                                (click)="
+                                    ingrid.childActive = !ingrid.childActive
+                                "
+                            >
+                                <div class="h-8 text-lg font-semibold">
+                                    Pack: {{ ingrid?.groupid }}
+                                </div>
+                                <div>
+                                    <button mat-icon-button>
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <ng-container
+                                *ngFor="let group of ingrid.groupData"
+                                class="accordion-body"
+                            >
+                                <div
+                                    class="row align-items-center mb-1"
+                                    *ngIf="ingrid.childActive"
+                                    style="height: max-content"
+                                >
+                                    <!-- <div class="h-12"> -->
+                                    <div
+                                        class="d-flex flex-row align-self-center align-items-center full-task-row"
+                                    >
+                                        <div class="assigned-to">
+                                            <div class="col">
+                                                <span class="text-start">{{
+                                                    group?.ingrname
+                                                }}</span
+                                                ><span *ngIf="group.telname"
+                                                    >-{{ group.telname }}</span
+                                                >
+                                                <span *ngIf="group.style"
+                                                    >-{{ group.style }}</span
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="d-flex main-tasks-duration">
+                                            <div class="duration">
+                                                <span
+                                                    >{{ group?.quantity }}
+                                                </span>
+                                                <span> {{ group.uom }}</span>
+                                            </div>
+                                            <!-- <div class="date">
+                                                <span
+                                                    >{{
+                                                        group?.duedate
+                                                            | date: "LLL dd"
+                                                    }}
+                                                </span>
+                                            </div> -->
+                                        </div>
+                                        <div class="name">
+                                            <span>{{ group?.category }}</span>
+                                        </div>
+                                        <!-- <div
+                                                class="d-flex flex-row justify-content-center"
+                                            >
+                                                <div class="start-time pt-8">
+                                                    <span
+                                                        >{{ subtask?.starttime }}
+                                                    </span>
+                                                </div>
+                                                <div class="end-time pr-3">
+                                                    <span>{{
+                                                        subtask?.endtime
+                                                    }}</span>
+                                                </div>
+                                            </div> -->
+                                    </div>
+                                    <hr />
+                                    <!-- </div> -->
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <div class="actions">
+                            <form [formGroup]="chefFormGroup">
+                                <div class="first-div">
+                                    <!-- <div class="form-group mb-0">
+                                        <label for="">Chef: </label>
+                                        <select class="form-control" formControlName="chef">
+                                            <option value="">--Chef--</option>
+                                            <option
+                                                *ngFor="let chef of chefOperator"
+                                                [value]="chef.stalloperatorid"
+                                            >
+                                                {{ chef.stalloperatorid }}-{{ chef.name }}
+                                            </option>
+                                        </select>
+                                    </div> -->
+                                </div>
+                                <div class="first-div">
+                                    <div class="form-group mb-0">
+                                        <label for="">Status: </label>
+                                        <select
+                                            class="form-control"
+                                            formControlName="status"
+                                        >
+                                            <option value="">--Status--</option>
+                                            <option
+                                                *ngFor="let stat of statusData"
+                                                [value]="stat"
+                                            >
+                                                {{ stat }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="first-div">
+                                    <!-- <div class="form-group mb-0">
+                                        <label for="">Sequence: </label>
+                                        <input
+                                            class="form-control"
+                                            type="number"
+                                            formControlName="sequence"
+                                        />
+                                    </div> -->
+                                </div>
+                            </form>
+                            <div class="first-div">
+                                <div class="save-btn">
+                                    <button
+                                        class="btn btn-primary"
+                                        (click)="OnStatusUpdate()"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-dialog-content>
+        <mat-dialog-actions> </mat-dialog-actions>
+    </ng-template>
+    <ng-template #rcpdetailsmodal>
+        <div mat-dialog-title class="dialog-title">
+            <h4>Packing Details</h4>
+            <button mat-icon-button aria-label="close dialog" matDialogClose>
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <mat-dialog-content class="mat-typography">
+            <div class="card-body vendor-table">
+                <div id="batchDelete" class="custom-datatable vendor-list">
+                    <div class="table-responsive">
+                        <table class="table table-bordernone rcpingr">
+                            <thead>
+                                <tr>
+                                    <th>Event ID/Name</th>
+                                    <th class="text-center">
+                                        Packing Quantity
+                                    </th>
+                                    <th>Required Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let table of recipeDetails">
+                                    <td>
+                                        <label
+                                            >{{ table.keventid
+                                            }}<span
+                                                >-({{ table.keventname }})</span
+                                            ></label
+                                        >
+                                    </td>
+                                    <td>
+                                        <label
+                                            >{{ table.outputquantity }}
+                                        </label>
+                                    </td>
+
+                                    <!-- <td>
+                              <label>{{table.uom}}</label>
+                            </td> -->
+
+                                    <td>
+                                        <label>{{
+                                            table.requiredquantity
+                                        }}</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button
+                mat-raised-button
+                color="primary"
+                matDialogClose
+                (cilck)="OnClose()"
+            >
+                Close
+            </button>
+        </mat-dialog-actions>
+    </ng-template>
+</div>
+<!-- <audio id="myAudio" controls *ngIf="false">
+    <source src="../../../assets/audio/Alarm.mp3" type="audio/mpeg" />
+</audio> -->
+<ng-template #timermodal>
+    <div mat-dialog-title class="dialog-title">
+        <h4>Add Cooker Time</h4>
+        <button mat-icon-button aria-label="close dialog" matDialogClose>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography">
+        <div class="form">
+            <div class="form-group">
+                <label for="timer" class="mb-1">Cooker Time in Min:</label>
+                <input
+                    type="number"
+                    [formControl]="whistletime"
+                    class="form-control"
+                />
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button
+            mat-raised-button
+            color="primary"
+            matDialogClose
+            (cilck)="OnClose()"
+        >
+            Close
+        </button>
+        <button class="btn btn-primary" (click)="OnSaveTimer()">Save</button>
+    </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,405 @@
+<section class="absolute inset-0 flex flex-col min-w-0 ">
+    <div class="flex flex-col">
+        <div class="flex flex-col flex-auto">
+            <div class="flex flex-row justify-between py-8 px-6 md:px-8">
+                <!-- Title -->
+
+                <div
+                    class="text-4xl font-extrabold tracking-tight leading-none"
+                >
+                    Genie Inventory
+                </div>
+
+                <div appearance="fill">
+                    <label for="" >Genie Name :</label>
+                    <select
+                        name=""
+
+                        id=""
+                        (change)="onGenieChange(selectedValue)"
+                        [(ngModel)]="selectedValue"
+
+
+                    >
+                        <option value="0">--Select--</option>
+                        <option
+                            [value]="stall.stallid"
+                            *ngFor="let stall of stallData"
+                        >
+                            {{ stall.stallid }}-{{ stall.name }}
+                        </option>
+                    </select>
+                   
+                </div>
+                <button class="btn btn-primary" (click)="onCreateRefresh()" *ngIf="isGenieChange"> + Create Refill Order</button>
+                <!-- <p>Total Amount:{{this.totalAmount}}</p> -->
+
+            </div>
+            <div class="form-inline grid grid-cols-5 ml-2">
+                <div appearance="fill">
+                    <label for="" >Total Slots : {{this.totalInvItems}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Quantity :{{this.totalInvMaxQuantity}}/{{this.totalQtyAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Available Quantity : {{this.totalInvAvailableQuantity}}/{{this.totalAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Today's Sale Amount : {{this.totalSaleQty}}/{{this.todaySaleAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Empty Quantity :{{this.totalInvEmptyQuantity}}</label>
+                    
+
+                </div>
+            
+              
+                <div appearance="fill">
+                    <label for="" >Total Reserved Items : {{this.totalResvItems}}/{{this.totalResvAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Margin Amount : {{this.totalMarginAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Available Margin Amount : {{this.totalAvailableMarginAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Sale Margin Amount : {{this.totalSaleMarginAmount}}</label>
+                    
+
+                </div>
+            </div>
+            <!-- <div class="flex flex-row justify-between mt-3 ml-5 mr-5">
+                <div appearance="fill">
+                    <label for="" >Total Reserved Items : {{this.totalResvItems}}/{{this.totalResvAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Margin Amount : {{this.totalMarginAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Available Margin Amount : {{this.totalAvailableMarginAmount}}</label>
+                    
+
+                </div>
+                <div appearance="fill">
+                    <label for="" >Total Sale Margin Amount : {{this.totalSaleMarginAmount}}</label>
+                    
+
+                </div>
+            </div> -->
+                    <div class="mt-3" style="margin-top: 1rem !important;">
+                    <!-- <div class="d-flex justify-content-center align-items-center" style="gap: 10px;">
+                        <mat-chip-list aria-label="Fish selection">
+                            <ng-container *ngFor="let subcat of machineData">
+                              <mat-chip
+
+                                [ngClass]="{ 'custom-chip': subcat.active }"
+                                (click)="subcategoryTabChange(subcat)"
+                                >{{ subcat.subCatName }}</mat-chip
+                              >
+                            </ng-container>
+                          </mat-chip-list>
+                    </div> -->
+                    <div class="main-section-products"  id="subcat-products-id">
+                <div class="sub-cat-tray-heading mt-2 d-flex flex-column overflow-auto" [attr.id]="'subcat-head-' + machines.rackId" *ngFor="let machines of machineData" >
+                    <div >
+                        <span class="font-weight-bold ml-1">Rack - {{machines.rackId}}</span>
+                        <!-- <button class="btn btn-primary additem">Add item</button> -->
+                        <div class="d-flex flex-row  mt-2 overflow-auto inline-prods">
+                            <div *ngFor="let item of machines.Productsbygenie; let i = index" class="ml-1">
+                                <!-- <span class="font-weight-bold ml-1">Rack Id - {{item.rackId}}</span> -->
+                                <div class="card" style="width: 10rem; border-radius: .75rem;">
+
+                                    <img [src]="itemImgLoc+item.prodImage" alt="" class="card-img-top align-self-center" (click)="onproductclick(item)">
+                                    <div class="card-body d-flex flex-column p-0">
+                                        <div class="card-text  font-weight-bold text-wrap p-1">{{item.prodName}}</div>
+                                        <div class="pl-1" style="font-size: 12px;">
+                                            SlotId: {{item.rackId}}{{item.slotId}}
+                                        </div>
+                                        <!-- price,uom -->
+                                        <div class="d-flex justify-content-between">
+
+                                            <div class=" pricing text-md font-weight-bold p-1">
+                                             <!-- <span class="line-through text-muted">{{item?.mrpPrice   | currency: "INR":"symbol":"1.0-2"}}</span> -->
+                                             <span>{{item?.offerprice   | currency: "INR":"symbol":"1.0-2"}}</span>
+                                            </div>
+                                            <!-- <div class="card-text text-md  p-1">
+                                                <strong> Empty Qty:</strong> {{item?.allotedQuantity - item?.balanceCountInStall}}
+                                             </div> -->
+                                            <!-- 'orange-text': item?.balanceCountInStall > 0 && item?.balanceCountInStall <= 5,
+                                            'yellow-text': item?.balanceCountInStall > 5 && item?.balanceCountInStall < 10, -->
+                                            <div class="card-text text-md  p-1"  [ngClass]="{
+                                                'red-text': item?.balanceCountInStall === 0,
+                                               
+                                                'green-text': item?.balanceCountInStall > 0
+                                              }">
+                                                {{item?.balanceCountInStall}} / {{item?.allotedQuantity - item?.balanceCountInStall}}
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mt-2 w-full">
+
+
+                                            <div  *ngIf="!item.isShown" class="left-btn card-btns">
+                                                <button class="btn left-btn w-full " type="button" (click)="onAddpo(addtoPoModal,item)">Add PO</button>
+                                            </div>
+                                            <div *ngIf="!item.isShown" class="right-btn card-btns">
+                                                <button class="btn right-btn w-full" type="button" (click)="OnRefillPress(item)">Refill</button>
+                                            </div>
+
+
+                                           </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                </div>
+                </div>
+            
+        </div>
+    </div>
+
+</section>
+<ng-template #Showdetails let-item >
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <!-- <h4>Product Details</h4> -->
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="modalReference.close()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <!-- <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+        <mat-icon>close</mat-icon>
+    </button> -->
+    <!-- <div *ngFor="let machines of machineData"> -->
+  <!-- <div *ngFor="let item of machines.productsList"> -->
+    <div style="max-height: 500px; overflow: auto">
+        <div class="details-div" *ngIf="!isRefillOn">
+            <div class="dialog-content" >
+
+                <img [src]="itemImgLoc + selectedItem?.prodImage" alt="Dialog Image" class="dialog-image">
+
+
+
+                </div>
+                <div class="card-text p-1 font-weight-bold">{{selectedItem.prodName}}</div>
+                <div class="card-text text-md  p-1" style="font-size: 12px;"><strong>SlotId:</strong> {{selectedItem?.rackId}}{{selectedItem?.slotId}}</div>
+                <div class="d-flex justify-content-between">
+
+                  <!-- <div class=" pricing text-md font-weight-bold p-1">
+               
+                   <span>{{selectedItem?.offerPrice   | currency: "INR":"symbol":"1.0-2"}}</span>
+                  </div> -->
+                  <div class="card-text text-md  p-1">
+                    <strong>AvailableStock:</strong>  {{prAvailableStock?.availableStock}}
+                    </div>     
+                  <div class="card-text text-md  p-1">
+                      {{selectedItem?.uom}}
+                  </div>
+              </div>
+
+           
+
+              <div class="d-flex justify-content-between">
+
+              <div class="card-text text-md  p-1">
+              <strong> Available Qty:</strong>  {{selectedItem?.balanceCountInStall}}
+              </div>
+              <div class="card-text text-md  p-1">
+                <strong> Supplier:</strong>  {{selectedItem?.supplier}}-{{prAvailableStock?.supname}}
+                </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+               <div class="card-text text-md  p-1">
+                  <strong> Reserved Qty:</strong>  {{selectedItem?.reservedQty}}
+               </div>
+               <div class="card-text text-md  p-1">
+                <strong> Purchase price:</strong>  {{selectedItem?.purchasePrice}}
+                </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                <div class="card-text text-md  p-1">
+                    <strong> Sales Qty:</strong>  {{selectedItem?.saleQuantity}}
+                    </div>
+                    <div class="card-text text-md  p-1">
+                        <strong>Tax :</strong>  {{this.prAvailableStock?.gst}} %
+                     </div>
+                     </div>
+                     <div class="d-flex justify-content-between">
+                     <div class="card-text text-md  p-1">
+                        <strong> Filled Qty:</strong>  {{selectedItem?.filledQuantity}}
+                        </div>
+                        <div class="card-text text-md  p-1">
+                            <strong> Sale price:</strong>  {{selectedItem?.salePrice}}
+                            </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                            <div class="card-text text-md  p-1">
+                                <strong> Empty Qty:</strong> {{selectedItem?.allotedQuantity - selectedItem?.balanceCountInStall}}
+                             </div>
+                             <div class="card-text text-md  p-1">
+                                <strong>Margin :</strong>  {{selectedItem?.margin}} %
+                             </div>
+                             
+ </div>
+   
+  </div>
+  <div class="card-text text-md  p-1" *ngIf="isRefillOn">
+    <label for="validationCustom02" class="mb-1"
+        ><strong>Refill quantity:</strong></label
+    >
+    <input
+    #refillInput
+        type="number"
+        class="form-control"
+        [formControl]="refillQuantity"
+        (input)="validateQuantity()"
+    />
+   <mat-error *ngIf="showQuantityError" class="error-text">
+    <strong>Quantity cannot exceed available stock!</strong>
+   </mat-error>
+   <mat-error *ngIf="showProductQuantityError" class="error-text">
+    <strong>Quantity Exceeded Max.Product quantity.</strong>
+   </mat-error>
+
+</div>
+  </div>
+  <mat-dialog-actions>
+    <div class="text-right" *ngIf="isRefillOn">
+        <button class="btn btn-primary justify-content-end" (click)="onGenieInventorySave()">Save</button>
+ </div>
+</mat-dialog-actions>
+  </ng-template>
+<!-- Adding PO Pop-up -->
+<ng-template #addtoPoModal>
+    <div mat-dialog-title class="dialog-title justify-content-end" >
+
+        <button mat-icon-button aria-label="close dialog" matDialogClose >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography">
+
+            <div class="form">
+
+                <h4>Add to po</h4>
+                <div class="form-group">
+                    <mat-form-field style="width: 100% !important">
+                        <mat-label>Select PO:</mat-label>
+                        <mat-select
+
+                            #singleSelect
+                            class="form-control-plain-text"
+                            (selectionChange)="
+                                onSelectPO($event.source.value)
+                            "
+                            aria-readonly="true"
+                        >
+                            <mat-option>
+                                <ngx-mat-select-search
+                                    [formControl]="itemControl"
+                                    placeholderLabel="Search"
+                                ></ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option
+                                *ngFor="let all of this.adhocPoData"
+                                [value]="all.adhocpoid"
+                            >
+                                {{ all.adhocpoid }}-{{ all.description }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="mb-1">Quantity</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        #quantityValue
+                    />
+                </div>
+
+            </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions style="justify-content: space-between !important;">
+        <button
+            mat-raised-button
+            color="primary"
+            matDialogClose
+            (cilck)="OnClose()"
+        >
+            Close
+        </button>
+        <button class="btn btn-primary" (click)="OnSavePO()">Save</button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #snackBar>
+    <div class="flex mt-auto">
+        <span class="example-pizza-party" matSnackBarLabel>
+            {{ responseMessage }}
+        </span>
+        <span matSnackBarActions class="ml-auto">
+            <button
+                mat-button
+                matSnackBarAction
+                (click)="snackBarRef.dismissWithAction()"
+            >
+                <mat-icon color="primary">close</mat-icon>
+            </button>
+        </span>
+    </div>
+</ng-template>
+<ng-template #confirmRefill>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Refill Order</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Are you sure you want create refill order ?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="OnConfirmCreateRefillOrder()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>

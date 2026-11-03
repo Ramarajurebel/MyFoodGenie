@@ -1,0 +1,466 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <div class="heading"><h2>ENTITY FRAMEWORK</h2></div>
+  <!-- Dropdown for selecting options -->
+  <div class="container-search">
+    <mat-form-field class="dropdown-flex">
+      <mat-label class="select-table">Select an option</mat-label>
+      <mat-select disableRipple [(value)]="selectedOption" (selectionChange)="onSelectChange($event.value)">
+        <mat-option *ngFor="let tData of tableName" [value]="tData">{{ tData }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <div class="searchbar">
+      <mat-icon class="searchicon" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+      <input class="search-input"
+        type="text"
+        id="search"
+        placeholder="Search..."
+        [(ngModel)]="searchQuery"
+        (input)="applySearch()"
+      />
+    </div>
+  </div>
+
+  <!-- Dynamic Tables based on Dropdown Selection -->
+  <div *ngIf="selectedOption === 'Entity'" class="container">
+    <form [formGroup]="form">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>AutoId</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Merchant</th>
+            <th>
+              <button type="button" title="Add New User" class="btn btn-primary" (click)="addUser()" [disabled]="isAddingUser">
+                Add
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let user of filteredUsers; let i = index">
+            <tr *ngIf="userSelected !== user" (click)="selectUser(user)">
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.number }}</td>
+              <td>{{ user.merchant }}</td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Edit User" type="button" (click)="selectUser(user)">
+                  Edit
+                </button>
+                <button class="btn btn-danger mx-1" title="Delete User" type="button" (click)="deleteUser(i)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="userSelected === user" class="table-primary">
+              <td>{{ user.id }}</td>
+              <td>
+                <input type="text" class="form-control" formControlName="Name" placeholder="Enter Name" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Description" placeholder="Enter Description" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Merchant" placeholder="Enter Merchant" />
+              </td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Save" type="button" [disabled]="form.invalid" (click)="updateUser(i)">
+                  Save
+                </button>
+                <button class="btn btn-secondary mx-1" title="Cancel" type="button" (click)="cancelEdit()">
+                  Cancel
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+  <div *ngIf="selectedOption === 'Entity-Parameters'" class="container">
+    <form [formGroup]="adminForm">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Entity</th>
+            <th>Name</th>
+            <th>DataType</th>
+            <th>DataSize</th>
+            <th>UIFieldType</th>
+            <th>Description</th>
+            <th>FormFlag</th>
+            <th>ValueFlag</th>
+            <th>
+              <button type="button" title="Add New Admin" class="btn btn-primary" (click)="addAdmin()" [disabled]="isAddingAdmin">
+                Add
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let admin of filteredAdmins; let i = index">
+            <tr *ngIf="adminSelected !== admin" (click)="selectAdmin(admin)">
+              <td>{{ admin.id }}</td>
+              <td>{{admin.entityName}}</td>
+              <td>{{ admin.name }}</td>
+              <td>{{ admin.dataType }}</td>
+              <td>{{ admin.dataSize }}</td>
+              <td>{{ admin.uiFieldType }}</td>
+              <td>{{ admin.description }}</td>
+              <td>{{ admin.formFlag }}</td>
+              <td>{{ admin.valueFlag }}</td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Edit Admin" type="button" (click)="selectAdmin(admin)">
+                  Edit
+                </button>
+                <button class="btn btn-danger mx-1" title="Delete Admin" type="button" (click)="deleteAdmin(i)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="adminSelected === admin" class="table-primary">
+              <td>{{ admin.id }}</td>
+              <td>
+                <mat-form-field>
+                  <mat-select formControlName="EntityName">
+                    <mat-option *ngFor="let entity of availableEntities" [value]="entity">
+                      {{ entity }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Name" placeholder="Enter Name" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="DataType" placeholder="Enter DataType" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="DataSize" placeholder="Enter DataSize" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="UIFieldType" placeholder="Enter UIFieldType" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Description" placeholder="Enter Description" />
+              </td>
+              <td>
+                <mat-checkbox formControlName="FormFlag" [checked]="admin.formFlag"></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox formControlName="ValueFlag" [checked]="admin.valueFlag"></mat-checkbox>
+              </td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Save" type="button" [disabled]="adminForm.invalid" (click)="updateAdmin(i)">
+                  Save
+                </button>
+                <button class="btn btn-secondary mx-1" title="Cancel" type="button" (click)="cancelAdminEdit()">
+                  Cancel
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+  <div *ngIf="selectedOption === 'Entity-Transactions'" class="container">
+    <form [formGroup]="transactionForm">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Entity Name</th>
+            <th>Entity Parameters</th>
+            <th>Reference Parameter ID</th>
+            <th>Value</th>
+            <th>Entity Hierarchy</th>
+            <th>Create Date & Time</th>
+            <th>Update Date & Time</th>
+            <th>Create By</th>
+            <th>Update By</th>
+            <th>
+              <button type="button" title="Add New Transaction" class="btn btn-primary" (click)="addTransaction()" [disabled]="isAddingTransaction">
+                Add
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let transaction of filteredTransactions; let i = index">
+            <tr *ngIf="transactionSelected !== transaction" (click)="selectTransaction(transaction)">
+              <td>{{ transaction.id }}</td>
+              <td>{{ transaction.entityName }}</td>
+              <td>{{ transaction.entityParameter }}</td>
+              <td>{{ transaction.refParameterId }}</td>
+              <td>{{ transaction.value }}</td>
+              <td>{{ transaction.entityHierarchy }}</td>
+              <td>{{ transaction.createDateTime }}</td>
+              <td>{{ transaction.updateDateTime }}</td>
+              <td>{{ transaction.createBy }}</td>
+              <td>{{ transaction.updateBy }}</td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Edit Transaction" type="button" (click)="selectTransaction(transaction)">
+                  Edit
+                </button>
+                <button class="btn btn-danger mx-1" title="Delete Transaction" type="button" (click)="deleteTransaction(i)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="transactionSelected === transaction" class="table-primary">
+              <td>{{ transaction.id }}</td>
+              <td>
+                <mat-form-field class="transacton-dropdown">
+                <mat-select formControlName="EntityName">
+                  <mat-option *ngFor="let entity of availableEntities" [value]="entity">
+                    {{ entity }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="transacton-dropdown">
+                <mat-select formControlName="EntityParameter">
+                  <mat-option *ngFor="let param of availableEntityParameters" [value]="param">
+                    {{ param }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="RefParameterId" placeholder="Enter Reference Parameter ID" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Value" placeholder="Enter Value" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="EntityHierarchy" placeholder="Enter Entity Hierarchy" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="CreateDateTime" placeholder="Enter Create Date & Time" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="UpdateDateTime" placeholder="Enter Update Date & Time" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="CreateBy" placeholder="Enter Create By" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="UpdateBy" placeholder="Enter Update By" />
+              </td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Save" type="button" [disabled]="transactionForm.invalid" (click)="updateTransaction(i)">
+                  Save
+                </button>
+                <button class="btn btn-secondary mx-1" title="Cancel" type="button" (click)="cancelTransactionEdit()">
+                  Cancel
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+  <div *ngIf="selectedOption === 'Entity-Reports'" class="container">
+    <form [formGroup]="reportForm">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Report Name</th>
+            <th>Report Type</th>
+            <th>Report Filter</th>
+            <th>
+              <button type="button" title="Add New Report" class="btn btn-primary" (click)="addReport()" [disabled]="isAddingReport">
+                Add
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let report of filteredReports; let i = index">
+            <tr *ngIf="reportSelected !== report" (click)="selectReport(report)">
+              <td>{{ report.id }}</td>
+              <td>{{ report.reportName }}</td>
+              <td>{{report.reportType}}</td>
+              <td>{{ report.reportFilter }}</td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Edit Report" type="button" (click)="selectReport(report)">
+                  Edit
+                </button>
+                <button class="btn btn-danger mx-1" title="Delete Report" type="button" (click)="deleteReport(i)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="reportSelected === report" class="table-primary">
+              <td>{{ report.id }}</td>
+              <td>
+                <input type="text" class="form-control" formControlName="ReportName" placeholder="Enter Report Name" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="ReportType" placeholder="Enter Report Type" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="ReportFilter" placeholder="Enter Report Filter" />
+              </td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Save" type="button" [disabled]="reportForm.invalid" (click)="updateReport(i)">
+                  Save
+                </button>
+                <button class="btn btn-secondary mx-1" title="Cancel" type="button" (click)="cancelReportEdit()">
+                  Cancel
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+  <div *ngIf="selectedOption === 'Entity-Hierarchy'" class="container">
+    <form [formGroup]="hierarchyForm">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Hierarchy Name</th>
+            <th>Hierarchy Type</th>
+            <th>Parent</th>
+            <th>Level</th>
+            <th>Status</th>
+            <th>
+              <button type="button" title="Add New Hierarchy" class="btn btn-primary" (click)="addHierarchy()" [disabled]="isAddingHierarchy">
+                Add
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let hierarchy of filteredHierarchies; let i = index">
+            <tr *ngIf="hierarchySelected !== hierarchy" (click)="selectHierarchy(hierarchy)">
+              <td>{{ hierarchy.id }}</td>
+              <td>{{ hierarchy.hierarchyName }}</td>
+              <td>{{ hierarchy.hierarchyType }}</td>
+              <td>{{ hierarchy.parent }}</td>
+              <td>{{ hierarchy.level }}</td>
+              <td>{{ hierarchy.status }}</td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Edit Hierarchy" type="button" (click)="selectHierarchy(hierarchy)">
+                  Edit
+                </button>
+                <button class="btn btn-danger mx-1" title="Delete Hierarchy" type="button" (click)="deleteHierarchy(i)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="hierarchySelected === hierarchy" class="table-primary">
+              <td>{{ hierarchy.id }}</td>
+              <td>
+                <input type="text" class="form-control" formControlName="HierarchyName" placeholder="Enter Hierarchy Name" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="HierarchyType" placeholder="Enter Hierarchy Type" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Parent" placeholder="Enter Parent" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Level" placeholder="Enter Level" />
+              </td>
+              <td>
+                <input type="text" class="form-control" formControlName="Status" placeholder="Enter Status" />
+              </td>
+              <td>
+                <button class="btn btn-primary mx-1" title="Save" type="button" [disabled]="hierarchyForm.invalid" (click)="updateHierarchy(i)">
+                  Save
+                </button>
+                <button class="btn btn-secondary mx-1" title="Cancel" type="button" (click)="cancelHierarchyEdit()">
+                  Cancel
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div *ngIf="selectedOption === 'formula'" class="container">
+    <form [formGroup]="formulaForm">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Formula</th>
+            <th>Filter</th>
+            <th>Input Field</th>
+            <th>Actions</th>
+            <th>
+              <button type="button" title="Add New Hierarchy" class="btn btn-primary" (click)="addFormula()" [disabled]="isAddingFormula">
+                Add
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let formula of filteredFormulas; let i = index">
+            <tr *ngIf="formulaSelected !== formula" (click)="selectFormula(formula)">
+            <td>{{ formula.id }}</td>
+            <td>{{ formula.name }}</td>
+            <td>{{ formula.formula }}</td>
+            <td>{{ formula.filter }}</td>
+            <td>{{ formula.inputField }}</td>
+            <td>{{formula.action}}</td>
+            <td>
+              <button class="btn btn-primary mx-1" title="Edit Formula" type="button" (click)="selectFormula(formula)" [disabled]="isAddingFormula">Edit</button>
+              <button class="btn btn-danger mx-1" title="Delete Formula" type="button" (click)="deleteFormula(i)">Delete</button>
+            </td>
+          </tr>
+          <tr *ngIf="formulaSelected === formula" class="table-primary">
+            <td>{{ formula.id }}</td>
+            <td>
+              <input type="text" class="form-control" formControlName="Name" placeholder="Enter Name" />
+            </td>
+            <td>
+              <input type="text" class="form-control" formControlName="Formula" placeholder="Enter Formula" />
+            </td>
+            <td>
+              <input type="text" class="form-control" formControlName="Filter" placeholder="Enter Filter" />
+            </td>
+            <td>
+              <input type="text" class="form-control" formControlName="InputField" placeholder="Enter Input Field" />
+            </td>
+            <td>
+              <input type="text" class="form-control" formControlName="Action" placeholder="Enter Action Field" />
+            </td>
+            <td>
+              <button class="btn btn-primary mx-1" title="Save" type="button" [disabled]="formulaForm.invalid" (click)="updateFormula(i)">
+                Save
+              </button>
+              <button class="btn btn-secondary mx-1" title="Cancel" type="button" (click)="cancelFormulaEdit()">
+                Cancel
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>

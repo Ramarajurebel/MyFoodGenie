@@ -1,0 +1,27 @@
+mat-option{
+    width: auto !important;
+    height: max-content !important;
+    white-space: pre-wrap !important;
+}
+::ng-deep .mat-dialog-container {
+  width: 350px !important;
+}
+
+.dropdown{
+  width: 300px !important;
+}
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  select {
+    -webkit-appearance: listbox !important;
+    }
+    .Tabwidth{
+      width: 270px !important;
+
+    }
+    .icons{
+      margin-top: 11px !important;
+    }

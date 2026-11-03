@@ -1,0 +1,35 @@
+<section class="inset-0 flex flex-col min-w-0">
+    <div class="flex flex-col p-6">
+        <div class="text-4xl font-extrabold tracking-tight leading-none">
+            Employee Grouping
+        </div>
+    </div>
+    <mat-tab-group>
+        <div class="scroll-container">
+            <mat-tab label="Employee Details">
+                <ng-template matTabContent>
+                    <employee-details></employee-details>
+                </ng-template>
+            </mat-tab>
+        </div>
+
+        <mat-tab label="Employee Leaves">
+            <emp-leaves></emp-leaves>
+        </mat-tab>
+        <mat-tab label="Employee Attendance">
+            <emp-attendance></emp-attendance>
+        </mat-tab>
+        <mat-tab label="Employee Salaries">
+            <emp-salaries></emp-salaries>
+        </mat-tab>
+        <mat-tab label="Employee Payments">
+            <emp-payments></emp-payments>
+        </mat-tab>
+        <mat-tab label="Employee Assignement">
+            <employee-assignment></employee-assignment>
+        </mat-tab>
+        <mat-tab label="Punch In/Out">
+            <punch-in-out></punch-in-out>
+        </mat-tab>
+    </mat-tab-group>
+</section>

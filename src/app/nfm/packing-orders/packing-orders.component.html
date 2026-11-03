@@ -1,0 +1,1542 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer class="w-full sm:w-128 dark:bg-gray-900" [mode]="drawerMode" [opened]="isMatDrawerOpened"
+            [position]="'end'" [disableClose]="true" #matDrawer>
+            <div>
+                <ng-container *ngIf="isAdhocItemDetails">
+                    <div class="flex flex-auto">
+                        <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="refillSlotItemformGroup">
+                            <!-- Header -->
+                            <div class="flex justify-between -mt-3 -ml-4">
+                                <div class="flex items-center">
+                                    <a mat-icon-button (click)="OnCloseItem()">
+                                        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="imgdiv">
+                                <img [src]="
+                                    itemImgLoc +
+                                        prodImage
+                                    " onerror="this.style.display='none'" class="w-20" />
+                            </div>
+                            <!-- <img [src]="itemImgLoc+item.prodImage"> -->
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <!-- Title -->
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1">Refill Order:</label>
+                                <select class="form-control" formControlName="refillOrderId">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let reforder of Refillresp" [value]="reforder.idRefillOrd">
+                                        {{ reforder.idRefillOrd }}-{{
+                                        reforder.genieName
+                                        }}-{{
+                                        reforder.genieId
+                                        }}
+                                    </option>
+                                </select>
+
+                                <!-- <div *ngIf="validation">
+                                      <mat-error *ngIf="TableFieldsForm.controls['supItemId'].hasError('required')">
+                                        <strong >required</strong>
+                                      </mat-error>
+                                    </div> -->
+                            </div>
+                            <div class="mt-1 mb-2">
+                                <label class="mb-1">SlotId:</label>
+                                <input class="form-control" type="number" [value]="SlotId" disabled />
+                            </div>
+                           
+                            <!-- <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Products:</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="prodId"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let slot of suppItems"
+                                        [value]="slot.productId"
+                                    >
+                                        {{ slot.productId }}-{{ slot.productname }}
+                                    </option>
+                                </select>
+
+                            </div> -->
+                            <!-- <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Suppliers:</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="supplierId"
+                                    (change)="
+                                        OnSelectSupplier($event.target.value)
+                                    "
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let all of suppliersList"
+                                        [value]="all.supId"
+                                    >
+                                        {{ all.supId }}-{{ all.name }}
+                                    </option>
+                                </select>
+
+                            </div> -->
+
+                            <!-- <div class="form-group">
+                                <label for="" class="mb-1">Rack Id:</label>
+                                <select class="form-control" formControlName="rackId" (change)="onRackChange()">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let rack of fitleredRacks" [value]="rack">
+                                       {{rack}}
+                                    </option>
+                                </select> 
+                            </div> -->
+                            <!-- <div class="form-group">
+                                <label for="" class="mb-1">Slot Id:</label>
+                                <select class="form-control" formControlName="slotId" (change)="onSlotChange()">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let slot of filteredSlots" [value]="slot.slotId">
+                                       {{slot.slotId}}
+                                    </option>
+                                </select> 
+                            </div> -->
+                            <mat-form-field style="width: 100% !important">
+                                <mat-label>Products</mat-label>
+                                <mat-select formControlName="prodId" #singleSelect class="form-control-plain-text"
+                                   
+                                    (selectionChange)="onProductSelectionChange(singleSelect.value)">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="itemControl"
+                                            placeholderLabel="Search"></ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngIf="filteredSuppItems.length == 0" disabled>
+                                        No results found
+                                    </mat-option>
+                                    <!-- <mat-option *ngFor="let slot of filteredSuppItems" [value]="slot.productId">
+                                        {{ slot.productId }}-{{ slot.productname }} - {{ slot.salePrice }} -{{ slot.quantity }}{{ slot.uom }}
+                                    </mat-option> -->
+                                    <mat-option *ngFor="let slot of filteredSuppItems" [value]="slot.prodId">
+                                        {{ slot.prodId }}-{{ slot.prodName }}-{{ slot.salePrice }}-{{ slot.quom }}{{ slot.muom }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>   
+                            <div class="form-group">
+                                <label for="" class="mb-1">Max Quantity:</label>
+                                <input class="form-control" required type="number" formControlName="maxQty"/>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Packing Quantity:</label>
+                                <input type="number" class="form-control" formControlName="packingQty" />
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="validationCustom01" class="mb-1">Packing Check :</label>
+                                <select class="form-control" formControlName="packingCheck">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let check of checkData" [value]="check">
+                                        {{ check ? 'true' : 'false' }}
+                                    </option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Correction Quantity:</label>
+                                <input type="number" class="form-control" formControlName="correctionQty" />
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1">Correction Check :</label>
+                                <select class="form-control" formControlName="corrected">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let check of checkData" [value]="check">
+                                        {{ check ? 'true' : 'false' }}
+                                    </option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Refill Quantity:</label>
+                                <input type="number" class="form-control" formControlName="refillQty" />
+                            </div> -->
+                            <!-- <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Status :</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="status"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let stat of statusData"
+                                        [value]="stat"
+                                    >
+                                        {{ stat }}
+                                    </option>
+                                </select>
+
+                            </div> -->
+                         
+                           
+                            
+                            <!-- <div class="form-group">
+                                <label for="validationCustom01" class="mb-1">Refill Check :</label>
+                                <select class="form-control" formControlName="refillCheck">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let stat of checkData" [value]="stat">
+                                        {{ stat ? 'true' : 'false' }}
+                                    </option>
+                                </select>
+
+                            </div> -->
+
+
+
+
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="d-flex flex-row justify-content-between">
+                                <button class="btn btn-danger" (click)="OnDel(deleteDialog)">
+                                    Delete
+                                </button>
+                                <button class="btn btn-primary" (click)="OnSaveSlotItem()">
+                                    Save
+                                </button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isAdhocDetails">
+                    <div class="flex flex-auto">
+                        <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="refillOrderFormGroup">
+                            <div class="flex justify-between -mt-3 -ml-4">
+                                <div class="flex items-center">
+                                    <a mat-icon-button (click)="OnCloseItem()">
+                                        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                    </a>
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary" (click)="onAddSlots()">Add Slots</button>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="flex justify-between">
+                                <button mat-mini-fab color="primary" (click)="OnAdhocItemClick()">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                                <button mat-mini-fab color="accent" (click)="OnExport()">
+                                    <mat-icon>cloud_download</mat-icon>
+                                </button>
+                                <!-- <button
+                                    mat-mini-fab
+                                    color="basic"
+                                    (click)="OnExportByQuantity(content)"
+                                >
+                                    <mat-icon color="primary"
+                                        >cloud_download</mat-icon
+                                    >
+                                </button> -->
+                                <button mat-mini-fab color="basic" (click)="OnRefresh()"
+                                    [disabled]="headerStatus !== 'Open' && headerStatus !== 'Packing' && headerStatus !== 'Packing Completed' && headerStatus !== 'In Transit' && headerStatus !== 'Correction' && headerStatus !== 'Refill' && headerStatus !== 'Refill Completed'">
+                                    <mat-icon>donut_large</mat-icon>
+                                </button>
+                            </div>
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1">Genie :</label>
+                                <select class="form-control" formControlName="genieId">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let all of genieMangresp" [value]="all.autoGenieId">
+                                        {{ all.stallId
+                                        }}-{{ all.vmsMachId }}-{{ all.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- genieLocation with input field -->
+                            <!-- <div class="form-group">
+                                    <label for="" class="mb-1">Genie Location:</label>
+                                    <a
+                                    class="form-control"
+                                    [textContent]="refillOrderFormGroup.get('genieLocation').value"
+                                    (click)="onLocationPress(row.genieLocation)"
+                                ></a>
+                                </div> -->
+                                <!-- genieLocation with text -->
+                                <div class="form-group" *ngIf="isgenieLocation">
+                                    <label for="" class="mb-1">Genie Location:</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="genieLocation"
+                                    />
+                                </div>
+                                <div class="form-group mt-1" *ngIf="!isgenieLocation">
+                                    <label for="" class="mb-1">Genie Location:</label>
+                                    <a
+                                    class="cursor-pointer"
+                                    (click)="onLocationPress(row.genieLocation)"
+                                >{{row.genieLocation}}</a>
+                                </div>
+                        
+                            <!-- <div class="form-group">
+                                <label for="" class="mb-1">Assigned To:</label>
+                                <select name="" id="" class="form-control" formControlName="assignedTo">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let op of stallOperator" [value]="op.name">
+                                        {{ op.stalloperatorid }}-{{ op.name }}
+                                    </option>
+                                </select>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="" class="mb-1">Contact:</label>
+                                <select name="" id="" class="form-control" formControlName="contactPerson">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let op of stallOperator" [value]="op.name">
+                                        {{ op.stalloperatorid }}-{{ op.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Order Type :</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="orderType"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let type of OrderTypeData" [value]="type">
+                                        {{ type }}
+                                    </option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Order For :</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="orderFor"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let order of OrderForData" [value]="order">
+                                        {{ order }}
+                                    </option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Packed By:</label>
+                                <select name="" id="" class="form-control" formControlName="packedBy">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let op of stallOperator" [value]="op.name">
+                                        {{ op.stalloperatorid }}-{{ op.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="" class="mb-1">Created By:</label>
+                                <select
+                                    name=""
+                                    id=""
+                                    class="form-control"
+                                    formControlName="createdBy"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let op of stallOperator"
+                                        [value]="op.name"
+                                    >
+                                        {{ op.stalloperatorid }}-{{ op.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Updated By:</label>
+                                <select
+                                    name=""
+                                    id=""
+                                    class="form-control"
+                                    formControlName="updatedBy"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let op of stallOperator"
+                                        [value]="op.name"
+                                    >
+                                        {{ op.stalloperatorid }}-{{ op.name }}
+                                    </option>
+                                </select>
+                            </div> -->
+                            
+                            <!-- <div class="form-group">
+                                <label class="mb-1">Purchased At</label>
+                                <select class="form-control" formControlName="purchasedat">
+                                    <option value="">--Select--</option>
+                                    <option
+                                    *ngFor="let supp of suppliersList"
+                                        [value]="supp.supId"
+
+                                    >
+                                        {{ supp.supId }} - {{supp.name}}
+                                    </option>
+                                </select>
+                            </div> -->
+                            <div class="form-group" *ngIf="isgenieLocation">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Status :</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="status"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let stat of statusData"
+                                        [value]="stat"
+                                       
+                                    >
+                                        {{ stat }}
+                                    </option>
+                                </select>
+                             
+                            </div>
+                            <div class="form-group" *ngIf="!isgenieLocation">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Status :</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="status"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let stat of filteredStatusData" [value]="stat">
+                                        {{ stat }}
+                                    </option>
+                                </select>
+
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="" class="mb-1">Comments:</label>
+                                <textarea type="text" class="form-control" formControlName="comments"></textarea>
+                            </div> -->
+                           
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="d-flex flex-row justify-content-between">
+                                <button class="btn btn-danger" (click)="OnDelRefillOrder(deleteDialogAdhoc)"
+                                    *ngIf="headerStatus=='Open'">
+                                    Delete
+                                </button>
+                                <button class="btn btn-primary" (click)="OnSaveRefillOrder()">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-drawer>
+
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                            <span *ngIf="packingback"><mat-icon (click)="onBackpacking()">keyboard_backspace</mat-icon></span> Packing Orders
+                        </div>
+                    </div>
+
+                    <div class="div header-btns">
+                        <button class="ml-3" mat-flat-button [color]="'primary'" (click)="OnAdhocClick()">
+                            <!-- <mat-icon
+                            [svgIcon]="'heroicons_outline:plus'"
+                        ></mat-icon> -->
+                            <!-- <mat-icon></mat-icon> -->
+
+                            <span class="ml-2 mr-1">Add Packing Order</span>
+                        </button>
+                        <button class="ml-3" mat-flat-button [color]="'primary'"
+                            (click)="onCreateRefillOrder(Refillrequest)">
+                            <span>+Create Packing Order</span>
+                        </button>
+                    </div>
+                    <!-- <div class="div">
+                        <button
+                            class="ml-3"
+                            mat-flat-button
+                            [color]="'secondary'"
+                            (click)="OpenMergePop(mergePopup)"
+                        >
+                            Merge PO
+                        </button>
+                    </div> -->
+                    <div class="export"></div>
+                </div>
+                <form [formGroup]="searchFormGroup"
+                    class="flex lg:flex-row sm:flex-col lg:justify-center sm:align-items-center mainForm">
+                    <!-- <div class="dates"> -->
+
+                    <div class="form-row flex searchform" style="gap: 5px">
+                        <div style="width: min-content">
+                            <mat-form-field appearance="fill" style="width: 100% !important">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input matStartDate placeholder="Start date" formControlName="startDate" />
+                                    <input matEndDate placeholder="End date" formControlName="endDate" />
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>  
+
+                        <div>
+                            <mat-form-field appearance="fill" style="width: 100% !important">
+                                <mat-label>Status</mat-label>
+                                <mat-select formControlName="status">
+                                    <mat-option>All</mat-option>
+                                    <mat-option
+                                        *ngFor="let all of RefillfilterstatusData"
+                                        [value]="all"
+                                        >{{ all }}</mat-option
+                                    >
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div>
+                            <mat-radio-group
+                                aria-label="Select an option"
+                                formControlName="paymentStatus"
+                            >
+                                <mat-radio-button value="Paid"
+                                    >Paid</mat-radio-button
+                                >
+                                <mat-radio-button value="Not Paid"
+                                    >Not Paid
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div> -->
+                        <div class="flex">
+                            <div style="align-self: center">
+                                <button class="btn btn-primary mb-2" (click)="onSearch()">
+                                    Go
+                                </button>
+                            </div>
+                            <!-- <button class="btn btn-primary" (click)="onStart()">start</button>
+                            <button class="btn btn-primary" (click)="onStop()">stop</button> -->
+                        </div>
+                    </div>
+                </form>
+                <div *ngIf="loading" class="spinner-container">
+                    <mat-spinner *ngIf="loading"></mat-spinner>
+                </div>
+
+                <div class="divide-y">
+                    <ng-container>
+                        <div *ngFor="let refill of Refillresp; let i = index">
+                            <!-- *ngIf="refill.status != 'Cancelled' && refill.status != 'Closed'" -->
+                            <div 
+                                class="d-flex flex-row  pl-3   p-3 adhoc-po"
+                                (click)="activatingChild(refill, lastDivRef)" #lastDivRef>
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div class="text-lg font-semibold text-primary description"
+                                        (click)="OnEditRefill(refill)">
+                                        <a class="cursor-pointer" *ngIf="refill.orderFor=='Single' || refill.orderType=='Refill'">
+                                            {{ refill.genieId }}-{{
+                                            refill?.genieName
+                                            }}</a>
+                                            <a *ngIf="refill.orderFor=='Multiple'">
+                                                <span *ngFor="let gen of refill.genieNamesList">{{gen.keyname}}</span>
+                                            </a>
+                                            <!-- <a class="cursor-pointer" *ngIf="refill?.orderFor!='Single'">
+                                                {{
+                                                refill?.geniesList
+                                                }}</a> -->
+                                    </div>
+                                    <div class="text-lg font-semibold text-primary adhoc mt-1">
+                                        {{ refill?.idRefillOrd }}/{{ refill?.createdDateTime | date:'yyyy-MM-dd
+                                        HH:mm:ss'}}
+                                    </div>
+                                    <div class="text-lg font-semibold text-primary adhoc mt-1">
+                                      Package Wt:{{ refill?.totalPackageWt}}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div class="text-lg font-semibold text-primary">
+                                        Order For: {{ refill.orderFor }}
+                                    </div>
+                                    <div class="text-lg font-semibold text-primary">
+                                        Packed By: {{ refill.packedBy }}
+                                    </div>
+                                  
+                                </div>
+                                <!-- <button (click)="OnPdfPress(po)">PDF</button> -->
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div class="text-lg font-semibold text-primary">
+                                        <a [matMenuTriggerFor]="statusMenu" (click)="$event.stopPropagation()">
+                                            {{ refill.status }}
+                                        </a>
+                                        <mat-menu #statusMenu="matMenu">
+                                            <!-- <button
+                                                mat-menu-item
+                                                (click)="
+                                                    StatusChange(refill, 'Open',check)
+                                                "
+                                            >
+                                                Open
+                                            </button> -->
+                                            <button mat-menu-item (click)="
+                                                    StatusChange(
+                                                        refill,
+                                                        'Packing',check
+                                                    )
+                                                " *ngIf="refill.status==='Open'">
+                                                Packing
+                                            </button>
+                                            <button mat-menu-item (click)="
+                                                StatusChange(
+                                                    refill,
+                                                    'Packing Completed',check
+                                                )
+                                            " *ngIf="refill.status==='Packing'">
+                                                Packing Completed
+                                            </button>
+                                            <!-- <button mat-menu-item (click)="
+                                                    StatusChange(
+                                                        refill,
+                                                        'In Transit',check
+                                                    )
+                                                " *ngIf="refill.status==='Packing Completed'">
+                                                In Transit
+                                            </button> -->
+                                            <button mat-menu-item (click)="
+                                                    StatusChange(
+                                                        refill,
+                                                        'Correction',check
+                                                    )
+                                                " *ngIf="refill.status==='In Transit' || refill.status==='Open'">
+                                                Correction
+                                            </button>
+                                            <!-- <button mat-menu-item (click)="
+                                                    StatusChange(
+                                                        refill,
+                                                        'Correction Completion',check
+                                                    )
+                                                " *ngIf="refill.status==='Correction'">
+                                                Correction Completion
+                                            </button> -->
+                                            <button mat-menu-item (click)="
+                                                StatusChange(
+                                                    refill,
+                                                    'Refill',check
+                                                )
+                                            " *ngIf="refill.status==='Correction'">
+                                                Refill
+                                            </button>
+                                            <button mat-menu-item (click)="
+                                            StatusChange(
+                                                refill,
+                                                'Refill Completed',check
+                                            )
+                                        " *ngIf="refill.status==='Refill'">
+                                                Refill Completed
+                                            </button>
+                                            <button mat-menu-item (click)="
+                                            StatusChange(
+                                                refill,
+                                                'Return Validation',check
+                                            )
+                                        " *ngIf="refill.status==='Refill Completed'">
+                                                Return Validation
+                                            </button>
+                                            <button mat-menu-item (click)="
+                                        StatusChange(
+                                            refill,
+                                            'Return Completed',check
+                                        )
+                                    " *ngIf="refill.status==='Return Validation'">
+                                                Return Completed
+                                            </button>
+                                            <button mat-menu-item (click)="
+                                    StatusChange(
+                                        refill,
+                                        'Closed'
+                                    )
+                                " *ngIf="refill.status==='Return Completed' || refill.status==='Correction'">
+                                                Closed
+                                            </button>
+                                            <button mat-menu-item (click)="
+                                StatusChange(
+                                    refill,
+                                    'Cancelled'
+                                )
+                            " *ngIf="refill.status==='Packing' || refill.status==='Packing Completed' || refill.status==='Return Validation'">
+                                                Cancelled
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                    <div class=" text-lg font-semibold text-primary adhoc ">
+                                        IC: {{refill.ItemLength}}, PKQ:{{refill.totalPKQ}} <br>
+                                        RFQ:{{refill.totalRefillQty}}, RTQ:{{refill.totalReturnQty}}
+                                    </div>
+                                </div>
+
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button mat-icon-button color="primary">
+                                        <mat-icon *ngIf="refill.childActive!=true"
+                                            (click)="activatingChild(refill)">keyboard_arrow_down</mat-icon>
+                                        <mat-icon *ngIf="refill.childActive==true"
+                                            (click)="activatingChild(refill)">keyboard_arrow_up</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="primary" (click)="OnVoicerecStart()">
+                                        <mat-icon>play_arrow</mat-icon>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                            <ng-container class="accordion-body" *ngIf="refill.childActive">
+                                <div class="example-container">
+                                    <table mat-table [dataSource]="refillSlotTable" matSort class="mat-elevation-z8"
+                                        (matSortChange)="
+                                announceSortChange($event)">
+                                        <div *ngIf="refill.status=='Packing'">
+                                            <ng-container matColumnDef="resetPacking">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    <mat-checkbox class="example-margin"
+                                                        (change)="onSelectall($event)" [disabled]="refill.packedBy == null"></mat-checkbox>
+                                                </th>
+                                                <td mat-cell *matCellDef="let table">
+                                                    <mat-checkbox class="example-margin"
+                                                        [(ngModel)]="table.packingCheck"
+                                                        (change)="OnPackingCheck(table,$event)" [disabled]="refill.packedBy == null || table.packingCheck!=true && table.diffQty== 0"></mat-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="refill.status=='Packing Completed'">
+                                            <ng-container matColumnDef="resetPackingCompleted">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    <!-- <mat-checkbox class="example-margin"
+                                                        (change)="onSelectall($event)" [disabled]="refill.packedBy == null"></mat-checkbox> -->
+                                                </th>
+                                                <td mat-cell *matCellDef="let table">
+                                                    <mat-checkbox class="example-margin"
+                                                        [(ngModel)]="table.packingCompletedCheck"
+                                                        (change)="OnPackingCompletedCheck(table,$event)" [disabled]="table.diffQty === 0" ></mat-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="refill.status=='Correction'">
+                                            <ng-container matColumnDef="resetCorrection" *ngIf="refill.status=='Correction'">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    <mat-checkbox class="example-margin"
+                                                        (change)="onSelectall($event)"></mat-checkbox>
+                                                </th>
+                                                <td mat-cell *matCellDef="let table">
+                                                    <mat-checkbox class="example-margin" [(ngModel)]="table.corrected"
+                                                        (change)="OnCorrectionCheck(table,$event)"></mat-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="refill.status=='Refill'">
+                                            <ng-container matColumnDef="resetRefill" *ngIf="refill.status=='Refill'">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    <mat-checkbox class="example-margin"
+                                                        (change)="onSelectall($event)"></mat-checkbox>
+                                                </th>
+                                                <td mat-cell *matCellDef="let table">
+                                                    <mat-checkbox class="example-margin" [(ngModel)]="table.refillCheck"
+                                                        (change)="OnRefillCheck(refill,table,$event)"></mat-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="refill.status=='Return Validation'">
+                                            <ng-container matColumnDef="resetReturn"
+                                                *ngIf="refill.status=='Return Validation'">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    <mat-checkbox class="example-margin"
+                                                        (change)="onSelectall($event)"></mat-checkbox>
+                                                </th>
+                                                <td mat-cell *matCellDef="let table">
+                                                    <mat-checkbox class="example-margin" [(ngModel)]="table.returnCheck"
+                                                        (change)="OnReturnCheck(table,$event)"></mat-checkbox>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+
+                                        <ng-container matColumnDef="rackSlotId" class="ml-2">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header>RackId/<br>SlotId</th>
+                                            <td mat-cell *matCellDef="let table" class="center">
+                                                <label>{{ table.rackId }}{{ table.slotId }}</label>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="prodId">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                class="justify-center">Product</th>
+                                            <td mat-cell *matCellDef="let table;  let i = index">
+                                                <a (click)="OnEditRow(table,i)" [ngClass]="{
+                                        'text-green-500':
+                                        (refill.status === 'Packing' && table.packingCheck) || (refill.status == 'Return Validation' && table.returnCheck),
+                                        'text-blue-400':
+                                        (refill.status === 'Packing' && !table.packingCheck && !table.itemChanged) || (refill.status == 'Correction' && !table.corrected && !table.itemChanged) || (refill.status == 'Refill' && !table.refillCheck && !table.itemChanged) || (refill.status == 'Return Validation' && !table.returnCheck && !table.itemChanged),
+                                        'text-yellow-400':table.itemChanged == true
+
+                                    }"> <span *ngIf="refill.status=='Packing' && table.packingCheck "
+                                                        style="text-decoration: line-through;">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+
+                                                    </span>
+                                                    <span *ngIf="refill.status=='Packing'&& !table.packingCheck"
+                                                        [ngClass]="{'highlight-row':  shouldHighlightRow(i, table,refill.status) }">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+                                                    </span>
+                                                    <span *ngIf="refill.status=='Correction' && table.corrected"
+                                                        style="text-decoration: line-through;">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+
+                                                    </span>
+                                                    <span *ngIf="refill.status=='Correction'&& !table.corrected"
+                                                    [ngClass]="{'highlight-row':  shouldHighlightRow(i, table,refill.status) }">
+                                                    {{ table.prodId }}-{{
+                                                    table.prodName
+                                                    }}-{{
+                                                    table.uom}}-{{table.salePrice}}<br>
+
+                                                </span>
+                                                    <span *ngIf="refill.status=='Refill' && table.refillCheck"
+                                                        style="text-decoration: line-through;">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+                                                    </span>
+                                                    <span *ngIf="refill.status=='Refill' && !table.refillCheck"
+                                                        [ngClass]="{'highlight-row':  shouldHighlightRow(i, table,refill.status) }">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+                                                    </span>
+                                                    <span
+                                                        *ngIf="refill.status=='Return Validation' && table.returnCheck"
+                                                        style="text-decoration: line-through;">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+                                                    </span>
+                                                    <span
+                                                        *ngIf="refill.status=='Return Validation' && !table.returnCheck"
+                                                        [ngClass]="{'highlight-row':  shouldHighlightRow(i, table,refill.status) }">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+                                                    </span>
+                                                    <span
+                                                        *ngIf="refill.status=='Open' || refill.status=='Packing Completed' || refill.status=='In Transit' || refill.status=='Correction Completion' || refill.status=='Refill Completed' || refill.status=='Return Completed' || refill.status=='Closed'">
+                                                        {{ table.prodId }}-{{
+                                                        table.prodName
+                                                        }}-{{
+                                                        table.uom}}-{{table.salePrice}}<br>
+
+                                                    </span>
+
+                                                </a>
+                                                <strong>Max Qty:{{table.maxQty}},<span>Pack
+                                                        Qty:{{table.packingQty}},</span><span *ngIf="refill.status=='Return Validation' || refill.status=='Return Completed'">Refill
+                                                            Qty:{{table.refillQty}},</span><span
+                                                        *ngIf="refill.status!='Packing' && refill.status!='Packing Completed' && refill.status!='Return Validation' && refill.status!='Return Completed'
+                                                        "> Return Qty:{{
+                                                        table.returnQty }},</span>
+                                                        <!-- <span
+                                                        *ngIf="refill.status!='Packing' && refill.status!='Packing Completed' && refill.status!='Return Validation'
+                                                        "> Return Qty:{{
+                                                        table.returnQty }},</span> -->
+                                                        <span> Avbl / Resv Qty: {{table.availableQty}} / {{table.reservedQty}}</span>
+                                                    <!-- <span>Price: {{table.salePrice}}</span> -->
+                                                </strong>
+                                            </td>
+                                        </ng-container>
+                                       
+                                        <div *ngIf="refill.status=='Packing'">
+
+                                            <ng-container matColumnDef="packingQty">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Empty<br>Qty
+                                                </th>
+                                                <td mat-cell *matCellDef="let table"
+                                                    [style.text-indent.px]="table.packingCheck ? 16 : 0">
+                                                    <ng-container *ngIf="refill.status !== 'Packing'; else editMode">
+                                                        <label>{{ table.packingQty }}</label>
+                                                    </ng-container>
+                                                    <ng-template #editMode>
+
+                                                        <input type="number" *ngIf="!table.packingCheck || editingMode "
+                                                            [(ngModel)]="table.diffQty" class="w-10 text-center"
+                                                            style="border: 1px solid;" (input)="onDiffQtyChange(table)"/>
+                                                            
+                                                        <lable class="mb-1" *ngIf="table.packingCheck">
+                                                            {{table.emptyQty-table.packingQty}}</lable>
+
+                                                    </ng-template>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="packaudio" >
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                                <td mat-cell *matCellDef="let table">
+                                                <button mat-icon-button color="primary" (click)="OnPlay(table, $event)" *ngIf="!table.packingCheck">
+                                                    <mat-icon>play_arrow</mat-icon>
+                                                    
+                                                </button>
+                                            </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="packnextaudio" >
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                                <td mat-cell *matCellDef="let table">
+                                                <button mat-icon-button color="primary" (click)="OnNext(table, $event)" *ngIf="!table.packingCheck">
+                                                   
+                                                    <mat-icon>navigate_next</mat-icon>
+                                                </button>
+                                            </td>
+                                            </ng-container>
+                                        </div>
+                                       
+                                        
+                                        <div *ngIf="refill.status=='Correction' || refill.status=='Refill'">
+
+                                            <ng-container matColumnDef="correctionQty">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Correction<br>Qty
+                                                </th>
+                                                <td mat-cell *matCellDef="let table"
+                                                    [style.text-indent.px]="table.corrected ? 16 : 0">
+                                                    <ng-container *ngIf="table.corrected; else editMode">
+                                                        <label>{{ table.correctionQty }}</label>
+                                                    </ng-container>
+                                                    <ng-template #editMode>
+                                                        <!-- (blur)="saveCorrectionData(table)" -->
+                                                        <input type="text" *ngIf="!table.corrected || editingMode"
+                                                            [(ngModel)]="table.correctionQty" class="w-10 text-center"
+                                                            style="border: 1px solid;"  />
+                                                        <!-- <lable class="mb-1" *ngIf="table.corrected" >
+                                                            {{table.correctionQty}}</lable> -->
+
+                                                    </ng-template>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <!-- <div *ngIf="refill.status=='Refill'">
+                                <ng-container matColumnDef="availableQty">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Available Qty</th>
+                                    <td mat-cell *matCellDef="let table" class="text-center">
+                                        <label> {{ table.availableQty }}</label>
+                                    </td>
+                                </ng-container>
+                                </div> -->
+                                        <div *ngIf="refill.status=='Refill'">
+                                            <!-- <ng-container matColumnDef="refillavailableQty">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Available Qty</th>
+                                    <td mat-cell *matCellDef="let table" class="text-center">
+                                        <label> {{ table.availableQty }}</label>
+                                    </td>
+                                </ng-container> -->
+                                            <ng-container matColumnDef="refillQty">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Refill<br>Qty</th>
+                                                <td mat-cell *matCellDef="let table"
+                                                    [style.text-indent.px]="table.refillCheck ? 16 : 0">
+                                                    <ng-container *ngIf="table.refillCheck; else refillmode">
+                                                        <label>{{ table.refillQty }}</label>
+                                                    </ng-container>
+                                                    <ng-template #refillmode>
+                                                        <!-- (blur)="saveRefillData(table)"  -->
+                                                        <input type="number" 
+                                                            [(ngModel)]="table.refillQty" class="w-10 text-center"
+                                                            style="border: 1px solid;" />
+                                                        
+                                                    </ng-template>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="refill.status=='Return Validation' || refill.status=='Return Completed'">
+                                            <ng-container matColumnDef="return">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Return Qty</th>
+                                                <td mat-cell *matCellDef="let table" class="Avblcenter">
+                                                    <label> {{ table.returnQty }}</label>
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="refill.status=='Packing Completed'">
+                                            <ng-container matColumnDef="difference">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Diff Qty</th>
+                                                <td mat-cell *matCellDef="let table" class="Avblcenter">
+                                                    <label *ngIf="table.packingCompletedCheck || table.diffQty==0"> {{ table.diffQty }}</label>
+                                                    <input type="number" *ngIf="!table.packingCompletedCheck && table.diffQty != 0"
+                                                            [(ngModel)]="table.diffQty" class="w-10 text-center"
+                                                            style="border: 1px solid;"  />
+                                                </td>
+                                            </ng-container>
+                                        </div>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row;  let i = index; columns: displayedColumns;">
+                                        </tr>
+                                        <!-- <thead
+                                  >
+                                        <tr>
+                                            <th class="text-center font-bold colcolorREd" *ngIf="refill.status=='Packing' || refill.status=='Refill' ">
+                                               Reset
+                                            </th>
+
+                                            <th class="colcolor text-center flex"   (mouseenter)="showSortingIndicators = true"
+                                            (mouseleave)="showSortingIndicators = false">RackId/<br>SlotId
+                                            <span
+                                            class="sort-indicator"
+                                            *ngIf="showSortingIndicators"
+                                          ><div (click)="onSortUp('slotId')">
+                                            <span
+                                              class="arrow-up"
+                                              [class.selected]="isAscending"
+
+                                            ></span>
+                                        </div>
+                                        <div  (click)="onSortDown('slotId')">
+                                            <span
+                                            class="arrow-down"
+                                            [class.selected]="!isAscending"
+
+                                          ></span>
+                                        </div>
+
+                                          </span>
+
+                                            </th>
+                                            <th class="colcolor text-center" >Product
+                                            <span
+                                            class="sort-indicator"
+                                            *ngIf="showSortingIndicators"
+                                          ><div (click)="onSortUp('prodId')">
+                                            <span
+                                              class="arrow-up"
+                                              [class.selected]="isAscending"
+
+                                            ></span>
+                                        </div>
+                                        <div  (click)="onSortDown('prodId')">
+                                            <span
+                                            class="arrow-down"
+                                            [class.selected]="!isAscending"
+
+                                          ></span>
+                                        </div>
+
+                                          </span>
+                                        </th>
+                                            <th class="colcolor text-center">Max<br> Qty
+                                        </th>
+                                            <th class="colcolor text-center" >Packing<br> Qty</th>
+                                            <th class="colcolor text-center" >Refill<br> Qty</th>
+                                            <th class="colcolor text-center" >Return<br> Qty</th>
+
+
+                                        </tr>
+                                    </thead> -->
+                                        <!-- <tbody>
+                                        <tr
+                                            *ngFor="
+                                                let table of mobilePoItems;
+                                                let i = index
+                                            "
+                                        >
+                                            <td class="text-center" *ngIf="refill.status=='Packing'">
+                                                <mat-checkbox class="example-margin"
+                                                [(ngModel)]="table.packingCheck"
+                                                (change)="OnPackingCheck(table,$event)">
+
+                                  </mat-checkbox>
+                                            </td>
+                                            <td class="text-center" *ngIf="refill.status=='Refill'">
+                                                <mat-checkbox class="example-margin"
+                                                [(ngModel)]="table.refillCheck"
+                                                (change)="OnRefillCheck(table,$event)">
+
+                                  </mat-checkbox>
+                                            </td>
+                                            <td class="text-center">
+                                                <label>{{ table.rackId }}{{ table.slotId }}</label>
+                                            </td>
+
+                                            <td>
+                                                <a (click)="OnEditRow(table)"  [ngClass]="{
+                                                    'text-green-500':
+                                                    table.packingCheck || table.refillCheck ,
+                                                    'text-yellow-400':
+                                                    !table.packingCheck || !table.refillCheck
+
+                                                }" >
+
+                                                <span *ngIf="refill.status=='Packing' && table.packingCheck "style="text-decoration: line-through;">
+                                                    {{ table.prodId }}-{{
+                                                        table.prodName
+                                                    }}-{{
+                                                        table.uom}}
+                                                </span>
+                                                <span *ngIf="refill.status=='Packing'&& !table.packingCheck" >
+                                                    {{ table.prodId }}-{{
+                                                        table.prodName
+                                                    }}-{{
+                                                        table.uom}}
+                                                </span>
+                                                <span *ngIf="refill.status=='Refill' && table.refillCheck" style="text-decoration: line-through;" >
+                                                    {{ table.prodId }}-{{
+                                                        table.prodName
+                                                    }}-{{
+                                                        table.uom}}
+                                                </span>
+                                                <span *ngIf="refill.status=='Refill' && !table.refillCheck" >
+                                                    {{ table.prodId }}-{{
+                                                        table.prodName
+                                                    }}-{{
+                                                        table.uom}}
+                                                </span>
+                                                <span *ngIf="refill.status=='Open' || refill.status=='In Transit' || refill.status=='Refill Completed'  || refill.status=='Return Validation' || refill.status=='Return Completed'" >
+                                                    {{ table.prodId }}-{{
+                                                        table.prodName
+                                                    }}-{{
+                                                        table.uom}}
+                                                </span>
+                                            </a>
+
+                                            <td class="text-center">
+                                                <label
+                                                    >{{ table.maxQty }}</label
+                                                >
+                                            </td>
+                                            <td class="text-center">
+                                            <ng-container *ngIf="refill.status !== 'Packing'; else editMode">
+                                                <label>{{ table.packingQty }}</label>
+                                            </ng-container>
+                                            <ng-template #editMode>
+
+                                                <input type="text" *ngIf="!table.packingCheck || editingMode" [(ngModel)]="table.packingQty" class="w-10 text-center" style="border: 1px solid;" (blur)="saveData(table)"/>
+                                                <lable class="mb-1" *ngIf="table.packingCheck">{{table.packingQty}}</lable>
+
+                                            </ng-template>
+                                        </td>
+                                            <td class="text-center">
+
+                                                <ng-container *ngIf="refill.status !== 'Refill'; else refillmode">
+                                                    <label>{{ table.refillQty }}</label>
+                                                </ng-container>
+                                                <ng-template #refillmode>
+
+                                                    <input type="text" *ngIf="!table.refillCheck" [(ngModel)]="table.refillQty" class="w-10 text-center" style="border: 1px solid;" (blur)="saveRefillData(table)"/>
+                                                    <lable class="mb-1" *ngIf="table.refillCheck">{{table.refillQty}}</lable>
+                                                </ng-template>
+                                            </td>
+                                            <td class="text-center">
+                                                <label
+                                                    >{{ table.packingQty-table.refillQty }}</label
+                                                >
+                                            </td>
+
+
+
+                                        </tr>
+                                    </tbody> -->
+                                    </table>
+                                </div>
+
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <!-- <ng-container *ngIf="todayCompletedTasks.length > 0">
+                        <div
+                            class="completed-heading"
+                            (click)="toggleCompletedTasks()"
+                        >
+                            <span>Today Completed Tasks</span>
+
+                            <div class="down-arrow">
+                                <button mat-icon-button>
+                                    <mat-icon (click)="toggleCompletedTasks()"
+                                        >keyboard_arrow_down</mat-icon
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="isCompletedTasksVisible">
+                            <div
+                                *ngFor="let task of todayCompletedTasks"
+                                class="cont-completed"
+                            >
+                                <div class="completed-task-name">
+                                    {{ task.taskname }}
+                                </div>
+
+                                <div
+                                    class="assd-to"
+                                    *ngIf="user.role == 'admin'"
+                                >
+                                    {{ task.assignedto }}
+                                </div>
+                                <div class="duration-date">
+                                    <div class="duration">
+                                        {{ task.duration }} min
+                                    </div>
+                                    <div
+                                        class="date text-sm whitespace-nowrap text-secondary"
+                                    >
+                                        {{ task.duedate | date: "LLL dd" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container> -->
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose</h5>
+        <button type="button" class="close" aria-label="Close" (click)="OnClose('Cross Click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <form class="needs-validation">
+                <div class="form">
+                    <div class="form-group">
+                        <label class="mb-1">Purchase Order:</label>
+                        <select class="form-control" [formControl]="purchaseorder">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let adhoc of adhocPoData" [value]="adhoc.adhocpoid">
+                                {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Categories:</label>
+                        <select class="form-control" [formControl]="category">
+                            <option value="All">All</option>
+                            <option [value]="val" *ngFor="let val of categories">
+                                {{ val }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1">Available:</label>
+                        <select class="form-control" [formControl]="available">
+                            <option value="All">All</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <!-- <div *ngIf="validation">
+                    <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                  </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+            Save
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="OnClose('Cross Click')">
+            Close
+        </button>
+    </div>
+</ng-template>
+<!-- delete dialog from below -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #confirmRefill>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Packing Order</h4>
+        <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Are you sure you want create Packing order ?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="OnConfirmCreateRefillOrder()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #deleteDialogAdhoc>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="OnConfirmRefill()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #updatePrice>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Update Price</h4>
+        <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <div class="form">
+            <div class="form-group">
+                <label for="" class="mb-1">Sale Price</label>
+                <input type="number" class="form-control" [formControl]="salePriceControl" />
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="Cancel()">
+            Cancel
+        </button>
+        <button mat-raised-button color="secondary" (click)="OnUpdatePrice()">
+            Save
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+
+
+
+<ng-template #snackBar>
+    <div class="flex mt-auto">
+        <span class="example-pizza-party" matSnackBarLabel>
+            {{ responseMessage }}
+        </span>
+        <span matSnackBarActions class="ml-auto">
+            <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">
+                <mat-icon color="primary">close</mat-icon>
+            </button>
+        </span>
+    </div>
+</ng-template>
+<ng-template #Refillrequest>
+    <div  class="dialogWidth">
+        <div class="flex items-center justify-content-between mb-3">
+            Select Genie
+            <a mat-icon-button (click)="OnCloseItem()">
+                <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </a>
+    
+        </div>
+        <form
+        [formGroup]="RefillCreateFormGroup">
+        <!-- <div>
+          
+            <label for="" class="mb-1">Refill Order Type: </label><br>
+            <mat-radio-group
+                aria-label="Select an option"
+                formControlName="orderType"
+            >
+                <mat-radio-button value="Packing" class="mr-1" (click)="onRadioOrderType('Packing')">Packing</mat-radio-button>
+                <mat-radio-button value="Refill" class="ml-1" (click)="onRadioOrderType('Refill')">Refill
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+     -->
+        <div class="mb-2" *ngIf="!RefillMethod">
+          
+            <label for="" class="mb-1">Order For: </label><br>
+            <mat-radio-group
+                aria-label="Select an option"
+                formControlName="orderFor"
+            >
+                <mat-radio-button value="Single" class="mr-2" (click)="onRadio('Single')"
+                    >Single</mat-radio-button
+                >
+                <mat-radio-button value="Multiple" class="ml-1" (click)="onRadio('Multiple')"
+                    >Multiple
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+    
+        <div appearance="fill" *ngIf="SinglegenieSelection || RefillMethod">
+            <mat-form-field class="MultipleField">
+                <mat-label>Genie Name :</mat-label>
+                <mat-select formControlName="genieName" #singleSelect class="form-control-plain-text" [(ngModel)]="selectedValue" (selectionChange)="onGenieChange(selectedValue)">
+                    <mat-option *ngFor="let stall of stallData" [value]="stall.stallid">
+                        {{ stall.stallid }}-{{ stall.name }}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            <!-- <select name="" id="" (change)="onGenieChange(selectedValue)" [(ngModel)]="selectedValue" formControlName="genieName">
+                <option value="0">--Select--</option>
+                <option [value]="stall.stallid" *ngFor="let stall of stallData">
+                    {{ stall.stallid }}-{{ stall.name }}
+                </option>
+            </select> -->
+    
+        </div>
+        <div appearance="fill" *ngIf="!SinglegenieSelection && !RefillMethod" style="width: 300px;" class="mt-2">
+            <mat-form-field class="MultipleField">
+                <mat-label>Genie Name :</mat-label>
+            <mat-select formControlName="geniesList" multiple class="MultipleField">
+                  <mat-option>
+                        <ngx-mat-select-search [formControl]="genieControl"
+                            placeholderLabel="Search"></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngIf="filteredstallData.length == 0; else noResultsFound" disabled>
+                        No results found
+                    </mat-option>
+                <mat-option *ngFor="let stall of filteredstallData; let i =index" [value]="stall.stallid">
+                    {{ stall.stallid }}-{{ stall.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+        <div class="form-group" appearance="fill" *ngIf="!RefillMethod">
+            <label for="" class="mb-1">Packed By:</label>
+            <select name="" id="" class="form-control" formControlName="packedBy">
+                <option value="">--Select--</option>
+                <option *ngFor="let op of stallOperator" [value]="op.name">
+                    {{ op.stalloperatorid }}-{{ op.name }}
+                </option>
+            </select>
+        </div>
+        <div appearance="fill" *ngIf="RefillMethod">
+            <mat-form-field class="MultipleField">
+                <mat-label>Refill Packing Completed :</mat-label>
+                <mat-select formControlName="refillPackOrder" #singleSelect class="form-control-plain-text"
+                   
+                 >
+                    <!-- <mat-option>
+                        <ngx-mat-select-search [formControl]="itemControl"
+                            placeholderLabel="Search"></ngx-mat-select-search>
+                    </mat-option> -->
+    
+                    <mat-option *ngFor="let ref of allRefillOrders" [value]="ref.idRefillOrd">
+                        {{ ref.idRefillOrd }}-{{ ref.genieName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>   
+          
+    
+        </div>
+    </form>
+        <div class="Createbutton">
+            <button class="btn btn-primary" (click)="onCreate()">Create</button>
+        </div>
+    </div>
+  
+</ng-template>
+
+<ng-template #check>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Checklist</h4>
+        <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div *ngIf="packingDialogContent">
+        <mat-dialog-content class="mat-typography">
+            <mat-checkbox class="example-margin" [(ngModel)]="packingStatusCheck1">Check if the Genie Name has been
+                marked correctly.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="packingStatusCheck2">Check if Quantities are packed
+                correctly to avoid any damages while In Trasit.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="packingStatusCheck3">Check the correct key has been taken
+                before start.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="packingStatusCheck4">Check if the Genie onsite Entry Gate
+                Pass issual process is known and fulfilled.</mat-checkbox>
+        </mat-dialog-content>
+    </div>
+    <div *ngIf="IntransitStatusContent">
+        <mat-dialog-content class="mat-typography">
+            <mat-checkbox class="example-margin" [(ngModel)]="IntransitStatusCheck1">Before refilling Check If any slot
+                has Slot Issue. if found reset the slots.<br>Share the slot number and item count in these
+                slots.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="IntranasitStatusCheck2">Check if Quantities are packed
+                correctly to avoid any damages while In Trasit.</mat-checkbox><br>
+
+        </mat-dialog-content>
+    </div>
+    <div *ngIf="!packingDialogContent && !IntransitStatusContent">
+        <mat-dialog-content class="mat-typography">
+            <mat-checkbox class="example-margin" [(ngModel)]="refillStatusCheck1">Share the screenshot of the Genie
+                after refill.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="refillStatusCheck2">Send message if any slot has been not
+                fully refilled.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="refillStatusCheck3">Check if missing or damaged items are
+                been reported.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="refillStatusCheck4">Validate Return Items before
+                starting.</mat-checkbox><br>
+            <mat-checkbox class="example-margin" [(ngModel)]="refillStatusCheck5">Check the door has been locked
+                properly.</mat-checkbox>
+        </mat-dialog-content>
+    </div>
+    <mat-dialog-actions style="justify-content: flex-end;">
+        <button class="btn" (click)="onCancelPackingCheck()">Cancel</button>
+        <button class="btn btn-primary" (click)="onPackingStatusCheck()">Ok</button>
+    </mat-dialog-actions>
+</ng-template>

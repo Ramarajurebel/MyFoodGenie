@@ -1,0 +1,206 @@
+.main-card {
+    padding: 10px 10px;
+}
+.rcp {
+    color: blue;
+    font: bold;
+    cursor: pointer;
+}
+.index {
+    width: max-content;
+}
+.dialog-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.rcp {
+    width: 40%;
+    word-wrap: break-word;
+}
+.ingr {
+    width: 40%;
+    word-wrap: break-word;
+}
+.col-4 {
+    width: 33.3333%;
+}
+.col-1 {
+    width: 33.33333%;
+    padding-right: 5px;
+}
+.orange {
+    color: orange;
+}
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+// .card {
+//     width: 50%;
+// }
+.one {
+    width: 33.3333%;
+}
+.two {
+    width: 33.3333%;
+}
+.four {
+    width: 33.3333%;
+}
+.chef {
+    width: auto;
+    padding-right: 10px;
+}
+select {
+    -webkit-appearance: listbox !important;
+}
+.status {
+    display: flex;
+    gap: 10px;
+}
+.save-btn {
+    margin-top: 10px;
+}
+.box:nth-child(2) {
+    margin-right: auto;
+    font-weight: bold;
+}
+// below is for grouping
+.main-tasks {
+    width: 100%;
+    height: 100%;
+    word-wrap: break-word;
+}
+.name {
+    width: 40%;
+    height: max-content;
+    word-wrap: break-word;
+}
+.assigned-to {
+    width: 75%;
+    word-wrap: break-word;
+}
+.main-tasks-duration {
+    justify-self: end;
+    align-items: center;
+    width: 100%;
+}
+.time {
+    margin-top: 20px;
+    margin-left: 42%;
+}
+.start-time-end-time {
+    padding-right: 20px;
+}
+.task-name {
+    width: 85% !important;
+    word-wrap: break-word !important;
+    height: auto;
+    padding-top: 30px;
+    align-items: center;
+    font-size: medium;
+}
+.full-row {
+    height: 100% !important;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+.group-ingr {
+    width: 100%;
+    background-color: rgba(128, 128, 128, 0.452);
+    display: flex;
+    flex-direction: column;
+}
+.assd-to {
+    word-wrap: break-word !important;
+    width: 85%;
+}
+.full-task-row {
+    gap: 15px;
+}
+.toggle-icon {
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+}
+// grouping ends
+@media (max-width: 480px) {
+    .main-card {
+        padding: 10px 10px;
+        display: flex;
+        flex-direction: column;
+    }
+    .chef {
+        width: auto;
+        padding-right: 10px;
+    }
+    table.rcpingr {
+        width: 100%;
+    }
+    .rcpingr tr {
+        width: 100%;
+    }
+    .rcpingr th {
+        padding: 0.3rem 0.2em !important;
+    }
+    .rcpingr td {
+        padding: 0.3rem 0.1em !important;
+    }
+    .one {
+        width: 100%;
+    }
+    .two {
+        width: 100%;
+    }
+    .four {
+        width: 100%;
+    }
+    .index {
+        width: max-content;
+        padding-right: 10px !important;
+    }
+}
+@media (min-width: 600px) and (max-width: 1440px) {
+    .row {
+        gap: 5px;
+    }
+    .one {
+        width: 33.3333%;
+    }
+    .two {
+        width: 33.3333%;
+    }
+    .four {
+        width: 33.3333%;
+    }
+    .rcp {
+        width: 40%;
+        word-wrap: break-word;
+    }
+    .ingr {
+        width: 40%;
+        word-wrap: break-word;
+    }
+    .col-4 {
+        width: 33.3333%;
+    }
+    .col-1 {
+        width: 33.33333%;
+        padding-right: 5px;
+    }
+    .main-card {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .index {
+        width: max-content;
+    }
+    .chef {
+        width: auto;
+        padding-right: 10px;
+    }
+}

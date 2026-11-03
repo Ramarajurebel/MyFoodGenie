@@ -1,0 +1,164 @@
+<div class="flex flex-auto">
+    <form
+        class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+        [formGroup]="adhocItemForm"
+    >
+        <!-- Header -->
+        <div class="flex justify-between -mt-3 -ml-4">
+            <div class="flex items-center">
+                <a mat-icon-button (click)="OnClose()">
+                    <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </a>
+            </div>
+        </div>
+
+        <mat-divider class="mt-6 mb-8"></mat-divider>
+
+        <!-- Title -->
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Purchase Order:</label>
+            <select
+                class="form-control"
+                required=""
+                formControlName="adhocpoid"
+            >
+                <option value="">--Select--</option>
+                <option
+                    *ngFor="let adhoc of adhocData"
+                    [value]="adhoc.adhocpoid"
+                >
+                    {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                </option>
+            </select>
+
+            <!-- <div *ngIf="validation">
+                  <mat-error *ngIf="TableFieldsForm.controls['supItemId'].hasError('required')">
+                    <strong >required</strong>
+                  </mat-error>
+                </div> -->
+        </div>
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Category:</label>
+            <select class="form-control" required="" formControlName="category">
+                <option value="">--Select--</option>
+                <option *ngFor="let all of categories" [value]="all">
+                    {{ all }}
+                </option>
+            </select>
+            <!-- <div *ngIf="validation">
+                <mat-error *ngIf="TableFieldsForm.controls['productId'].hasError('required')">
+                  <strong >required</strong>
+                </mat-error>
+              </div> -->
+        </div>
+        <div class="form-group">
+            <!-- <label for="validationCustom01" class="mb-1">Product List:</label>
+            <select class="form-control" required="" formControlName="productlist">
+              <option value="">--Select--</option>
+              <option *ngFor="let all of Productslist" [value]="all.prodId">{{all.prodId}}-{{all.prodName}}</option>
+          </select> -->
+            <mat-form-field style="width: 100%">
+                <mat-label>Products</mat-label>
+                <mat-select
+                    formControlName="productlist"
+                    #singleSelect
+                    class="form-control-plain-text"
+                    (selectionChange)="onSelectProducts($event.source.value)"
+                >
+                    <mat-option>
+                        <ngx-mat-select-search
+                            [formControl]="itemcontrol"
+                            placeholderLabel="Search"
+                        ></ngx-mat-select-search>
+                    </mat-option>
+
+                    <mat-option
+                        *ngFor="let all of filtereditems"
+                        [value]="all.prodId"
+                    >
+                        {{ all.prodId }}-{{ all.prodName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!-- <div *ngIf="validation">
+              <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+                <strong >required</strong>
+              </mat-error>
+            </div> -->
+        </div>
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Quantity:</label>
+            <input
+                class="form-control"
+                required
+                type="number"
+                formControlName="quantity"
+            />
+            <!-- <div *ngIf="validation">
+            <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+              <strong >required</strong>
+            </mat-error>
+          </div> -->
+        </div>
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">UOM:</label>
+            <select class="form-control" formControlName="uom">
+                <option value="">--Select--</option>
+                <option *ngFor="let all of UOM" [value]="all">{{ all }}</option>
+            </select>
+            <!-- <div *ngIf="validation">
+          <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+            <strong >required</strong>
+          </mat-error>
+        </div> -->
+        </div>
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Price per UOM :</label>
+            <input
+                class="form-control"
+                type="number"
+                (input)="OnPricePerUOMChange($event.target.valueAsNumber)"
+                formControlName="price"
+            />
+        </div>
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Final Price :</label>
+            <input
+                class="form-control"
+                type="number"
+                (input)="OnFinalPriceChange($event.target.valueAsNumber)"
+                formControlName="finalprice"
+            />
+        </div>
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Available:</label>
+            <select class="form-control" formControlName="available">
+                <option value="false">--Select--</option>
+                <option value="true">Available</option>
+                <option value="false">Not Available</option>
+            </select>
+            <!-- <div *ngIf="validation">
+        <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+          <strong >required</strong>
+        </mat-error>
+      </div> -->
+        </div>
+        <mat-divider class="mt-6 mb-8"></mat-divider>
+        <div class="d-flex flex-row justify-content-between">
+            <button class="btn btn-danger" *ngIf="editMode" (click)="OnDel()">
+                Delete
+            </button>
+            <button class="btn btn-primary" (click)="OnSave()">Save</button>
+        </div>
+
+        <!-- <div class="form-group">
+            <label>Add Comments</label>
+            <textarea
+                rows="5"
+                [formControl]="comment"
+                class="form-control"
+            ></textarea>
+        </div> -->
+        <!-- Tags -->
+    </form>
+</div>

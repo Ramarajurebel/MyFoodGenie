@@ -1,0 +1,107 @@
+.flex {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%; 
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%; 
+  margin: 0 2px;
+  padding: 0 1px; 
+  max-width: max-content;
+}
+
+.table {
+  width: 100%; 
+  border-collapse: collapse;
+  table-layout: fixed; 
+}
+
+.table th,
+.table td {
+  padding: 12px 8px; 
+  text-align: left;
+  word-wrap: break-word; 
+}
+
+.table th {
+  background-color: #f8f9fa; /* Light gray header*/
+  font-weight: bold;
+}
+
+.table-primary {
+  background-color: white !important;
+}
+
+.btn {
+  padding: 5px 10px;
+  margin-right: 5px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.dropdown-flex {
+  display: inline-flex;
+  width: auto;
+  min-width: 200px;
+  margin-bottom: 16px;
+  padding-left: 160px; 
+}
+.transacton-dropdown{
+  width:100px;
+}
+.heading{
+  padding-left: 40px;
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+.select-table{
+  width:100%;
+  overflow: visible;
+  white-space: nowrap;
+}
+.container-search {
+  display: flex;
+  align-items: center; /* Ensures all items align vertically */
+  gap: 176px; /* Adjust spacing between dropdown and search bar */
+  padding: 16px; /* Add padding for consistent spacing */
+}
+
+.dropdown-flex {
+  min-width: 300px;   
+  margin: 0; /* Remove unnecessary margins */
+}
+
+.searchbar {
+  display: flex;
+  align-items: center; /* Aligns the search icon and input */
+  background-color: #f8f9fa;
+  border: 1px solid black;
+  border-radius: 40px;
+  height: 50px;
+  width: 300px; /* Adjust width for a better layout */
+  padding: 0 16px; /* Adjust padding for consistent input space */
+}
+
+.searchicon {
+  margin-right: 8px; /* Space between the icon and the input */
+}
+
+.search-input {
+  flex-grow: 1; /* Fills the remaining space in the container */
+  border: none;
+  background: transparent;
+  outline: none;
+  height: 100%;
+}

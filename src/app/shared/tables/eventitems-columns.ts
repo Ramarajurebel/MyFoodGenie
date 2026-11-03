@@ -1,0 +1,55 @@
+export const EventItemsColumns = [
+    {
+        key: 'recname',
+        type: 'recid/name',
+        label: 'Recipe',
+        disabled: true,
+        controlName: 'category',
+        columnActive: true,
+    },
+    {
+        key: 'platterscount',
+        type: 'requiredQuantity',
+        label: 'Required Qty',
+        disabled: false,
+        controlName: 'productlist',
+        columnActive: true,
+    },
+    {
+        key: 'outputqty',
+        type: 'output',
+        label: 'Output Qty',
+        disabled: false,
+        controlName: 'quantity',
+        columnActive: false,
+    },
+    {
+        key: 'recstatus',
+        type: 'select',
+        label: 'Rcp Status',
+        disabled: false,
+        controlName: 'recstatus',
+        columnActive: true,
+    },
+    // {
+    //     key: 'uom',
+    //     type: 'uom',
+    //     label: 'UOM',
+    //     disabled: true,
+    //     controlName: 'uom',
+    // },
+    // {
+    //     key: 'totalprice',
+    //     type: 'number',
+    //     label: 'Price',
+    //     disabled: false,
+    //     controlName: 'price',
+    // },
+
+    {
+        key: 'isEdit',
+        type: 'isEdit',
+        label: 'Edit',
+        columnActive: true,
+    },
+];

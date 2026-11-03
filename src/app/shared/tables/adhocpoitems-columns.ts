@@ -1,0 +1,175 @@
+export const PoItemsColumns = [
+    {
+        key: 'available',
+        type: 'checkbox',
+        label: '',
+        disabled: false,
+        controlName: 'available',
+        isColumnActive: true,
+        isSort: false,
+    },
+    {
+        key: 'ispacked',
+        type: 'ispacked',
+        label: 'Is Packed',
+        disabled: false,
+        controlName: 'ispacked',
+        isColumnActive: false,
+        isSort: false,
+    },
+    {
+        key: 'isreceived',
+        type: 'isreceived',
+        label: 'Is Recieved',
+        disabled: false,
+        controlName: 'ispacked',
+        isColumnActive: false,
+        isSort: false,
+    },
+    {
+        key: 'itemName',
+        type: 'itemname',
+        label: 'Item Name',
+        disabled: true,
+        controlName: 'productlist',
+        isColumnActive: true,
+        isSort: true,
+    },
+    // {
+    //     key: 'hsnCode',
+    //     type: 'hsnCode',
+    //     label: 'HSN Code',
+    //     disabled: true,
+        
+    //     isColumnActive: true,
+    //     isSort: true,
+    // },
+    // {
+    //     key: 'qtyPerUom',
+    //     type: 'qtyperuom',
+    //     label: 'Item UOM',
+    //     disabled: false,
+    //     controlName: 'qtyperuom',
+    //     isColumnActive: true,
+    //     isSort: true,
+    // },
+   
+    {
+        key: 'purchaseUom',
+        type: 'purchaseUom',
+        label: 'Purchase UOM',
+        disabled: false,
+       
+        isColumnActive: true,
+        isSort: true,
+    },
+    {
+        key: 'quantity',
+        type: 'number',
+        label: 'Quantity',
+        disabled: false,
+       controlName: 'quantity',
+        isColumnActive: true,
+        isSort: true,
+    },
+    {
+        key: 'uomsize',
+        type: 'uomsize',
+        label: 'UOM Size',
+        disabled: false,
+       
+        isColumnActive: true,
+        isSort: true,
+    },
+    // {
+    //     key: 'mrpPerUom',
+    //     type: 'mrpPerUom',
+    //     label: 'MRP Per UOM',
+    //     disabled: false,
+       
+    //     isColumnActive: true,
+    //     isSort: true,
+    // },
+    {
+        key: 'purPricePerUom',
+        type: 'purPricePerUom',
+        label: 'PPrice Per UOM',
+        disabled: false,
+       
+        isColumnActive: true,
+        isSort: true,
+    },
+    {
+        key: 'totalAmt',
+        type: 'totalAmt',
+        label: 'Total Amount',
+        disabled: false,
+       
+        isColumnActive: true,
+        isSort: true,
+    },
+    {
+        key: 'taxAmt',
+        type: 'taxAmt',
+        label: 'Tax Amount',
+        disabled: false,
+       
+        isColumnActive: true,
+        isSort: true,
+    },
+   
+
+   
+ 
+    {
+        key: 'uom',
+        type: 'uom',
+        label: 'UOM',
+        disabled: true,
+        controlName: 'uom',
+        isColumnActive: false,
+        isSort: false,
+    },
+
+    // {
+    //     key: 'createddate',
+    //     type: 'createddate',
+    //     label: 'Created Date',
+    //     disabled: false,
+    //     controlName: 'createddate',
+    //     isColumnActive: true,
+    //     isSort: true,
+    // },
+    // {
+    //     key: 'isinstock',
+    //     type: 'button',
+    //     label: 'Add to Stock',
+    //     disabled: false,
+    //     controlName: 'ininstock',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+    // {
+    //     key: 'updateprice',
+    //     type: 'updateprice',
+    //     label: 'Update Price',
+    //     disabled: false,
+    //     controlName: 'ininstock',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+    // {
+    //     key: 'isEdit',
+    //     type: 'isEdit',
+    //     label: 'Edit',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+    // {
+    //     key: 'isDelete',
+    //     type: 'isDelete',
+    //     label: 'Del',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+];

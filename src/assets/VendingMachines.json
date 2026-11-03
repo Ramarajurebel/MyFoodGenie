@@ -1,0 +1,47 @@
+{
+    "code": "SUCCESS",
+    "data": [
+        {
+            "id": 48,
+            "machineDisplayId": "2VE0000048",
+            "city": "chennai",
+            "state": "Tamilnadu",
+            "installedAt": null,
+            "slotRowCount": 7,
+            "slotColumnCount": 8,
+            "serialNumber": "8989879",
+            "address": null,
+            "updatedAt": "2023-04-17T06:48:20.000Z",
+            "Model": "VENT32INCH",
+            "Type": "22 Inch Sprial Combo",
+            "PaymentOption": null,
+            "cloudStatus": "Disconnected",
+            "cloudStatusAt": 1681714100088,
+            "operationStatus": "Down",
+            "operationStatusReason": "Error: No VMC boards connected!",
+            "operationStatusAt": 1681713652423,
+            "operationStatusBy": "MACHINE"
+        },
+        {
+            "id": 52,
+            "machineDisplayId": "SVE0000052",
+            "city": null,
+            "state": null,
+            "installedAt": null,
+            "slotRowCount": 4,
+            "slotColumnCount": 4,
+            "serialNumber": "34",
+            "address": null,
+            "updatedAt": "2023-09-21T06:53:17.000Z",
+            "Model": "VENT22INSC",
+            "Type": "Snack Vending Machine",
+            "PaymentOption": null,
+            "cloudStatus": "Disconnected",
+            "cloudStatusAt": 1685425683576,
+            "operationStatus": "Online",
+            "operationStatusReason": "Machine functional",
+            "operationStatusAt": 1685425423771,
+            "operationStatusBy": "MACHINE"
+        }
+    ]
+}

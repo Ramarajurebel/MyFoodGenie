@@ -1,0 +1,1632 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+            ><div>
+                <ng-container *ngIf="isRecipeItemDetails">
+                    <div class="flex flex-auto">
+                        <form
+                            class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="recipeItemFormgroup"
+                        >
+                            <!-- Header -->
+                            <div class="flex justify-between -mt-3 -ml-4">
+                                <div class="flex items-center">
+                                    <a
+                                        mat-icon-button
+                                        (click)="OnCloseItem(false)"
+                                    >
+                                        <mat-icon
+                                            [svgIcon]="'heroicons_outline:x'"
+                                        ></mat-icon>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <!-- <div
+                                class="w-20 border-4 border-indigo-600 mb-4"
+                                *ngIf="currentObj?.prodImage"
+                            >
+                                <img
+                                    [src]="
+                                        ingredientsImagePath +
+                                        currentObj.prodImage
+                                    "
+                                    onerror="this.style.display='none'"
+                                    class="w-20"
+                                />
+                            </div> -->
+
+                            <div class="form-group mb-0">
+                                <!-- <label for="validationCustom02" class="mb-1">RCPID:</label>
+                                    <select class="form-control" required="" formControlName="rcpid" >
+                                      <option value="">--Select--</option>
+                                      <option *ngFor="let all of Recipes" [value]="all.rcpid">{{all.rcpid}}-{{all.name}}</option>
+                                  </select> -->
+                                <mat-form-field style="width: 100%">
+                                    <mat-label>RCPID Name</mat-label>
+                                    <mat-select
+                                        formControlName="rcpid"
+                                        #singleSelect
+                                        class="form-control-plain-text"
+                                    >
+                                        <mat-option>
+                                            <ngx-mat-select-search
+                                                [formControl]="rcpcontrol"
+                                                placeholderLabel="Search"
+                                            ></ngx-mat-select-search>
+                                        </mat-option>
+
+                                        <mat-option
+                                            *ngFor="let bank of filteredrecipe"
+                                            [value]="bank.rcpid"
+                                        >
+                                            {{ bank.rcpid }}-{{ bank.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Category:</label
+                                >
+                                <!-- <input  class="form-control"  required type="text" formControlName="category"/> -->
+                                <select
+                                    formControlName="category"
+                                    class="form-control"
+                                >
+                                    <option
+                                        *ngFor="let cat of rcpcat"
+                                        [value]="cat"
+                                    >
+                                        {{ cat }}
+                                    </option>
+                                </select>
+
+                                <div class="form-group mb-0">
+                                    <mat-form-field style="width: 100%">
+                                        <mat-label>INGR Name</mat-label>
+                                        <mat-select
+                                            formControlName="ingrname"
+                                            #singleSelect
+                                            class="form-control-plain-text"
+                                            (selectionChange)="
+                                                OnItemSelect(
+                                                    $event.source.value
+                                                )
+                                            "
+                                        >
+                                            <mat-option>
+                                                <ngx-mat-select-search
+                                                    [formControl]="itemControl"
+                                                    placeholderLabel="Search"
+                                                ></ngx-mat-select-search>
+                                            </mat-option>
+
+                                            <mat-option
+                                                *ngFor="
+                                                    let bank of filtereditems
+                                                "
+                                                [value]="bank.itemid"
+                                            >
+                                                {{ bank.itemid }}-{{
+                                                    bank.itemname
+                                                }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <!-- <div ><button class="btn btn-primary mb-2" type="button"  (click)="onAddItem(AddItem)">Add Item</button></div> -->
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label for="validationCustom02" class="mb-1"
+                                        >Style:</label
+                                    >
+                                    <select
+                                        class="form-control"
+                                        formControlName="style"
+                                    >
+                                        <option value="">--Select--</option>
+                                        <option
+                                            *ngFor="let style of styleData"
+                                            [value]="style"
+                                        >
+                                            {{ style }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-inline">
+                                    <label for="validationCustom02" class="mb-1"
+                                        >Main Ingredient:</label
+                                    >
+                                    <input
+                                        class="form-check-input"
+                                        formControlName="mainingr"
+                                        type="checkbox"
+                                    />
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label for="validationCustom02" class="mb-1"
+                                        >Price:</label
+                                    >
+                                    <input
+                                        class="form-control"
+                                        [formControl]="readprice"
+                                        type="number"
+                                        readonly
+                                    />
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label for="validationCustom02" class="mb-1"
+                                        >UOM:</label
+                                    >
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        [formControl]="readquom"
+                                        readonly
+                                    />
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label for="validationCustom02" class="mb-1"
+                                        >Quantity:</label
+                                    >
+                                    <input
+                                        class="form-control"
+                                        formControlName="quantity"
+                                        required
+                                        type="number"
+                                        (input)="
+                                            onQuantityEnter($event.target.value)
+                                        "
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Price:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="price"
+                                    required
+                                    type="number"
+                                    readonly
+                                />
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Group ID:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="groupid"
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="mb-1">Premium</label>
+                                <input
+                                    type="checkbox"
+                                    class="form-check"
+                                    formControlName="premium"
+                                />
+                            </div>
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div
+                                class="d-flex flex-row justify-content-between"
+                            >
+                                <button
+                                    class="btn btn-danger"
+                                    (click)="OnDel(deleteDialog)"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    (click)="OnSaveRcpItem()"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isRecipeDetails">
+                    <div class="flex flex-auto">
+                        <form
+                            class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="recipeFormgroup"
+                        >
+                            <div class="flex justify-between -mt-3 -ml-4">
+                                <div class="flex items-center">
+                                    <a
+                                        mat-icon-button
+                                        (click)="OnCloseItem(false)"
+                                    >
+                                        <mat-icon
+                                            [svgIcon]="'heroicons_outline:x'"
+                                        ></mat-icon>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="flex flex-row justify-between">
+                                <button
+                                    mat-mini-fab
+                                    color="primary"
+                                    (click)="OnAddRcpItem()"
+                                >
+                                    <mat-icon>add</mat-icon>
+                                </button>
+
+                                <!-- <button
+                                    mat-mini-fab
+                                    color="accent"
+                                    (click)="OnExport(content)"
+                                >
+                                    <mat-icon>cloud_download</mat-icon>
+                                </button>
+                                <button
+                                    mat-mini-fab
+                                    color="basic"
+                                    (click)="OnExportByQuantity(content)"
+                                >
+                                    <mat-icon color="primary"
+                                        >cloud_download</mat-icon
+                                    >
+                                </button> -->
+                            </div>
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <!-- <div class="form-group">
+                                <label for="" class="mb-1">Vendor Id</label>
+                                <select
+                                    name=""
+                                    id=""
+                                    class="form-control"
+                                    formControlName="vendorId"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let obj of vendorData"
+                                        [value]="obj.vendorId"
+                                    >
+                                        {{ obj.vendorName }}
+                                    </option>
+                                </select>
+                            </div> -->
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                    Name:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="name"
+                                    required
+                                    type="text"
+                                />
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'name'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Telugu Name :</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="tname"
+                                    type="text"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label
+                                    for="validationCustom02"
+                                    class="form-inline"
+                                    >VG/NV :</label
+                                >
+                                <mat-radio-group
+                                    aria-label="Select an option"
+                                    formControlName="isnv"
+                                >
+                                    <mat-radio-button
+                                        value="false"
+                                        class="form-group mx-sm-3 mb-2"
+                                        checked="true"
+                                        >Veg</mat-radio-button
+                                    >
+                                    <mat-radio-button
+                                        value="true"
+                                        class="form-group mx-sm-3 mb-2"
+                                        >Non Veg</mat-radio-button
+                                    >
+                                </mat-radio-group>
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'isnv'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label
+                                    for="validationCustom02"
+                                    class="form-inline"
+                                    >Category:</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="category"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let all of rcpCatList"
+                                        [value]="all.rcpCatId"
+                                    >
+                                        {{ all.rcpCatName }}-{{
+                                            all.rcpPrepName
+                                        }}
+                                    </option>
+                                </select>
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'isnv'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Min Duration:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="minduration"
+                                    required
+                                    type="number"
+                                />
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'minduration'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group mb-0">
+                                      <label for="validationCustom02" class="mb-1">Description:</label>
+                                      <input matInput class="form-control" formControlName="description" required type="text"  />
+                                      <div *ngIf="validation">
+                                      <mat-error *ngIf="recipeFormgroup.controls['description'].hasError('required')">
+                                        <strong>required</strong>
+                                      </mat-error>
+                                      </div>
+
+                                  </div> -->
+
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Main Ingredient Quantity:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="minquantity"
+                                    required
+                                    type="number"
+                                />
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'minquantity'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Output Quantity:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    required
+                                    type="number"
+                                    formControlName="outputquantity"
+                                />
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'outputquantity'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >UOM:</label
+                                >
+                                <select
+                                    class="form-control"
+                                    required=""
+                                    formControlName="uom"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let all of uom"
+                                        [value]="all"
+                                    >
+                                        {{ all }}
+                                    </option>
+                                </select>
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'uom'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >No of Platters :</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="platterscount"
+                                    required
+                                    type="number"
+                                />
+                                <div *ngIf="validation">
+                                    <mat-error
+                                        *ngIf="
+                                            recipeFormgroup.controls[
+                                                'platterscount'
+                                            ].hasError('required')
+                                        "
+                                    >
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Instructions :</label
+                                >
+                                <textarea
+                                    class="form-control"
+                                    rows="5"
+                                    cols="12"
+                                    formControlName="instructions"
+                                >
+                                </textarea>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Cooking Type:</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="cookingtype"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let all of cookingType"
+                                        [value]="all"
+                                    >
+                                        {{ all }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Cooker Time :</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="cookertime"
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Whistles :</label
+                                >
+                                <input
+                                    class="form-control"
+                                    type="number"
+                                    formControlName="whistles"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Group ID:</label>
+                                <select
+                                    name=""
+                                    id=""
+                                    class="form-control"
+                                    formControlName="groupid"
+                                >
+                                    <option>--select--</option>
+                                    <option
+                                        [value]="id"
+                                        *ngFor="let id of groupidData"
+                                    >
+                                        {{ id }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Menu Rcp :</label
+                                >
+                                <mat-form-field style="width: 100%">
+                                    <mat-label></mat-label>
+                                    <mat-select
+                                        formControlName="menurcpid"
+                                        #singleSelect
+                                        class="form-control-plain-text"
+                                    >
+                                        <mat-option>
+                                            <ngx-mat-select-search
+                                                [formControl]="currycontrol"
+                                                placeholderLabel="Search"
+                                            ></ngx-mat-select-search>
+                                        </mat-option>
+
+                                        <mat-option
+                                            *ngFor="let bank of filteredCurries"
+                                            [value]="bank.prodId"
+                                        >
+                                            {{ bank.prodId }}-{{
+                                                bank.prodName
+                                            }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Piece IP Qty:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="pieceipqty"
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >No Of Pieces:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="noofpieces"
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Verified:</label
+                                >
+                                <input
+                                    class="form-check"
+                                    formControlName="verified"
+                                    type="checkbox"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Verified By:</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="verifiedby"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let op of stallOperator"
+                                        [value]="op.name"
+                                    >
+                                        {{ op.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div
+                                class="d-flex flex-row justify-content-between"
+                            >
+                                <button
+                                    class="btn btn-danger"
+                                    (click)="OnDel(deleteDialog)"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    (click)="OnSaveRcp()"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Recipes
+                        </div>
+                    </div>
+
+                    <div class="div header-btns ml-auto">
+                        <button
+                            class="ml-3"
+                            mat-flat-button
+                            [color]="'primary'"
+                            (click)="OnAddRcp()"
+                        >
+                            <!-- <mat-icon
+                            [svgIcon]="'heroicons_outline:plus'"
+                        ></mat-icon> -->
+                            <!-- <mat-icon></mat-icon> -->
+
+                            <span class="ml-2 mr-1">Add Recipe</span>
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            (click)="CopyRecipeModal(newrcpmodal)"
+                        >
+                            Copy Recipe
+                        </button>
+                    </div>
+                    <div class="div"></div>
+                    <div class="export"></div>
+                </div>
+
+                <div class="divide-y">
+                    <ng-container>
+                        <div *ngFor="let rcp of recipesData; let i = index">
+                            <div
+                                class="d-flex flex-row items-center pl-3 w-100 h12 p-3 adhoc-po"
+                                (click)="activatingChild(rcp, lastDivRef)"
+                                #lastDivRef
+                            >
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary description"
+                                    >
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="OnRcpClick(rcp, $event)"
+                                        >
+                                            {{ rcp.rcpid }}-{{ rcp.name }}/{{
+                                                rcp.tname
+                                            }}
+                                        </a>
+                                    </div>
+                                    <div
+                                        class="text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Category : {{ rcp?.catName }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        Main/Opt Qty: {{ rcp.minquantity }}/{{
+                                            rcp.outputquantity
+                                        }}
+                                    </div>
+                                    <div
+                                        class="h-8 text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Items: {{ rcp?.totalingr }} Cost:
+                                        {{ rcp?.totalcost }}
+                                    </div>
+                                </div>
+                                <!-- <button (click)="OnPdfPress(rcp)">PDF</button> -->
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        <button>
+                                            Min. Duration: {{ rcp.minduration }}
+                                        </button>
+                                    </div>
+                                    <div
+                                        class="h-8 text-lg font-semibold text-primary adhoc"
+                                    >
+                                        No. Of Plates: {{ rcp.noofplatters }}
+                                    </div>
+                                </div>
+
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="activatingChild(rcp)"
+                                    >
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <ng-container
+                                class="accordion-body"
+                                *ngIf="rcp.childActive"
+                            >
+                                <div class="example-container">
+                                    <table
+                                        class="table table-bordernone"
+                                        matSort
+                                        (matSortChange)="
+                                            announceSortChange($event)
+                                        "
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    mat-sort-header="rcpid"
+                                                    scope="col"
+                                                >
+                                                    RCPID/Name
+                                                </th>
+                                                <th
+                                                    mat-sort-header="itemid"
+                                                    scope="col"
+                                                >
+                                                    Ingr name
+                                                </th>
+                                                <th
+                                                    mat-sort-header="quantity"
+                                                    scope="col"
+                                                >
+                                                    Quantity
+                                                </th>
+                                                <th
+                                                    mat-sort-header="category"
+                                                    scope="col"
+                                                >
+                                                    Category
+                                                </th>
+                                                <th
+                                                    mat-sort-header="mainingr"
+                                                    scope="col"
+                                                >
+                                                    Main Ingredient
+                                                </th>
+                                                <th
+                                                    mat-sort-header="price"
+                                                    scope="col"
+                                                >
+                                                    Price
+                                                </th>
+                                                <th
+                                                    mat-sort-header="groupid"
+                                                    scope="col"
+                                                >
+                                                    Pack Id
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                *ngFor="
+                                                    let table of recipeItemsTable.data;
+                                                    index as i
+                                                "
+                                                (click)="OnRcpItemClick(table)"
+                                            >
+                                                <td class="text-left">
+                                                    <label
+                                                        >{{ table.rcpid }}-{{
+                                                            table.rcpname
+                                                        }}</label
+                                                    >
+                                                </td>
+
+                                                <td>
+                                                    <label
+                                                        >{{ table.ingrname
+                                                        }}<span
+                                                            *ngIf="table?.tname"
+                                                            >-({{
+                                                                table.tname
+                                                            }})</span
+                                                        ></label
+                                                    >
+                                                </td>
+                                                <td>
+                                                    <label
+                                                        >{{ table.quantity }}
+                                                        {{ table.uom }}</label
+                                                    >
+                                                </td>
+
+                                                <td>
+                                                    <label>{{
+                                                        table.category
+                                                    }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{
+                                                        table?.mainingr
+                                                    }}</label>
+                                                </td>
+
+                                                <td>
+                                                    <label>{{
+                                                        table.price
+                                                    }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{
+                                                        table?.groupid
+                                                    }}</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-mobile-view">
+                                    <div class="row-data">
+                                        <ng-container
+                                            *ngFor="let row of mobilePoItems"
+                                        >
+                                            <div
+                                                class="container"
+                                                *ngFor="
+                                                    let col of columnsSchema
+                                                "
+                                            >
+                                                <div class="row">
+                                                    <div
+                                                        class="col-4"
+                                                        *ngIf="
+                                                            col.isColumnActive
+                                                        "
+                                                    >
+                                                        <span
+                                                            class="heading font-bold"
+                                                            >{{
+                                                                col.label
+                                                            }}:</span
+                                                        >
+                                                    </div>
+                                                    <div
+                                                        class="col-6"
+                                                        *ngIf="
+                                                            col.isColumnActive
+                                                        "
+                                                    >
+                                                        <ng-container>
+                                                            <div
+                                                                class="switch-div"
+                                                                [ngSwitch]="
+                                                                    col.type
+                                                                "
+                                                                *ngIf="
+                                                                    !row.isEdit
+                                                                "
+                                                            >
+                                                                <div
+                                                                    *ngSwitchDefault
+                                                                    style="
+                                                                        display: flex;
+                                                                        gap: 5px;
+                                                                    "
+                                                                >
+                                                                    <span>{{
+                                                                        row[
+                                                                            col
+                                                                                .key
+                                                                        ]
+                                                                    }}</span>
+                                                                    <div
+                                                                        *ngIf="
+                                                                            col.key ==
+                                                                            'quantity'
+                                                                        "
+                                                                    >
+                                                                        {{
+                                                                            row.uom
+                                                                        }}
+                                                                    </div>
+                                                                    <!-- <div
+                                                                        *ngIf="
+                                                                            col.key ==
+                                                                            'available'
+                                                                        "
+                                                                    >
+                                                                        <input
+                                                                            class="form-control"
+                                                                            type="col.type"
+                                                                            [(ngModel)]="
+                                                                                row.available
+                                                                            "
+                                                                        />
+                                                                    </div> -->
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'itemname'
+                                                                    "
+                                                                >
+                                                                    <a
+                                                                        (click)="
+                                                                            OnEditRow(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                        [ngClass]="{
+                                                                            isAvailable:
+                                                                                row.available
+                                                                        }"
+                                                                        class="cursor-pointer"
+                                                                        >{{
+                                                                            row[
+                                                                                col
+                                                                                    .key
+                                                                            ]
+                                                                        }}</a
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'img'
+                                                                    "
+                                                                    class="col"
+                                                                >
+                                                                    <div
+                                                                        class="col"
+                                                                    >
+                                                                        <img
+                                                                            [src]="
+                                                                                ingredientsImagePath +
+                                                                                row.prodImage
+                                                                            "
+                                                                            onerror="this.style.display='none'"
+                                                                            class="w-10"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'updateprice'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        class="btn btn-secondary text-xs"
+                                                                        (click)="
+                                                                            OnUpdatePrice(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        Update
+                                                                        Price
+                                                                    </button>
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'checkbox'
+                                                                    "
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        (change)="
+                                                                            OnAvailableChange(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            row[
+                                                                                col
+                                                                                    .key
+                                                                            ]
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'button'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        [ngClass]="{
+                                                                            'btn btn-primary text-xs':
+                                                                                row.isStockAdded ==
+                                                                                true,
+                                                                            'btn btn-secondary text-xs':
+                                                                                row.isStockAdded ==
+                                                                                false
+                                                                        }"
+                                                                        [disabled]="
+                                                                            row.isStockAdded ==
+                                                                            true
+                                                                        "
+                                                                        (click)="
+                                                                            OnAddToStock(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        {{
+                                                                            row.stockButton
+                                                                        }}
+                                                                    </button>
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'uom'
+                                                                    "
+                                                                ></div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'isEdit'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        mat-button
+                                                                        (click)="
+                                                                            OnEditRow(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        <mat-icon
+                                                                            color="primary"
+                                                                            >edit</mat-icon
+                                                                        >
+                                                                    </button>
+                                                                </div>
+                                                                <!-- <mat-slide-toggle
+                                                                    class="example-margin"
+                                                                    color="primary"
+                                                                    *ngSwitchCase="
+                                                                        'toggle'
+                                                                    "
+                                                                    [checked]="
+                                                                        row.available
+                                                                    "
+                                                                    [(ngModel)]="
+                                                                        row[
+                                                                            col
+                                                                                .key
+                                                                        ]
+                                                                    "
+                                                                    disabled="true"
+                                                                >
+                                                                </mat-slide-toggle> -->
+                                                            </div>
+                                                            <div
+                                                                class="switch-div"
+                                                                [ngSwitch]="
+                                                                    col.type
+                                                                "
+                                                                *ngIf="
+                                                                    row.isEdit
+                                                                "
+                                                            >
+                                                                <div
+                                                                    *ngSwitchDefault
+                                                                >
+                                                                    {{
+                                                                        row[
+                                                                            col
+                                                                                .key
+                                                                        ]
+                                                                    }}
+                                                                </div>
+
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'number'
+                                                                    "
+                                                                    style="
+                                                                        width: auto;
+                                                                        display: flex;
+                                                                        gap: 5px;
+                                                                    "
+                                                                >
+                                                                    <input
+                                                                        type="number"
+                                                                        class="form-control"
+                                                                        [(ngModel)]="
+                                                                            row.quantity
+                                                                        "
+                                                                        style="
+                                                                            width: 50%;
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'updateprice'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        class="btn btn-secondary text-xs"
+                                                                        (click)="
+                                                                            OnUpdatePrice(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        Update
+                                                                        Price
+                                                                    </button>
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'priceperuom'
+                                                                    "
+                                                                    style="
+                                                                        width: auto;
+                                                                        display: flex;
+                                                                        gap: 5px;
+                                                                    "
+                                                                >
+                                                                    <input
+                                                                        type="number"
+                                                                        class="form-control"
+                                                                        [(ngModel)]="
+                                                                            row.price
+                                                                        "
+                                                                        (input)="
+                                                                            OnPricePerUOMChange(
+                                                                                $event
+                                                                                    .target
+                                                                                    .valueAsNumber
+                                                                            )
+                                                                        "
+                                                                        style="
+                                                                            width: 50%;
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'img'
+                                                                    "
+                                                                    class="col"
+                                                                >
+                                                                    <div
+                                                                        class="col"
+                                                                    >
+                                                                        <img
+                                                                            [src]="
+                                                                                ingredientsImagePath +
+                                                                                row.prodImage
+                                                                            "
+                                                                            onerror="this.style.display='none'"
+                                                                            class="w-10"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'finalprice'
+                                                                    "
+                                                                    style="
+                                                                        width: auto;
+                                                                        display: flex;
+                                                                        gap: 5px;
+                                                                    "
+                                                                >
+                                                                    <input
+                                                                        type="number"
+                                                                        class="form-control"
+                                                                        [(ngModel)]="
+                                                                            row.finalprice
+                                                                        "
+                                                                        (input)="
+                                                                            OnFinalPriceChange(
+                                                                                $event
+                                                                                    .target
+                                                                                    .valueAsNumber
+                                                                            )
+                                                                        "
+                                                                        style="
+                                                                            width: 50%;
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'button'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        [ngClass]="{
+                                                                            'btn btn-primary text-xs':
+                                                                                row.isStockAdded ==
+                                                                                true,
+                                                                            'btn btn-secondary text-xs':
+                                                                                row.isStockAdded ==
+                                                                                false
+                                                                        }"
+                                                                        [disabled]="
+                                                                            row.isStockAdded ==
+                                                                            true
+                                                                        "
+                                                                        (click)="
+                                                                            OnAddToStock(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        {{
+                                                                            row.stockButton
+                                                                        }}
+                                                                    </button>
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'itemname'
+                                                                    "
+                                                                    [ngClass]="{
+                                                                        isAvailable:
+                                                                            row.available
+                                                                    }"
+                                                                >
+                                                                    <a
+                                                                        class="cursor-pointer"
+                                                                        (click)="
+                                                                            OnEditRow(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        {{
+                                                                            row[
+                                                                                col
+                                                                                    .key
+                                                                            ]
+                                                                        }}
+                                                                    </a>
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'checkbox'
+                                                                    "
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        (change)="
+                                                                            OnAvailableChange(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            row[
+                                                                                col
+                                                                                    .key
+                                                                            ]
+                                                                        "
+                                                                    />
+                                                                </div>
+
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'uom'
+                                                                    "
+                                                                    class="form-group"
+                                                                >
+                                                                    <select
+                                                                        class="form-control"
+                                                                        [(ngModel)]="
+                                                                            row[
+                                                                                col
+                                                                                    .key
+                                                                            ]
+                                                                        "
+                                                                    >
+                                                                        <option
+                                                                            value=""
+                                                                        >
+                                                                            --Select--
+                                                                        </option>
+                                                                        <option
+                                                                            *ngFor="
+                                                                                let uom of uomData
+                                                                            "
+                                                                            [value]="
+                                                                                uom
+                                                                            "
+                                                                        >
+                                                                            {{
+                                                                                uom
+                                                                            }}
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                                <div
+                                                                    class="btn-edit"
+                                                                    *ngSwitchCase="
+                                                                        'isEdit'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        mat-button
+                                                                        color="primary"
+                                                                        (click)="
+                                                                            OnAvailableChange(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        <mat-icon
+                                                                            color="primary"
+                                                                            >check</mat-icon
+                                                                        >
+                                                                    </button>
+                                                                    <button
+                                                                        mat-button
+                                                                        color="primary"
+                                                                        (click)="
+                                                                            CancelRow(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        <mat-icon
+                                                                            color="warn"
+                                                                            >cancel</mat-icon
+                                                                        >
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose</h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnClose('Cross Click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <form class="needs-validation">
+                <div class="form">
+                    <div class="form-group">
+                        <label class="mb-1">Purchase Order:</label>
+                        <select
+                            class="form-control"
+                            [formControl]="purchaseorder"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let adhoc of adhocPoData"
+                                [value]="adhoc.adhocpoid"
+                            >
+                                {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Categories:</label>
+                        <select class="form-control" [formControl]="category">
+                            <option value="All">All</option>
+                            <option
+                                [value]="val"
+                                *ngFor="let val of categories"
+                            >
+                                {{ val }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Available:</label
+                        >
+                        <select class="form-control" [formControl]="available">
+                            <option value="All">All</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <!-- <div *ngIf="validation">
+                    <mat-error *ngIf="recipeFormgroup.controls['prodname'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                  </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+            Save
+        </button>
+        <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+            (click)="OnClose('Cross Click')"
+        >
+            Close
+        </button>
+    </div>
+</ng-template>
+<!-- delete dialog from below -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+
+<ng-template #newrcpmodal>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Copy Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="OnCloseItem(false)"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <div class="form">
+            <div class="form-group mb-0">
+                <mat-form-field style="width: 100%">
+                    <mat-label>RCPID Name</mat-label>
+                    <mat-select [formControl]="oldrcpid" #singleSelect>
+                        <mat-option>
+                            <ngx-mat-select-search
+                                [formControl]="rcpcontrol"
+                                placeholderLabel="Search"
+                            ></ngx-mat-select-search>
+                        </mat-option>
+
+                        <mat-option
+                            *ngFor="let bank of filteredrecipe"
+                            [value]="bank.rcpid"
+                        >
+                            {{ bank.rcpid }}-{{ bank.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1"
+                    >Recipe Name:</label
+                >
+                <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="newrcpname"
+                />
+            </div>
+            <div class="form-group">
+                <label for="" class="mb-1">Select Vendor:</label>
+                <select
+                    name=""
+                    id=""
+                    class="form-control"
+                    [formControl]="vendorIdControl"
+                >
+                    <option value="">--Select--</option>
+                    <option
+                        *ngFor="let obj of vendorData"
+                        [value]="obj.vendorId"
+                    >
+                        {{ obj.vendorName }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="OnNewRcpCreate()">
+            Save
+        </button>
+        <button
+            mat-raised-button
+            color="secondary"
+            (click)="OnCloseItem(false)"
+        >
+            Cancel
+        </button>
+    </mat-dialog-actions>
+</ng-template>

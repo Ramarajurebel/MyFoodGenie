@@ -1,0 +1,486 @@
+<div class="row main-card">
+    <div class="w-full">
+        <div class="flex items-center mb-6">
+            <div class="w-1/3">
+                <label for="" class="mb-1 font-semibold">Day:</label>
+            </div>
+            <div class="w-2/3">
+                <mat-radio-group
+                    aria-label="Select an option"
+                    class="form-inline"
+                    [formControl]="todayOrTomorrowControl"
+                >
+                    <mat-radio-button
+                        value="Today"
+                        class="form-group mx-sm-3 mb-2 mr-2"
+                        >Today (ఈరోజు - आज)</mat-radio-button
+                    >
+                    <mat-radio-button
+                        value="Tomorrow"
+                        class="form-group mx-sm-3 mb-2"
+                        >Tomorrow (రేపు - आने वाला कल)</mat-radio-button
+                    >
+                </mat-radio-group>
+            </div>
+        </div>
+        <div class="flex items-center mb-6">
+            <div class="w-1/3">
+                <label for="" class="mb-1 font-semibold">Date:</label>
+            </div>
+            <div class="w-2/3">
+                <input
+                    type="date"
+                    style="width: 50% !important"
+                    [formControl]="eventDateControl"
+                    class="bg-black-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                />
+            </div>
+
+            <!-- <div class="">
+                <button class="btn btn-primary" (click)="OnSearch()">
+                    Go
+                </button>
+            </div> -->
+        </div>
+        <div class="flex items-center mb-6">
+            <div class="w-1/3">
+                <label for="" class="mb-1 font-semibold">Category:</label>
+            </div>
+            <div class="w-2/3" style="width: 105%">
+                <mat-radio-group
+                    aria-label="Select an option"
+                    [formControl]="categoryControl"
+                >
+                    <mat-radio-button value="Tiffins" class="pr-2"
+                        >Tiffins ( టిఫిన్లు - टिफिन )</mat-radio-button
+                    >
+                    <mat-radio-button value="Lunch" class="pr-2"
+                        >Lunch (లంచ్ - दिन का खाना)
+                    </mat-radio-button>
+                    <mat-radio-button value="Snacks" class="pr-2"
+                        >Snacks ( స్నాక్స్ - नाश्ता)</mat-radio-button
+                    >
+                    <mat-radio-button value="Dinner" class="pr-2"
+                        >Dinner ( డిన్నర్ - रात का खाना)</mat-radio-button
+                    >
+                </mat-radio-group>
+            </div>
+        </div>
+        <div class="flex items-center">
+            <div class="w-1/3">
+                <label for="" class="mb-1">Category:</label>
+                <select class="form-control" [formControl]="evtCatCtrl">
+                    <option value="">All</option>
+                    <option [value]="cat" *ngFor="let cat of catCtrlData">
+                        {{ cat }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="flex items-center">
+            <div class="w-1/3"></div>
+            <div class="w-2/3">
+                <button class="btn btn-primary" (click)="OnSearch()">Go</button>
+            </div>
+        </div>
+        <!-- <div style="position: relative; top: 31%">
+
+    </div> -->
+    </div>
+
+    <div class="col">
+        <div class="card" *ngIf="typeOneRecipes.length > 0">
+            <label class="card-header"
+                >Packing:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} {{ eventName }},</span
+                ><span class="h6" style="font-weight: bold">
+                    {{ typeOneName }}</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let rcp of typeOneRecipes; let i = index"
+                >
+                    <div class="col-1 p-0">{{ i + 1 }})</div>
+                    <div class="col-1 w-auto index">
+                        <input
+                            type="checkbox"
+                            [(ngModel)]="rcp.isPacked"
+                            (change)="OnStatusChange($event, rcp)"
+                        />
+                    </div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col rcp p-0" (click)="OnPack(rcp, typeOneName)">
+                        {{ rcp.RecipeName }}
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ rcp.TotalReqQty }}/{{ rcp.TotalOutputQty }}
+                        {{ rcp.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="typeTwoRecipes.length > 0">
+            <label class="card-header"
+                >Packing:
+                <span class="h6" style="font-weight: bold">
+                    {{ eventDate }} {{ eventName }},</span
+                ><span class="h6" style="font-weight: bold">
+                    {{ typeTwoName }}</span
+                ></label
+            >
+            <div class="card-body">
+                <div
+                    class="row mb-2 p-1"
+                    *ngFor="let rcp of typeTwoRecipes; let i = index"
+                >
+                    <div class="col-1 p-0">{{ i + 1 }})</div>
+                    <div class="col-1 w-auto index">
+                        <input
+                            type="checkbox"
+                            [(ngModel)]="rcp.isPacked"
+                            (change)="OnStatusChange($event, rcp)"
+                        />
+                    </div>
+                    <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                    <div class="col rcp p-0" (click)="OnPack(rcp, typeTwoName)">
+                        {{ rcp.RecipeName }}
+                    </div>
+                    <div class="col-3 p-0">
+                        {{ rcp.TotalReqQty }}/{{ rcp.TotalOutputQty }}
+                        {{ rcp.uom }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <ng-container *ngIf="typeOneEvents.length > 0">
+            <div *ngFor="let event of typeOneEvents">
+                <div class="card">
+                    <div class="cart-header flex flex-row justify-between">
+                        <div>
+                            <label
+                                >Packing:
+                                <span class="h6" style="font-weight: bold">
+                                    {{ eventDate }}
+                                    {{ event.keventname }},</span
+                                ><span class="h6" style="font-weight: bold">
+                                    {{ typeOneName }}</span
+                                ></label
+                            >
+                        </div>
+                        <div>
+                            <button
+                                class="btn btn-primary"
+                                [matMenuTriggerFor]="statusMenu"
+                            >
+                                {{ event.status }}
+                            </button>
+                        </div>
+                        <mat-menu #statusMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Open')"
+                            >
+                                Open
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Preparation')"
+                            >
+                                Preparation
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Ready for Sale')"
+                            >
+                                Ready for Sale
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="
+                                    OnStatusClick(event, 'Sales InProgress')
+                                "
+                            >
+                                Sales InProgress
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Completed')"
+                            >
+                                Completed
+                            </button>
+                        </mat-menu>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            class="row mb-2 p-1 g-1"
+                            *ngFor="
+                                let rcp of event.assignedEventItems;
+                                let i = index
+                            "
+                        >
+                            <div class="col-1 p-0">{{ i + 1 }})</div>
+                            <div class="col-auto p-1">
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    [(ngModel)]="rcp.checked"
+                                    (click)="
+                                        OnCheckBoxSelect(
+                                            rcp,
+                                            $event.currentTarget.checked
+                                        )
+                                    "
+                                />
+                            </div>
+                            <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                            <div
+                                class="col rcp p-0"
+                                [ngClass]="{ isChecked: rcp.checked }"
+                                (click)="
+                                    rcp.checked
+                                        ? null
+                                        : OnEventItemPress(
+                                              eventdetailsModal,
+                                              rcp
+                                          )
+                                "
+                            >
+                                {{ rcp.recipeName }}-{{ rcp.tname }}
+                            </div>
+                            <div class="col-3 p-0">
+                                {{ rcp.platterscount }}/{{ rcp.outputqty }}
+                                {{ rcp.uom }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="typeTwoEvents.length > 0">
+            <div *ngFor="let event of typeTwoEvents">
+                <div class="card">
+                    <div class="cart-header flex flex-row justify-between">
+                        <div>
+                            <label
+                                >Packing:
+                                <span class="h6" style="font-weight: bold">
+                                    {{ eventDate }}
+                                    {{ event.keventname }},</span
+                                ><span class="h6" style="font-weight: bold">
+                                    {{ typeTwoName }}</span
+                                ></label
+                            >
+                        </div>
+                        <div>
+                            <button
+                                class="btn btn-primary"
+                                [matMenuTriggerFor]="statusMenu"
+                            >
+                                {{ event.status }}
+                            </button>
+                        </div>
+                        <mat-menu #statusMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Open')"
+                            >
+                                Open
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Preparation')"
+                            >
+                                Preparation
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Ready for Sale')"
+                            >
+                                Ready for Sale
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="
+                                    OnStatusClick(event, 'Sales InProgress')
+                                "
+                            >
+                                Sales InProgress
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="OnStatusClick(event, 'Completed')"
+                            >
+                                Completed
+                            </button>
+                        </mat-menu>
+                    </div>
+
+                    <div class="card-body">
+                        <div
+                            class="row mb-2 p-1"
+                            *ngFor="
+                                let rcp of event.assignedEventItems;
+                                let i = index
+                            "
+                        >
+                            <div class="col-1 p-0">{{ i + 1 }})</div>
+                            <div class="col-auto p-1">
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    [(ngModel)]="rcp.checked"
+                                    (click)="
+                                        OnCheckBoxSelect(
+                                            rcp,
+                                            $event.currentTarget.checked
+                                        )
+                                    "
+                                />
+                            </div>
+                            <!-- <div class="col-1"><input type="checkbox" /></div> -->
+                            <div
+                                class="col rcp p-0"
+                                [ngClass]="{ isChecked: rcp.checked }"
+                                (click)="
+                                    rcp.checked
+                                        ? null
+                                        : OnEventItemPress(
+                                              eventdetailsModal,
+                                              rcp
+                                          )
+                                "
+                            >
+                                {{ rcp.recipeName }}-{{ rcp.tname }}
+                            </div>
+                            <div class="col-3 p-0">
+                                {{ rcp.platterscount }}/{{ rcp.outputqty }}
+                                {{ rcp.uom }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
+<!-- modal -->
+<ng-template #rcpdetailsmodal>
+    <div mat-dialog-title class="dialog-title">
+        <h4>Packing Details</h4>
+        <button mat-icon-button aria-label="close dialog" matDialogClose>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography">
+        <div class="card-body vendor-table">
+            <div id="batchDelete" class="custom-datatable vendor-list">
+                <div class="table-responsive">
+                    <table class="table table-bordernone rcpingr">
+                        <thead>
+                            <tr>
+                                <th>Event ID/Name</th>
+                                <th class="text-center">Packing Quantity</th>
+                                <th>Required Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let table of recipeDetails">
+                                <td>
+                                    <label
+                                        >{{ table.keventid
+                                        }}<span
+                                            >-({{ table.keventname }})</span
+                                        ></label
+                                    >
+                                </td>
+                                <td>
+                                    <label>{{ table.outputquantity }} </label>
+                                </td>
+
+                                <!-- <td>
+                          <label>{{table.uom}}</label>
+                        </td> -->
+
+                                <td>
+                                    <label>{{ table.requiredquantity }}</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button
+            mat-raised-button
+            color="primary"
+            matDialogClose
+            (cilck)="OnClose()"
+        >
+            Close
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #eventdetailsModal>
+    <div mat-dialog-title class="dialog-title">
+        <h4>Event Details</h4>
+        <button mat-icon-button aria-label="close dialog" matDialogClose>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography">
+        <div class="form">
+            <div class="form-group">
+                <label for="required Quantity" class="mb-1"
+                    >Required Quantity</label
+                >
+                <input
+                    type="number"
+                    [formControl]="reqQuantity"
+                    class="form-control"
+                />
+            </div>
+            <div class="form-group">
+                <label for="required Quantity" class="mb-1"
+                    >Output Quantity</label
+                >
+                <input
+                    type="number"
+                    [formControl]="opQuantity"
+                    class="form-control"
+                />
+            </div>
+            <div class="form-group">
+                <label for="required Quantity" class="mb-1">Status</label>
+                <select
+                    class="form-control"
+                    placeholder="Status"
+                    [formControl]="recStatus"
+                >
+                    <option *ngFor="let all of statusData" [value]="all">
+                        {{ all }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="accent" (click)="OnSave()">
+            Save
+        </button>
+        <button
+            mat-raised-button
+            color="primary"
+            matDialogClose
+            (cilck)="OnClose()"
+        >
+            Close
+        </button>
+    </mat-dialog-actions>
+</ng-template>

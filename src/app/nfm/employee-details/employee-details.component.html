@@ -1,0 +1,411 @@
+<section class="flex flex-col h-screen min-w-0">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 h-screen overflow-y-auto dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div
+                class="flex flex-auto overflow-y-auto"
+                *ngIf="isMatDrawerOpened"
+            >
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="TableFieldsForm"
+                >
+                    <!-- Header -->
+                    <div class="flex justify-between -mt-3 -ml-4">
+                        <div class="flex items-center">
+                            <!-- Close button -->
+                            <a mat-icon-button (click)="OnClose()">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="img mt-2">
+                        <img
+                            [src]="imageFile"
+                            style="width: 100px; height: 100px"
+                        />
+                    </div>
+                    <!-- Title -->
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1">
+                            Name:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="name"
+                            type="text"
+                        />
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Address:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="address"
+                            type="text"
+                        />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Aadhar No</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="aadharno"
+                            type="number"
+                        />
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Mobile:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="mobile"
+                            type="number"
+                        />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Alternate Mobile:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="mobile1"
+                            type="number"
+                        />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Parents Mobile :</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="parentmobile"
+                            type="number"
+                        />
+                    </div>
+                    <!-- <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Shift :</label
+                        >
+                        <select class="form-control" formControlName="shift">
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let shifts of shift"
+                                [value]="shifts"
+                            >
+                                {{ shifts }}
+                            </option>
+                        </select>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="" class="mb-1">Start Time:</label>
+                        <input
+                            type="time"
+                            formControlName="startTime"
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">End Time:</label>
+                        <input
+                            type="time"
+                            formControlName="endTime"
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Status:</label>
+                        <select
+                            name=""
+                            id=""
+                            class="form-control"
+                            formControlName="status"
+                        >
+                            <option value="Active">Active</option>
+                            <option value="In Active">In Active</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Payment Mode :</label
+                        >
+                        <select
+                            class="form-control"
+                            formControlName="paymentmode"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let mode of paymentMode"
+                                [value]="mode"
+                            >
+                                {{ mode }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Payment Type :</label
+                        >
+                        <select
+                            class="form-control"
+                            formControlName="paymenttype"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let type of paymenttype"
+                                [value]="type"
+                            >
+                                {{ type }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Role :</label
+                        >
+                        <select class="form-control" formControlName="role">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let type of Role" [value]="type">
+                                {{ type }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Date of Join :</label
+                        >
+                        <input
+                            type="date"
+                            class="form-control"
+                            formControlName="dateofjoin"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Default Language:</label>
+                        <!-- <input
+                            type="text"
+                            class="form-control"
+                            formControlName="defaultLanguage"
+                        /> -->
+                        <select
+                            name=""
+                            id=""
+                            class="form-control"
+                            formControlName="defaultLanguage"
+                        >
+                            <option value="en">English</option>
+                            <option value="te">Telugu</option>
+                            <option value="hi">Hindi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Vendor</label>
+                        <select class="form-control" formControlName="vendorId">
+                            <option value="">--Select--</option>
+                            <option
+                                [value]="vendor.vendorId"
+                                *ngFor="let vendor of vendorData"
+                            >
+                                {{ vendor.vendorName }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-1">
+                        <label for="" class="mb-1">Uplaod Logo</label>
+                        <input
+                            type="file"
+                            class="form-control"
+                            (change)="OnImageSelect($event)"
+                        />
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="validationCustom02" class="mb-1"
+                            >Upload Image :</label
+                        >
+                        <input
+                            type="file"
+                            class="form-control"
+                            (change)="OnImageSelect($event)"
+                        />
+                    </div> -->
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="d-flex flex-row justify-content-between">
+                        <button class="btn btn-primary" (click)="OnSavePopup()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Employee Details
+                        </div>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <ng-container>
+                        <div class="table-responsive">
+                            <table class="table table-bordernone">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            Stall Operator ID
+                                        </th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Aadhar No</th>
+                                        <th>Mobile</th>
+                                        <th>Mobile 1</th>
+                                        <th>Parents Mobile</th>
+                                        <th>Shift</th>
+                                        <th>Payment Mode</th>
+                                        <th>Payment Type</th>
+                                        <th>Role</th>
+                                        <th>Date of Join</th>
+                                        <th>Status</th>
+                                        <th>
+                                            <button
+                                                mat-mini-fab
+                                                (click)="open()"
+                                            >
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="
+                                            let table of empDetails;
+                                            let i = index
+                                        "
+                                    >
+                                        <td class="text-center">
+                                            <label>{{
+                                                table.stalloperatorid
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.name }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.address }}</label>
+                                        </td>
+
+                                        <td>
+                                            <label>{{ table.aadharno }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.mobile }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.mobile1 }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{
+                                                table.parentmobile
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.shift }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{
+                                                table.paymentmode
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{
+                                                table.paymenttype
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table?.role }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{
+                                                table?.dateofjoin
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table?.status }}</label>
+                                        </td>
+                                        <td>
+                                            <div class="all-icons">
+                                                <mat-icon
+                                                    color="accent"
+                                                    (click)="OnEdit(table)"
+                                                    >edit</mat-icon
+                                                >
+                                                <mat-icon
+                                                    color="primary"
+                                                    (click)="
+                                                        onDelPopup(
+                                                            template,
+                                                            table
+                                                        )
+                                                    "
+                                                    >delete</mat-icon
+                                                >
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- dialog  -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,82 @@
+export const PurchaseRateCardTable = [
+    {
+        key: 'itemImage',
+        type: 'itemImage',
+        label: 'Image',
+        disabled: true,
+        controlName: 'category',
+        columnActive: true,
+    },
+    {
+        key: 'itemId',
+        type: 'itemId',
+        label: 'Item ID/Name',
+        disabled: true,
+        controlName: 'category',
+        columnActive: true,
+    },
+
+    // {
+    //     key: 'subCategory',
+    //     type: 'subCategory',
+    //     label: 'Subcategory/Name',
+    //     disabled: false,
+    //     controlName: 'productlist',
+    //     columnActive: true,
+    // },
+    {
+        key: 'subCategory',
+        type: 'subcat',
+        label: 'Sub Category',
+        disabled: false,
+        controlName: 'productlist',
+        columnActive: false,
+    },
+    {
+        key: 'quantity',
+        type: 'number',
+        label: 'Quantity',
+        disabled: false,
+        controlName: 'productlist',
+        columnActive: true,
+    },
+
+    {
+        key: 'uom',
+        type: 'uom',
+        label: 'UOM',
+        disabled: false,
+        controlName: 'quantity',
+        columnActive: true,
+    },
+    {
+        key: 'price',
+        type: 'number',
+        label: 'Price',
+        disabled: false,
+        controlName: 'recstatus',
+        columnActive: true,
+    },
+    // {
+    //     key: 'purchasedDate',
+    //     type: 'uom',
+    //     label: 'Date',
+    //     disabled: true,
+    //     controlName: 'uom',
+    // },
+    {
+        key: 'salePercentage',
+        type: 'number',
+        label: 'Sale Price',
+        disabled: false,
+        controlName: 'price',
+        columnActive: true,
+    },
+
+    {
+        key: 'isEdit',
+        type: 'isEdit',
+        label: 'is Edit',
+        columnActive: true,
+    },
+];

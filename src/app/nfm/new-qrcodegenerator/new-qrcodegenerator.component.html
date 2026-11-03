@@ -1,0 +1,382 @@
+<section class="main-section">
+    <header class="header">
+    <label class="label"><strong >QR Code Generator</strong></label>
+    </header>
+    <!-- <div class="labellist mt-5 ">
+      <mat-form-field appearance="fill">
+        <mat-label><strong>Select QR type:</strong></mat-label>
+        <mat-select [(ngModel)]="selectedOption" (selectionChange)="onChange()">
+          <mat-option *ngFor="let option of qrtypeData" [value]="option.name">
+            {{ option.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <form [formGroup]="dynamicForm">
+        <div *ngIf="selectedOption === 'Link/Url'" class="form-group">
+            <div class="forminputfields">
+            <mat-form-field class="bottom">
+                <mat-label>Link Name :</mat-label>
+                <input matInput placeholder="Link Name" formControlName="linkName">
+              </mat-form-field>
+         
+          <mat-form-field class="bottom">
+            <mat-label>URL :</mat-label>
+            <input matInput placeholder="url" formControlName="url">
+          </mat-form-field>
+        
+        </div>
+        </div>
+        <div *ngIf="selectedOption === 'Wi-fi'" class="form-group">
+          <div class="bottom input-group">
+          <label for="wifiName">Wi-fi Name:</label>
+          <input type="text" id="wifiName" formControlName="wifiName">
+          </div>
+          <div class="input-group">
+          <label for="wifiKey" >Key :</label>
+          <input type="text" id="wifiKey" formControlName="wifiKey">
+        </div>
+        </div>
+        <div *ngIf="selectedOption === 'PDF'" class="form-group">
+          <div class="bottom">
+          
+          <input type="file" id="pdf" formControlName="pdffile" (change)="onFileChange($event)">
+          </div>
+         
+        </div>
+        <div *ngIf="selectedOption === 'Application'" class="form-group">
+          <div class="bottom input-group">
+          <label for="LinkAppStore">Link for AppStore :  </label>
+          <input type="text" id="LinkAppStore" formControlName="LinkAppStore">
+          </div>
+          <div  class="bottom input-group">
+          <label for="LinkGpay">Link for Googelpay :  </label>
+          <input type="text" id="LinkGpay" formControlName="LinkGpay">
+        </div>
+        <div class="input-group">
+          <label for="LinkOther">Link for Others :  </label>
+          <input type="text" id="LinkOther" formControlName="LinkOther">
+        </div>
+        </div>
+        <div *ngIf="selectedOption === 'E-mail'" class="form-group">
+          <div class="bottom input-group">
+          <label for="emailto">Mail To :  </label>
+          <input type="text" id="emailto" formControlName="emailto">
+          </div>
+          <div  class="bottom input-group">
+          <label for="subject">Subject :  </label>
+          <input type="text" id="subject" formControlName="subject">
+        </div>
+        <div class="input-group">
+          <label for="body">Body :  </label>
+          <textarea type="text" id="body" formControlName="body"></textarea>
+        </div>
+        </div>
+        <div *ngIf="selectedOption === 'WhatsApp'" class="form-group">
+          <div class="bottom input-group">
+          <label for="phn">Phone No :  </label>
+          <input type="number" id="phn" formControlName="phn">
+          </div>
+          <div  class="bottom input-group">
+          <label for="message">Message :  </label>
+          <input type="text" id="message" formControlName="message">
+        </div>
+       
+        </div>
+        <div *ngIf="selectedOption">
+          <button class="btn btn-primary" (click)="onSave()">Save</button>
+        </div>
+
+      </form>
+     
+    
+      
+    </div> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+        class="w-full sm:w-128 dark:bg-gray-900"
+        [mode]="drawerMode"
+        [opened]="isMatDrawerOpened"
+        [position]="'end'"
+        [disableClose]="true"
+        #matDrawer
+    >
+        <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+            <form
+                class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                [formGroup]="AddUrlForm"
+            >
+                <!-- Header -->
+                <div class="flex justify-between -mt-3 -ml-4">
+                    <div class="flex items-center">
+                        <!-- Close button -->
+                        <a mat-icon-button (click)="onClose()">
+                            <mat-icon
+                                [svgIcon]="'heroicons_outline:x'"
+                            ></mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <mat-divider class="mt-6 mb-8"></mat-divider>
+             
+                <div class="form">
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Name:</label
+                        >
+                        <input
+                            class="form-control mt-0 amber-border"
+                            formControlName="name"
+                            type="text"
+                            required
+                        />
+                    </div>
+                   
+                 
+                  
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Type:</label
+                        >
+                        <select
+                            formControlName="description"
+                            class="form-control"
+                            (change)="OnCatSelect($event.target.value)"
+                        >
+                            <option
+                                *ngFor="let cat of qrtypeData"
+                                [value]="cat.name"
+                            >
+                                {{ cat.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Url:</label
+                        >
+                        <input
+                            class="form-control mt-0 amber-border"
+                            formControlName="value"
+                            type="text"
+                            required
+                        />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Caegories:</label
+                        >
+                        <input
+                            class="form-control mt-0 amber-border"
+                            formControlName="folderName"
+                            type="text"
+                           
+                        />
+                    </div>
+                </div>
+                <mat-divider class="mt-6 mb-8"></mat-divider>
+                <div class="d-flex flex-row justify-content-between">
+                    <button class="btn btn-primary" (click)="OnSaveUrl()">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </mat-drawer>
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                
+                <div class="divide-y">
+                    <ng-container
+                        ><div
+                            id="batchDelete"
+                            class="custom-datatable vendor-list"
+                        >
+                            <div class="table-responsive">
+                                <!-- <ng2-smart-table  [settings]="settings" [source]="Suppliers"   (create)="onAddClick($event)"></ng2-smart-table> -->
+
+                                <table class="table table-bordernone">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>Category ID/Name</th> -->
+                                            <th class="text-left">
+                                                Name
+                                            </th>
+                                           
+                                            <th class="text-center">Url</th>
+                                            <th>Type</th>
+                                            <!-- <th class="text-center">Type</th> -->
+                                            <!-- <th class="text-center">categories</th> -->
+                                            <th (click)="Add()">
+                                                <mat-icon>add</mat-icon>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let table of qrdataid">
+                                            <td class="text-left">
+                                                <label
+                                                    >{{ table.qrAutoId }}-{{
+                                                        table.name
+                                                    }}</label
+                                                >
+                                            </td>
+                                            <td class="text-left">
+                                                <label>{{
+                                                    table.value
+                                                }}</label>
+                                            </td>
+                                            <td>
+                                                <label
+                                                    >{{ table.description }}
+                                                   </label
+                                                >
+                                            </td>
+                                          
+
+                                            <td>
+                                                <div class="all-icons">
+                                                    <mat-icon
+                                                        color="accent"
+                                                        (click)="onEdit(table)"
+                                                        >edit</mat-icon
+                                                    >
+                                                    <mat-icon
+                                                        color="primary"
+                                                        (click)="
+                                                            onDel(
+                                                                table,
+                                                                deleteDialog
+                                                            )
+                                                        "
+                                                        >delete</mat-icon
+                                                    >
+                                                   <button class="btn btn-primary" (click)="onView(table,qrCodeTemplate)">view</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+ 
+    </section>
+    <ng-template #qrcodeModal let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">QR Code</h5>
+            <button type="button" class="close" (click)="onClose()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+             <ng-container *ngIf="showQRCode">
+          <ngx-qrcode
+            
+            [value]="qrCode"
+          ></ngx-qrcode>
+         
+        </ng-container>
+        <button class="btn btn-primary" (click)="downloadQRCode()">Download QR Code</button> 
+        </div>
+    </ng-template>
+    <ng-template #qrScannerModal let-modal>
+      <div class="modal-header">
+          <h5 class="modal-title">Scan QR Code</h5>
+          <button type="button" class="close" (click)="onClose()">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <!-- <div class="form-group" *ngIf="currentDevice">
+              <label for="" class="mb-1">Choose Camera</label>
+              <select class="form-control mb-1" >
+                  <option value="" [selected]="!currentDevice">No Device Selected</option>
+                  <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+                     >{{device.label}}</option>
+              </select>
+          </div> -->
+    
+          <!-- QR scanner component here -->
+          <div class="scanner-container absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    
+              <zxing-scanner (scanSuccess)="onScanSuccess($event)" 
+                  
+                 ></zxing-scanner>
+    
+    
+              <div *ngIf="isContainerVisible" class="rectangle-overlay">
+                  <div class="line" [style.top.%]="linePosition"></div>
+              </div>
+          </div>
+      </div>
+    
+    </ng-template>
+    <!-- delete dialog -->
+    <ng-template #deleteDialog>
+        <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+            <h4>Delete Record</h4>
+            <button
+                mat-icon-button
+                aria-label="close dialog"
+                (click)="OnCloseItem(true)"
+            >
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <mat-dialog-content class="mat-typography text-center">
+            <p>Do you really want to delete this record?</p>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-raised-button color="primary" (click)="confirm()">
+                Yes
+            </button>
+            <button mat-raised-button color="secondary" (click)="OnCloseItem(true)">
+                No
+            </button>
+        </mat-dialog-actions>
+    </ng-template>
+    <!-- view QR -->
+    <ng-template #qrCodeTemplate let-data="data">
+        <div class="modal-header">
+            <span class="modal-title qrcode"> Scan here</span>
+            <button type="button" class="close" (click)="onClose()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <!-- colorStops: [{ offset: 0, color: '#5FD411' }, { offset: 1, color: '#E61919' }] -->
+    <div class="qr">
+        <ngx-qrcode-styling #qrcode id="qrcode" 
+       
+        [data]="genurl"
+        
+        [width]=200
+        [height]=300
+      [image]="'./assets/images/qr2.jpg'" 
+      
+        [dotsOptions]="{
+            type: 'square',
+            color: 'gradient',
+            gradient: {
+              type: 'linear',
+              colorStops: [{ offset: 0, color: '#5FD411' }, { offset: 1, color: '#E61919' }]
+            }
+          }"
+         
+         
+        >
+        ></ngx-qrcode-styling>
+        <!-- <ngx-qrcode-styling [options]="qrcodeOptions"></ngx-qrcode-styling> -->
+    </div>
+        <div class="flex ">
+            <button class="btn btn-primary mr-2" (click)="shareQrCodeImage()">Share QR</button>
+            <button class="btn btn-primary" (click)="downloadQR(qrcode)">Download QR</button>
+        </div>
+       
+      </ng-template>
+    

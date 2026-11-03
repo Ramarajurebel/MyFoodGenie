@@ -1,0 +1,57 @@
+@use '@angular/material';
+.main-card {
+    padding: 10px 10px;
+}
+.rcp {
+    color: blue;
+    font: bold;
+    cursor: pointer;
+}
+.card {
+    height: max-content;
+}
+.dialog-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.isChecked {
+    text-decoration: line-through;
+}
+// .card {
+//     width: 50%;
+// }
+@media (max-width: 480px) {
+    .main-card {
+        padding: 10px 10px;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .main-col {
+        width: 100% !important;
+    }
+    table.rcpingr {
+        width: 100%;
+    }
+    .rcpingr tr {
+        width: 100%;
+    }
+    .rcpingr th {
+        padding: 0.3rem 0.2em !important;
+    }
+    .rcpingr td {
+        padding: 0.3rem 0.1em !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 1440px) {
+    .main-col {
+        width: 48% !important;
+    }
+    .col-1 {
+        width: auto !important;
+        padding-right: 5px !important;
+    }
+    .col-3 {
+        width: auto !important;
+    }
+}

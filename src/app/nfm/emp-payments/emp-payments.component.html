@@ -1,0 +1,380 @@
+<section class="inset-0 flex flex-col min-w-0 h-screen">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 h-screen dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="TableFieldsForm"
+                >
+                    <!-- Header -->
+                    <div class="flex justify-between -mt-3 -ml-4">
+                        <div class="toggle">
+                            <!-- <mat-slide-toggle>Edit Mode</mat-slide-toggle> -->
+                        </div>
+                        <div class="flex items-center">
+                            <!-- Close button -->
+                            <a mat-icon-button (click)="OnClose()">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Date:</label
+                        >
+                        <input
+                            type="date"
+                            class="form-control"
+                            formControlName="date"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <mat-form-field style="width: 100% !important">
+                            <mat-label>Employees </mat-label>
+                            <mat-select
+                                formControlName="employeeId"
+                                #singleSelect
+                                class="form-control-plain-text"
+                                aria-readonly="true"
+                            >
+                                <mat-option>
+                                    <ngx-mat-select-search
+                                        [formControl]="empControl"
+                                        placeholderLabel="Search"
+                                    ></ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option
+                                    *ngFor="let all of filteredEmps"
+                                    [value]="all.stalloperatorid"
+                                >
+                                    {{ all.stalloperatorid }}-{{ all.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Purpose:</label
+                        >
+                        <select
+                            name=""
+                            id=""
+                            class="form-control"
+                            formControlName="purpose"
+                        >
+                            <option value="">--Select--</option>
+                            <option *ngFor="let all of purpose" [value]="all">
+                                {{ all }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Payment Amount:</label
+                        >
+                        <input
+                            type="number"
+                            class="form-control"
+                            formControlName="paymentAmount"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Vendor Id</label>
+                        <select
+                            name=""
+                            id=""
+                            class="form-control"
+                            formControlName="vendorId"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let obj of vendorData"
+                                [value]="obj.vendorId"
+                            >
+                                {{ obj.vendorName }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Amount Cleared:</label
+                        >
+                        <input
+                            type="checkbox"
+                            (change)="
+                                OnAmountClearedChange($event.target.checked)
+                            "
+                            class="form-check"
+                            formControlName="amountCleared"
+                        />
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="d-flex flex-row justify-content-between">
+                        <button
+                            class="btn btn-danger"
+                            (click)="onDelPopup(deleteDialog)"
+                        >
+                            Delete
+                        </button>
+                        <button class="btn btn-primary" (click)="OnSavePopup()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row justify-between py-8 px-6 md:px-8">
+                    <!-- Title -->
+
+                    <div
+                        class="text-4xl font-extrabold tracking-tight leading-none"
+                    >
+                        Employee Payments
+                    </div>
+                    <div class="button">
+                        <button class="btn btn-primary" (click)="onAddClick()">
+                            Add
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col md:flex-row lg:flex-row mt-4 ml-4 gap-3 w-auto"
+                >
+                    <div class="w-auto ml-1">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="picker">
+                                <input
+                                    matStartDate
+                                    placeholder="Start date"
+                                    [formControl]="startDateCtrl"
+                                />
+                                <input
+                                    matEndDate
+                                    placeholder="End date"
+                                    [formControl]="endDateCtrl"
+                                />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle
+                                matSuffix
+                                [for]="picker"
+                            ></mat-datepicker-toggle>
+                            <mat-date-range-picker
+                                #picker
+                            ></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group w-30">
+                        <label for="" class="mb-1">Employees:</label>
+                        <select
+                            class="form-control"
+                            [formControl]="empSearchControl"
+                        >
+                            <option value="">All</option>
+                            <option
+                                [value]="emp.stalloperatorid"
+                                *ngFor="let emp of filteredEmps"
+                            >
+                                {{ emp.stalloperatorid }}-{{ emp.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mt-auto mb-auto">
+                        <button class="btn btn-primary" (click)="OnSearch()">
+                            Go
+                        </button>
+                    </div>
+                </div>
+                <div class="text-2xl text-black">
+                    Total Amount : {{ totalAmount }}
+                </div>
+                <div class="divide-y">
+                    <!-- <div class="table-responsive">
+                        <table class="table table-bordernone">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Date</th>
+
+                                    <th>Employee Id/Name</th>
+
+                                    <th>Purpose</th>
+                                    <th>Payment Amount</th>
+                                    <th>Amount Cleared</th>
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="
+                                        let table of cashManagementData;
+                                        let i = index
+                                    "
+                                >
+                                    <td class="text-center">
+                                        <label>{{ table.date }}</label>
+                                    </td>
+
+                                    <td>
+                                        <label
+                                            >{{ table.employeeId }}-{{
+                                                table.empName
+                                            }}</label
+                                        >
+                                    </td>
+
+                                    <td>
+                                        <label>{{ table.purpose }}</label>
+                                    </td>
+                                    <td>
+                                        <label>{{ table.paymentAmount }}</label>
+                                    </td>
+
+                                    <td>
+                                        <label>{{ table.amountCleared }}</label>
+                                    </td>
+
+                                    <td>
+                                        <div class="all-icons">
+                                            <mat-icon
+                                                color="accent"
+                                                (click)="OnEdit(table)"
+                                                >edit</mat-icon
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> -->
+                    <ng-container>
+                        <div
+                            *ngFor="
+                                let table of cashManagementData;
+                                let i = index
+                            "
+                        >
+                            <div
+                                class="d-flex flex-row items-center pl-3 w-100 h12 p-3 adhoc-po bg-gray-400"
+                                (click)="OnEdit(table)"
+                                #lastDivRef
+                            >
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold description"
+                                    >
+                                        <span class="text-black font-bold"
+                                            >Employee:</span
+                                        >
+                                        <span class="text-white font-semibold">
+                                            {{ table.employeeId }}-{{
+                                                table.empName
+                                            }}</span
+                                        >
+                                    </div>
+                                    <div class="text-lg adhoc">
+                                        <span class="text-black font-bold"
+                                            >Purpose :
+                                        </span>
+                                        <span
+                                            class="text-white font-semibold"
+                                            >{{ table.purpose }}</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div class="text-lg">
+                                        <span class="text-black font-bold"
+                                            >Date :
+                                        </span>
+                                        <span
+                                            class="text-white font-semibold"
+                                            >{{ table.date }}</span
+                                        >
+                                    </div>
+                                    <div class="text-lg">
+                                        <span class="text-black font-bold"
+                                            >Payment Amount :
+                                        </span>
+                                        <span
+                                            class="text-white font-semibold"
+                                            >{{ table.paymentAmount }}</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div class="text-lg">
+                                        <span class="text-black font-bold"
+                                            >Amount Cleared :
+                                        </span>
+                                        <span
+                                            class="text-white font-semibold"
+                                            >{{ table.amountCleared }}</span
+                                        >
+                                    </div>
+                                </div>
+                                <!-- <button (click)="OnPdfPress(po)">PDF</button> -->
+
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="activatingChild(po)"
+                                    >
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- dialog  -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>

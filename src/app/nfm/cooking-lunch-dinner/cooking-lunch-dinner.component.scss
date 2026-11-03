@@ -1,0 +1,181 @@
+.main-card {
+    padding: 10px 10px;
+}
+.orange {
+    color: orange;
+}
+.red {
+    color: red;
+}
+.box:nth-child(2) {
+    margin-left: auto;
+}
+.green {
+    color: green;
+}
+.one {
+    width: 50.666667%;
+}
+.two {
+    width: 48.666667%;
+}
+.rcp {
+    color: blue;
+    font: bold;
+    cursor: pointer;
+}
+
+.dialog-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+// .card {
+//     width: 50%;
+// }
+.index {
+    width: 10.33333%;
+}
+select {
+    -webkit-appearance: listbox !important;
+}
+.status {
+    display: flex;
+    gap: 10px;
+}
+.save-btn {
+    margin-top: 10px;
+}
+.box:nth-child(2) {
+    margin-right: auto;
+    font-weight: bold;
+}
+.chef {
+    width: auto;
+    padding-right: 10px;
+}
+// for timer
+.timer {
+    font-size: x-large;
+    color: black;
+    padding-left: 5px;
+    background-color: red;
+}
+// below is for grouping
+.main-tasks {
+    width: 100%;
+    height: 100%;
+    word-wrap: break-word;
+}
+.name {
+    width: 40%;
+    height: max-content;
+    word-wrap: break-word;
+}
+.assigned-to {
+    width: 75%;
+    word-wrap: break-word;
+}
+.main-tasks-duration {
+    justify-self: end;
+    align-items: center;
+    width: 100%;
+}
+.time {
+    margin-top: 20px;
+    margin-left: 42%;
+}
+.start-time-end-time {
+    padding-right: 20px;
+}
+.task-name {
+    width: 85% !important;
+    word-wrap: break-word !important;
+    height: auto;
+    padding-top: 30px;
+    align-items: center;
+    font-size: medium;
+}
+.full-row {
+    height: 100% !important;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+.group-ingr {
+    width: 100%;
+    background-color: rgba(128, 128, 128, 0.452);
+    display: flex;
+    flex-direction: column;
+}
+.assd-to {
+    word-wrap: break-word !important;
+    width: 85%;
+}
+.full-task-row {
+    gap: 15px;
+}
+.toggle-icon {
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+}
+// grouping ends
+
+@media (max-width: 480px) {
+    .main-card {
+        padding: 10px 10px;
+        display: flex;
+        flex-direction: column;
+    }
+    .chef {
+        width: auto;
+        padding-right: 10px;
+    }
+    table.rcpingr {
+        width: 100%;
+    }
+    .rcpingr tr {
+        width: 100%;
+    }
+    .rcpingr th {
+        padding: 0.3rem 0.2em !important;
+    }
+    .rcpingr td {
+        padding: 0.3rem 0.1em !important;
+    }
+    .one {
+        width: 100%;
+    }
+    .two {
+        width: 100%;
+    }
+}
+@media (min-width: 600px) and (max-width: 1440px) {
+    .rcp {
+        width: 45%;
+        word-wrap: break-word;
+    }
+    .col-1 {
+        width: 33.3333%;
+    }
+    .col-3 {
+        width: 33.33333%;
+    }
+    .index {
+        width: auto;
+    }
+    .ingr {
+        width: 45%;
+        word-wrap: break-word;
+    }
+    .col-1 {
+        padding-right: 5px;
+    }
+    .row {
+        gap: 5px;
+    }
+    .chef {
+        width: auto;
+        padding-right: 10px;
+    }
+}

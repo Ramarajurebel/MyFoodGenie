@@ -1,0 +1,91 @@
+.main-section{
+    width: 100% !important;
+    margin-left: 1rem;
+}
+.header{
+    background-color: #D9F8F6;
+   
+    height: 3rem;
+
+}
+::ng-deep.canvas {
+    display: block;
+    vertical-align: middle;
+    margin-bottom: 1rem;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+}
+.qr{
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.95rem;
+}
+
+.qrcode{
+    font-size: 15px;
+    font-family: poppins;
+}
+.inputlink{
+    width: 3rem;
+    border-color: black
+}
+.label{
+    margin-top: 10px !important;
+}
+.labellist{
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+}
+.forminputfields{
+    display: grid;
+}
+.dform{
+    margin-top: 2rem !important;
+}
+.form-group {
+    display: block !important;
+    margin-bottom: 10px !important; /* Adjust the margin as needed */
+  }
+  .bottom{
+    margin-bottom: 10px;
+  }
+  
+  .form-container {
+    border: 1px solid #ccc; /* Add a border to create a rectangular container */
+    padding: 20px; /* Add padding for spacing */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    background-color: #f9f9f9; /* Add a background color */
+    margin: 20px 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 700px; /* Adjust the maximum height as needed */
+    width:80rem !important; 
+  overflow-y: auto;/* Add margin for spacing around the container */
+  /* Add margin for spacing around the container */
+width: 100%;
+  }
+  .input-box{
+    border: 1px solid #ccc; /* Adjust the border properties as needed */
+  padding: 5px; 
+  }
+  .input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px; /* Adjust as needed for spacing between input groups */
+  }
+  .input-group label {
+    flex: 1; /* Equal sizing for labels */
+    margin-right: 10px; /* Adjust as needed for spacing between label and input */
+  }
+  .input-group input[type="text"],
+.input-group input[type="number"],
+.input-group textarea {
+  flex: 2; /* Equal sizing for input fields */
+  /* Add other styles as needed */
+}
+.scannerbuon{
+    margin-left: 5px;
+  }

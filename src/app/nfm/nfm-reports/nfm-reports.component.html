@@ -1,0 +1,1976 @@
+<div class="flex flex-col flex-auto w-full">
+    <div *ngIf="mobileNumber == '9618812143' || mobileNumber == '7893843240'">
+
+        <div class="max-w-screen-xl mx-auto p-6 md:p-8 vms-grid">
+
+            <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    Genies Inventory
+                </div> -->
+                <div class="text-4xl font-extrabold tracking-tight leading-none ml-2">
+                    Genies Inventory
+                </div>
+                <div class="p-3 font-semibold" style="font-size: 16px;">
+                    <span class="mr-6">Total Quantity: {{ totalQuantity1}}</span>
+                    <span class="mr-6">Total Available Quantity: {{ totalAvailableQty}}</span><br>
+                    <span class="mr-6">Total Sale Quantity: {{ totalSaleQty }}</span>
+                    <span>Total Empty Quantity: {{ totalEmptyQty}}</span>
+                    
+                </div>
+                <div class="flex flex-col flex-auto"></div>
+                <div class="mt-8">
+                    <table class="table table-bordernone">
+                        <thead>
+                            <tr>
+                                <th scope="col">SNO</th>
+                                <th scope="col" style="width: 30%;">Genie</th>
+                                <th scope="col">Total Quantity</th>
+                                <th scope="col">Available Quantity</th>
+                                <th scope="col">Reserved Quantity</th>
+                                <th scope="col">Sale Quantity</th>
+                                <th>Empty Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let genie of genies; let i = index"
+                                [ngClass]="{'text-green-600': genie.cloudStatus === 'Connected', 
+                                            'text-red-600': genie.cloudStatus === 'Disconnected'}">
+                              <td>{{ i + 1 }}</td>
+                              <td style="width: 30%;">
+                                {{ genie.genieid }} - {{ genie.name }}<br>
+                                {{ genie.vmsmachid }} - 
+                                <span [ngClass]="{'text-green-500': genie.cloudStatus === 'Connected', 'text-red-500': genie.cloudStatus === 'Disconnected'}">
+                                  {{ genie.cloudStatus }}
+                                </span>
+                              </td>
+                              <td>{{ genie.totalQty }}</td>
+                              <td>{{ genie.avblQty }}</td>
+                              <td>{{ genie.reservedQty }}</td>
+                              <td>{{ genie.saleQty }}</td>
+                              <td>{{ genie.emptyQty }}</td>
+                            </tr>
+                          </tbody>
+                    </table>
+                </div>  
+            </div>
+            
+
+
+            <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    Genies Margin
+                </div> -->
+                <div class="text-4xl font-extrabold tracking-tight leading-none ml-2">
+                    Genies Margin
+                </div>
+
+                <div class="p-3 font-semibold" style="font-size: 16px;">
+                    <span class="mr-6">Gross Total Margin: {{ grossTotalMargin | number: '1.2-2'}}</span>
+                    <span class="mr-6">Total Available Margin: {{ totalAvailableMargin  | number: '1.2-2'}}</span><br>
+                    <span>Total Sale Margin: {{ totalSaleMargin | number: '1.2-2' }}</span>
+                </div>
+
+                <div class="flex flex-col flex-auto"></div>
+                <div class="mt-8">
+                    <table class="table table-bordernone">
+                        <thead>
+                            <tr>
+                                <th scope="col">SNO</th>
+                                <th scope="col">Genie</th>
+                                <th scope="col">Total Margin</th>
+                                <th scope="col">Avbl Margin</th>
+                                <th>Sale Margin</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let genie of geniesMargin; let i = index">
+                              <td>{{ i + 1 }}</td>
+                              <td>
+                                {{genie.genieid}} - {{ genie.name }}<br>
+                                {{ genie.vmsmachid }}
+                              </td>
+                              <td>{{ genie.totalMargin}}</td>
+                              <td>{{ genie.totalAvblMargin}}</td>
+                              <td>{{ genie.totalSaleMargin}}</td>
+                              
+                              
+                            </tr>
+                          </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    Item Sale Report
+                </div>
+                <form [formGroup]="ItemSaleReportForm">
+                    <div class="flex items-start justify-between p-2">
+                        <div>
+                            <mat-form-field>
+                                <mat-label>StallID/Name</mat-label>
+                                <mat-select formControlName="stallid">
+                                    <mat-option value="0">All</mat-option>
+                                    <mat-option *ngFor="let options of itemsaleReportData" [value]="options.stallid">{{
+                                        options.stallid }}-{{
+                                        options.name
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="vendorsaleorderitems">
+                                <input matStartDate placeholder="Start date" formControlName="startDate"
+                                    #startDateSaleItems />
+                                <input matEndDate placeholder="End date" formControlName="endDate" #endDateSaleItems />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="vendorsaleorderitems"></mat-datepicker-toggle>
+                            <mat-date-range-picker #vendorsaleorderitems></mat-date-range-picker>
+                        </mat-form-field>
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Dispense status:</mat-label>
+                                <mat-select formControlName="dStatus">
+                                    <mat-option value="all">All</mat-option>
+                                    <mat-option *ngFor="let options of itemdispenseStatus" [value]="options.key">{{
+                                        options.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <button class="btn btn-primary" (click)="onGo()" style="margin-top: 1.75rem;">Go</button>
+                    </div>
+                </form>
+                <div class="form-inline grid ml-3">
+                    <div>
+                        Total Price : {{totalPrice}}
+                    </div>
+                    <div>
+                        Total Average Price : {{AveragePrice}}
+                    </div>
+                    <div>
+                        Total Quantity : {{listlength}}
+                    </div>
+
+                </div>
+                <div class="flex flex-col flex-auto"></div>
+                <div class="mt-8">
+                    <table class="table table-bordernone">
+                        <thead>
+                            <tr>
+                                <th scope="col">SNO</th>
+                                <th scope="col">Item Id/Name</th>
+                                <th scope="col">Total Quantity</th>
+                                <th scope="col">Item Price</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="
+                                    let vendorSaleOrderItem of vendorSaleOrderItemsList;
+                                    index as i
+                                ">
+                                <td>
+                                    <label>{{ i + 1 }}</label>
+                                </td>
+                                <td>
+                                    <label>{{ vendorSaleOrderItem?.itemId }}-{{
+                                        vendorSaleOrderItem?.itemName
+                                        }}-{{vendorSaleOrderItem?.uom}}</label>
+                                </td>
+                                <td class="font-danger">
+                                    <label>{{
+                                        vendorSaleOrderItem?.totalQuantity
+                                        }}</label>
+                                </td>
+                                <td class="font-danger">
+                                    <label>{{
+                                        vendorSaleOrderItem.itemPrice
+                                        }}</label>
+                                </td>
+                                <td class="font-danger">
+                                    <label for="">{{
+                                        vendorSaleOrderItem.totalPrice
+                                        }}</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    VMS Item Group Report
+                </div>
+                <form>
+                    <div class="flex items-start justify-between p-2">
+
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Machine:</mat-label>
+                            <mat-select [formControl]="macCtrlVms">
+                                <mat-option value="all">All</mat-option>
+                                <mat-option *ngFor="let options of vmsMacsList" [value]="options.id">{{
+                                    options.machineDisplayId}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="vmsrp">
+                                <input matStartDate placeholder="Start date" [formControl]="sdVms" #sdvmsreport />
+                                <input matEndDate placeholder="End date" [formControl]="edVms" #edvmsreport />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="vmsrp"></mat-datepicker-toggle>
+                            <mat-date-range-picker #vmsrp></mat-date-range-picker>
+                        </mat-form-field>
+                        <div class="form-group">
+                            <mat-form-field>
+                                <mat-label>Item Status:</mat-label>
+                                <mat-select [formControl]="itemStatus">
+                                    <mat-option value="all">All</mat-option>
+                                    <mat-option *ngFor="let options of itemStatusList" [value]="options">{{
+                                        options}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <button class="btn btn-primary" (click)="getVmsSalesReport()"
+                            style="margin-top: 1.75rem;">Go</button>
+                    </div>
+                </form>
+      
+                <div class="ml-2">Total Quantity:{{totalQuantity}}</div>
+                <div class="flex flex-col flex-auto"></div>
+                <div class="mt-8">
+                    <table class="table table-bordernone">
+                        <thead>
+                            <tr>
+                                <th scope="col">SNO</th>
+                                <th scope="col">Item Name</th>
+                                <th scope="col">Total Quantity</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="
+                                    let item of vmsItemsByGroup | keyvalue: unsorted;
+                                    let i=index
+                                ">
+                                <td>
+                                    <label>{{ i + 1 }}</label>
+                                </td>
+                                <td>
+                                    <label>{{ item?.key
+                                        }}</label>
+                                </td>
+                                <td class="font-danger">
+                                    <label>{{
+                                        item?.value
+                                        }}</label>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="pt-2 bg-card shadow rounded-2xl  h-120 overflow-auto">
+                <div class="grid">
+                     <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    Item Sale Report
+                </div> -->
+                    <div class="text-4xl font-extrabold tracking-tight leading-none ml-2">
+                        Genie Purchase & Sales
+                    </div>
+                    <form
+                    [formGroup]="geniepurchaseandsales">
+                    <div class="flex flex-row ">
+                       
+                        <div appearance="fill"  class="mt-2 mr-2 ml-2" style="width: 200px;">
+                            <mat-form-field class="MultipleField">
+                                <mat-label>Genie Name :</mat-label>
+                            <mat-select formControlName="genieIdsList" multiple class="MultipleField">
+                               
+                                   <mat-option *ngFor="let stall of itemsaleReportData; let i =index" [value]="stall.stallid">
+                                    {{ stall.stallid }}-{{ stall.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        </div>
+                        <div appearance="fill"  class="mt-2 mr-2">
+                            <mat-form-field appearance="fill" style="width: 100% !important">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input matStartDate placeholder="Start date" formControlName="startDate" />
+                                    <input matEndDate placeholder="End date" formControlName="endDate" />
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-8">
+                            <button class="btn btn-primary" (click)="onSearch()">Go</button>
+                        </div>   
+                    </div>
+                   
+              
+                        <!-- <div class="text-4xl font-extrabold tracking-tight leading-none mr-12 ">
+                            Genie Purchase & Sales
+                        </div>
+                        <div appearance="fill" class="mt-1">
+                            <label for="">Genie Name :</label>
+                            <select name="" id="" (change)="onCounterChange()" [(ngModel)]="selectedCounterValue">
+                                <option value="0">--Select--</option>
+                                <option [value]="stall.stallid" *ngFor="let stall of itemsaleReportData">
+                                    {{ stall.stallid }}-{{ stall.name }}
+                                </option>
+                            </select>
+    
+                        </div> -->
+                 
+                </form>
+                </div>
+
+
+
+                <div class="mt-6">
+                    <div class="table-responsive">
+                        <div style="height: 400px; overflow-y: auto;">
+                            <ng-container *ngFor="let table of purchaseTableData; let i = index">
+                                <table class="table table-bordernone">
+                                    <tbody>
+                                        <tr>
+                                            <td>Status:</td>
+                                            <td>{{ table.status }} </td>
+                                        </tr>
+
+
+
+
+                                        <!-- <tr>Liability Amount</tr> -->
+
+                                        <tr>
+                                            <td>Total Racks</td>
+                                            <td>{{
+                                                table?.totalRacks
+                                                }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Slots</td>
+                                            <td>{{
+                                                table.totalSlots
+                                                }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Qty</td>
+                                            <td>{{table.totalItemsQty}}</td>
+                                        </tr>
+
+                                        <!-- <th>Status</th> -->
+                                        <!-- <th>Assets Amount</th> -->
+                                        <tr>
+                                            <td>Available Quantity</td>
+                                            <td>{{table.totalAvblItemsQty}} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Empty Items</td>
+                                            <td>{{ table.totalItemsQty - table.totalAvblItemsQty}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PO Amount</td>
+                                            <td>{{ table.totalItemsPoAmt }} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tax</td>
+                                            <td>{{
+                                                table.totalItemsTax
+                                                }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sale Amount</td>
+                                            <td>{{ table.totalItemsSaleAmt }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Transaction Amount</td>
+                                            <td>{{ table?.totalTrscnAmt }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Asset Amount:</td>
+                                            <td>{{ table.totalAsstsAmt }} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Liability Amount:</td>
+                                            <td>{{ table.totalLbtyAmt }} </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Profit</td>
+                                            <td>{{ table?.totalProfit }}</td>
+                                        </tr>
+
+
+
+
+                                    </tbody>
+
+                                </table>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                <div class="grid">
+                    <div class="text-4xl font-extrabold tracking-tight leading-none mr-12 ml-2">
+                        Genie Daily Sales Report
+                    </div>
+                    <form
+                    [formGroup]="geniedailysalesReport">
+                    <div class="flex flex-row ">
+                       
+                        <!-- <div appearance="fill"  class="mt-2 mr-2 ml-2" style="width: 200px;">
+                            <mat-form-field class="MultipleField">
+                                <mat-label>Genie Name :</mat-label>
+                            <mat-select formControlName="genieIdsList" multiple class="MultipleField">
+                               
+                                   <mat-option *ngFor="let stall of itemsaleReportData; let i =index" [value]="stall.stallid">
+                                    {{ stall.stallid }}-{{ stall.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        </div> -->
+                        <div appearance="fill"  class="mt-2 mr-2">
+                            <mat-form-field appearance="fill" style="width: 100% !important">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="DailysalesPicker">
+                                    <input matStartDate placeholder="Start date" formControlName="startDate" />
+                                    <input matEndDate placeholder="End date" formControlName="endDate" />
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="DailysalesPicker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #DailysalesPicker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-8">
+                            <button class="btn btn-primary" (click)="onSearchDailySalesReport()">Go</button>
+                        </div>   
+                    </div>
+                   
+              
+                        <!-- <div class="text-4xl font-extrabold tracking-tight leading-none mr-12 ">
+                            Genie Purchase & Sales
+                        </div>
+                        <div appearance="fill" class="mt-1">
+                            <label for="">Genie Name :</label>
+                            <select name="" id="" (change)="onCounterChange()" [(ngModel)]="selectedCounterValue">
+                                <option value="0">--Select--</option>
+                                <option [value]="stall.stallid" *ngFor="let stall of itemsaleReportData">
+                                    {{ stall.stallid }}-{{ stall.name }}
+                                </option>
+                            </select>
+    
+                        </div> -->
+                 
+                </form>
+                <span class="ml-2">Total Quantity: <strong>{{totalGenieSum}}</strong></span>
+                    <!-- <div appearance="fill" class="mt-1 mr-2">
+                        <label for="">Genie Name :</label>
+                        <select name="" id="" (change)="onChartCounterChange()" [(ngModel)]="selectedChartValue">
+                            <option value="0">--Select--</option>
+                            <option [value]="stall.stallid" *ngFor="let stall of itemsaleReportData">
+                                {{ stall.stallid }}-{{ stall.name }}
+                            </option>
+                        </select>
+
+                    </div> -->
+                </div>
+                <div style="height: 400px; overflow: auto;" class="mt-4">
+
+                    <!-- <input type="date" [(ngModel)]="selectedDate" (change)="filterDataByDate()"/> -->
+                    <apx-chart *ngIf="GeniechartOptions" [xaxis]="GeniechartOptions.xaxis" [series]="GeniechartOptions.series"
+                        [chart]="GeniechartOptions.chart" [dataLabels]="GeniechartOptions.dataLabels"
+                        [plotOptions]="GeniechartOptions.plotOptions" [title]="GeniechartOptions.title"
+                        [tooltip]="GeniechartOptions.tooltip">
+                    </apx-chart>
+                </div>
+            </div>
+            <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                <div class="grid">
+                    <div class="text-4xl font-extrabold tracking-tight leading-none mr-12 ml-2">
+                        Genie Sales Report
+                    </div>
+                    <form
+                    [formGroup]="geniesalesReport">
+                    <div class="flex flex-row ">
+                       
+                        <div appearance="fill"  class="mt-2 mr-2 ml-2" style="width: 200px;">
+                            <mat-form-field class="MultipleField">
+                                <mat-label>Genie Name :</mat-label>
+                            <mat-select formControlName="genieIdsList" multiple class="MultipleField">
+                               
+                                   <mat-option *ngFor="let stall of itemsaleReportData; let i =index" [value]="stall.stallid">
+                                    {{ stall.stallid }}-{{ stall.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        </div>
+                        <div appearance="fill"  class="mt-2 mr-2">
+                            <mat-form-field appearance="fill" style="width: 100% !important">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="salesPicker">
+                                    <input matStartDate placeholder="Start date" formControlName="startSalesDate" />
+                                    <input matEndDate placeholder="End date" formControlName="endSalesDate" />
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="salesPicker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #salesPicker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-8">
+                            <button class="btn btn-primary" (click)="onSearchSalesReport()">Go</button>
+                        </div>   
+                    </div>
+                   
+              
+                        <!-- <div class="text-4xl font-extrabold tracking-tight leading-none mr-12 ">
+                            Genie Purchase & Sales
+                        </div>
+                        <div appearance="fill" class="mt-1">
+                            <label for="">Genie Name :</label>
+                            <select name="" id="" (change)="onCounterChange()" [(ngModel)]="selectedCounterValue">
+                                <option value="0">--Select--</option>
+                                <option [value]="stall.stallid" *ngFor="let stall of itemsaleReportData">
+                                    {{ stall.stallid }}-{{ stall.name }}
+                                </option>
+                            </select>
+    
+                        </div> -->
+                 
+                </form>
+                <span class="ml-2">Total Quantity: <strong>{{totalSum}}</strong></span>
+                    <!-- <div appearance="fill" class="mt-1 mr-2">
+                        <label for="">Genie Name :</label>
+                        <select name="" id="" (change)="onChartCounterChange()" [(ngModel)]="selectedChartValue">
+                            <option value="0">--Select--</option>
+                            <option [value]="stall.stallid" *ngFor="let stall of itemsaleReportData">
+                                {{ stall.stallid }}-{{ stall.name }}
+                            </option>
+                        </select>
+
+                    </div> -->
+                </div>
+                <div style="height: 400px; overflow: auto;" class="mt-4">
+
+                    <!-- <input type="date" [(ngModel)]="selectedDate" (change)="filterDataByDate()"/> -->
+                    <apx-chart *ngIf="chartOptions" [xaxis]="chartOptions.xaxis" [series]="chartOptions.series"
+                        [chart]="chartOptions.chart" [dataLabels]="chartOptions.dataLabels"
+                        [plotOptions]="chartOptions.plotOptions" [title]="chartOptions.title"
+                        [tooltip]="chartOptions.tooltip">
+                    </apx-chart>
+                </div>
+            </div>
+            <!-- <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    Item Stock Report
+                </div>
+                <form [formGroup]="ItemStockReportForm">
+                    <div class="flex items-start justify-between p-2">
+                        <div>
+                            <mat-form-field>
+                                <mat-label>StallID/Name</mat-label>
+                                <mat-select formControlName="stallid">
+                                    <mat-option value="0">All</mat-option>
+                                    <mat-option *ngFor="let options of itemsaleReportData" [value]="options.stallid">{{
+                                        options.stallid }}-{{
+                                        options.name
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+
+                        
+
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Products :</mat-label>
+                                <mat-select formControlName="prods" (selectionChange)="
+                                onSelectStockProducts($event.source.value)
+                            ">
+                                    <ngx-mat-select-search [formControl]="itemStockControl"
+                                                placeholderLabel="Search"></ngx-mat-select-search>
+                                    <mat-option value="all">All</mat-option>
+                                    <mat-option *ngFor="let options of filteredIngrs" [value]="options.prodId">
+                                        {{ options.prodId }}-{{ options.prodName }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <button class="btn btn-primary" (click)="onItemStockGo()" style="margin-top: 1.75rem;">Go</button>
+                    </div>
+                </form>
+                <div class="ml-2 flex">
+                    <span>Total Items:{{ StockitemCount }}</span>
+                    <span class="ml-2">Total Balance:{{  Stockbalance }}</span>
+                </div>
+                <div >
+                    <table class="table table-bordernone">
+                        <thead>
+                            <tr>
+                                <th scope="col">SNO</th>
+                                <th scope="col">Item Id/Name</th>
+                                <th scope="col">Balance</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="
+                                    let Item of StockReportData;
+                                    index as i
+                                ">
+                                <td>
+                                    <label>{{ i + 1 }}</label>
+                                </td>
+                                <td>
+                                    <label class="stockItem" (click)="onStockItemclick(Item.productId,itemStock)">{{ Item?.productId }}-{{
+                                        Item?.productName
+                                        }}-{{Item?.uom}}-{{Item?.mrpPrice}}</label>
+                                </td>
+                                <td>
+                                    <label>{{ Item?.balanceQuantity }}</label>
+                                </td>
+                               
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> -->
+            <!-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-8">
+
+                <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
+
+                    <div class="flex items-start justify-between">
+
+                        <div class="text-lg font-medium tracking-tight leading-6 truncate">
+                            Sales
+                        </div>
+                        <div class="ml-2">
+                            <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
+                                [matMenuTriggerFor]="conversionMenu">
+                                <span class="font-medium text-sm text-secondary">Today</span>
+                            </button>
+                            <mat-menu #conversionMenu="matMenu">
+                                <ng-template matMenuContent><mat-form-field appearance="fill">
+                                        <mat-label>Enter a date range</mat-label>
+                                        <mat-date-range-input [rangePicker]="picker">
+                                            <input matStartDate placeholder="Start date" #dateRangeStart />
+                                            <input matEndDate placeholder="End date" #dateRangeEnd (dateChange)="
+                                                    dateRangeChange(
+                                                        dateRangeStart,
+                                                        dateRangeEnd
+                                                    )
+                                                " />
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                    </mat-form-field></ng-template>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto mt-6 h-44" *ngIf="allCategoriesTransactions.length > 0">
+                        <apx-chart class="flex flex-auto items-center justify-center w-full h-full"
+                            [chart]="salesChartDetails.chart" [colors]="salesChartDetails.colors"
+                            [labels]="salesChartDetails.labels" [plotOptions]="salesChartDetails.plotOptions"
+                            [series]="salesChartDetails.series" [states]="salesChartDetails.states"
+                            [tooltip]="salesChartDetails.tooltip"></apx-chart>
+                    </div>
+                    <div class="mt-8">
+                      
+                        <div class="flex flex-row gap-2 justify-between font-bold">
+                            <div class="w-6/12">Tiffins</div>
+                            <div class="w-6/12">Lunch</div>
+                            <div class="w-6/12">Snacks</div>
+                            <div class="w-6/12">Dinner</div>
+                        </div>
+                        <div class="flex flex-row gap-2">
+                            <ng-container *ngFor="
+                                    let dataset of allCategoriesTransactions
+                                ">
+                                <div class="w-3/12">
+                                    <div class="font-medium">
+                                        Tot:{{
+                                        dataset.totalAmount
+                                        | currency: "INR":"symbol"
+                                        }}
+                                    </div>
+                                    <div class="text-secondary">
+                                        Ptm:
+                                        {{
+                                        dataset.paytm
+                                        | currency: "INR":"symbol"
+                                        }}
+                                    </div>
+                                    <div class="text-secondary">
+                                        Cod:
+                                        {{
+                                        dataset.cod
+                                        | currency: "INR":"symbol"
+                                        }}
+                                    </div>
+                                    <div class="text-secondary">
+                                        Oth:
+                                        {{
+                                        dataset.othersAmount
+                                        | currency: "INR":"symbol"
+                                        }}
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="text-lg font-medium tracking-tight leading-6 truncate">
+                            Expenses
+                        </div>
+                        <div class="ml-2">
+                            <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
+                                [matMenuTriggerFor]="expensesMenu">
+                                <span class="font-medium text-sm text-secondary">Today</span>
+                            </button>
+                            <mat-menu #expensesMenu="matMenu">
+                                <ng-template matMenuContent><mat-form-field appearance="fill">
+                                        <mat-label>Enter a date range</mat-label>
+                                        <mat-date-range-input [rangePicker]="picker">
+                                            <input matStartDate placeholder="Start date" #dateRangeStart />
+                                            <input matEndDate placeholder="End date" #dateRangeEnd />
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                    </mat-form-field></ng-template>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-auto mt-6 h-auto w-auto"
+                        *ngIf="allCategoriesTransactions.length > 0">
+                        <apx-chart class="flex flex-auto items-center justify-center w-auto h-auto"
+                            [chart]="expensesChartDetails.chart" [colors]="expensesChartDetails.colors"
+                            [labels]="expensesChartDetails.labels" [plotOptions]="expensesChartDetails.plotOptions"
+                            [series]="expensesChartDetails.series" [states]="expensesChartDetails.states"
+                            [tooltip]="expensesChartDetails.tooltip"></apx-chart>
+                    </div>
+
+                </div>
+                <div class="bg-card shadow rounded-2xl">
+                    <div class="p-6">
+                        <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">
+                            Counter Expenses
+                            <div>
+                                <div>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Enter a date range</mat-label>
+                                        <mat-date-range-input [rangePicker]="picker">
+                                            <input matStartDate placeholder="Start date" #startDateCounter />
+                                            <input matEndDate placeholder="End date" #endDateCounter (dateChange)="
+                                                    dateChangeCounter(
+                                                        startDateCounter,
+                                                        endDateCounter
+                                                    )
+                                                " />
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto mx-6" *ngIf="counterData.length > 0">
+                            <div id="chart">
+                                <apx-chart [chart]="counterChartOptions.chart" [series]="counterChartOptions.series"
+                                    [dataLabels]="
+                                        counterChartOptions.dataLabels
+                                    " [plotOptions]="
+                                        counterChartOptions.plotOptions
+                                    " [yaxis]="counterChartOptions.yaxis" [xaxis]="counterChartOptions.xaxis"
+                                    [fill]="counterChartOptions.fill" [title]="counterChartOptions.title"></apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> -->
+
+        </div>
+        <!-- <div class="grid grid-cols-1 gap-4 md:grid-cols-2 h-160">
+            <div class="h-full overflow-scroll">
+                <div class="bg-card shadow rounded-2xl">
+                    <div class="p-6">
+                        <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">
+                            Out of Stock Items
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto mx-6">
+                        <mat-tab-group (selectedTabChange)="OutOfStockTabChange($event)">
+                            <mat-tab label="Vegetables">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort (matSortChange)="
+                                            announceSortChange($event)
+                                        ">
+                                        <thead>
+                                            <tr>
+                                                <th mat-sort-header="sno" scope="col">
+                                                    SNO
+                                                </th>
+                                                <th mat-sort-header="itemid" scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th mat-sort-header="date" scope="col">
+                                                    Date
+                                                </th>
+                                                <th mat-sort-header="balance" scope="col">
+                                                    Balance
+                                                </th>
+                                                <th>Add to PO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of selectedTabData.data;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.purchasedDate
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.balance
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <button class="btn btn-primary" [disabled]="row.checked" (click)="
+                                                            onAddtoPoPress(
+                                                                row,
+                                                                addtoPoModal
+                                                            )
+                                                        ">
+                                                        {{
+                                                        row?.checked
+                                                        ? "Added"
+                                                        : "Add to PO"
+                                                        }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Groceries">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort (matSortChange)="
+                                            announceSortChange($event)
+                                        ">
+                                        <thead>
+                                            <tr>
+                                                <th mat-sort-header="sno" scope="col">
+                                                    SNO
+                                                </th>
+                                                <th mat-sort-header="itemid" scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th mat-sort-header="date" scope="col">
+                                                    Date
+                                                </th>
+                                                <th mat-sort-header="balance" scope="col">
+                                                    Balance
+                                                </th>
+                                                <th>Add to PO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of selectedTabData.data;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.purchasedDate
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.balance
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <button class="btn btn-primary" [disabled]="row.checked" (click)="
+                                                            onAddtoPoPress(
+                                                                row,
+                                                                addtoPoModal
+                                                            )
+                                                        ">
+                                                        {{
+                                                        row?.checked
+                                                        ? "Added"
+                                                        : "Add to PO"
+                                                        }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="NonVeg">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort (matSortChange)="
+                                            announceSortChange($event)
+                                        ">
+                                        <thead>
+                                            <tr>
+                                                <th mat-sort-header="sno" scope="col">
+                                                    SNO
+                                                </th>
+                                                <th mat-sort-header="itemid" scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th mat-sort-header="date" scope="col">
+                                                    Date
+                                                </th>
+                                                <th mat-sort-header="balance" scope="col">
+                                                    Balance
+                                                </th>
+                                                <th>Add to PO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of selectedTabData.data;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.purchasedDate
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.balance
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <button class="btn btn-primary" [disabled]="row.checked" (click)="
+                                                            onAddtoPoPress(
+                                                                row,
+                                                                addtoPoModal
+                                                            )
+                                                        ">
+                                                        {{
+                                                        row?.checked
+                                                        ? "Added"
+                                                        : "Add to PO"
+                                                        }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Others">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort (matSortChange)="
+                                            announceSortChange($event)
+                                        ">
+                                        <thead>
+                                            <tr>
+                                                <th mat-sort-header="sno" scope="col">
+                                                    SNO
+                                                </th>
+                                                <th mat-sort-header="itemid" scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th mat-sort-header="date" scope="col">
+                                                    Date
+                                                </th>
+                                                <th mat-sort-header="balance" scope="col">
+                                                    Balance
+                                                </th>
+                                                <th>Add to PO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of selectedTabData.data;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.purchasedDate
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.balance
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <button class="btn btn-primary" [disabled]="row.checked" (click)="
+                                                            onAddtoPoPress(
+                                                                row,
+                                                                addtoPoModal
+                                                            )
+                                                        ">
+                                                        {{
+                                                        row?.checked
+                                                        ? "Added"
+                                                        : "Add to PO"
+                                                        }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+            </div>
+            <div class="h-full overflow-scroll">
+                <div class="xl:col-span-1 flex flex-col flex-auto bg-card shadow rounded-2xl">
+                    <div class="p-6">
+                        <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">
+                            Sale Order Items Group
+                        </div>
+                        <div>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input matStartDate placeholder="Start date" #startDateSale />
+                                    <input matEndDate placeholder="End date" #endDateSale (dateChange)="
+                                            dateChangeSale(
+                                                startDateSale,
+                                                endDateSale
+                                            )
+                                        " />
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-3">
+                            <div class="flex flex-col gap-2 sm:flex-row">
+                                <span>Tiffins: {{ tiffinsSaleOrderPrice }}</span>
+                                <span>Lunch: {{ lunchSaleOrderPrice }}</span>
+                                <span>Snacks: {{ snacksSaleOrderPrice }}</span>
+                                <span>Dinner: {{ dinnerSaleOrderPrice }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto mx-4">
+                        <mat-tab-group>
+                            <mat-tab label="Tiffins">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">SNO</th>
+                                                <th scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th scope="col">Total Qty</th>
+                                                <th scope="col">Item Price</th>
+                                                <th>Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of tiffinsSaleOrderData;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}-{{ row.uom }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.totalQuantity
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.itemPrice
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.totalPrice
+                                                        }}</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Lunch">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">SNO</th>
+                                                <th scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th scope="col">Total Qty</th>
+                                                <th scope="col">Item Price</th>
+                                                <th>Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of lunchSaleOrderData;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}-{{ row.uom }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.totalQuantity
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.itemPrice
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.totalPrice
+                                                        }}</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Snacks">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">SNO</th>
+                                                <th scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th scope="col">Total Qty</th>
+                                                <th scope="col">Item Price</th>
+                                                <th>Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of snacksSaleOrderData;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}-{{ row.uom }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.totalQuantity
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.itemPrice
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.totalPrice
+                                                        }}</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                            <mat-tab label="Dinner">
+                                <ng-template matTabContent>
+                                    <table class="table table-bordernone" matSort>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">SNO</th>
+                                                <th scope="col">
+                                                    Item Id/Name
+                                                </th>
+                                                <th scope="col">Total Qty</th>
+                                                <th scope="col">Item Price</th>
+                                                <th>Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="
+                                                    let row of dinnerSaleOrderData;
+                                                    index as i
+                                                ">
+                                                <td>
+                                                    <label>{{ i + 1 }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{ row?.itemId }}/{{
+                                                        row?.itemName
+                                                        }}-{{ row.uom }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row?.totalQuantity
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.itemPrice
+                                                        }}</label>
+                                                </td>
+                                                <td class="font-danger">
+                                                    <label>{{
+                                                        row.totalPrice
+                                                        }}</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 h-160 mt-2">
+       
+        <!-- <div class="pt-2 bg-card shadow rounded-2xl">
+            <div class="flex items-start justify-between">
+                <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    Overall Sales
+                </div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="vendororders">
+                        <input matStartDate placeholder="Start date" #vendororderStartDate />
+                        <input matEndDate placeholder="End date" #vendororderEndDate (dateChange)="
+                                    dateRangeVendorOrders(
+                                        vendororderStartDate,
+                                        vendororderEndDate
+                                    )
+                                " />
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="vendororders"></mat-datepicker-toggle>
+                    <mat-date-range-picker #vendororders></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col flex-auto"></div>
+            <div class="mt-8">
+                <div class="text-bold p-3">Total: {{ overallTotal }}</div>
+                <ng-container *ngFor="let method of paymentMethodsList; let i = index">
+                    <div class="flex flex-row justify-between p-3">
+                        <div class="w-3/12">
+                            {{ method.paymentType }}
+                        </div>
+                        <div class="font-medium w-3/12">
+                            {{ method.amount | currency: "INR":"symbol" }}
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div> -->
+
+
+
+        <!-- <div class="pt-2 bg-card shadow rounded-2xl">
+            <div>
+
+               
+                <apx-chart [chart]="ReportcalculatorOptions.chart" [xaxis]="ReportcalculatorOptions.xaxis"
+                    [markers]="ReportcalculatorOptions.markers" [stroke]="ReportcalculatorOptions.stroke"
+                    [yaxis]="ReportcalculatorOptions.yaxis" [dataLabels]="ReportcalculatorOptions.dataLabels"
+                    [series]="ReportcalculatorOptions.series" [title]="ReportcalculatorOptions.title"
+                    [fill]="ReportcalculatorOptions.fill" [tooltip]="ReportcalculatorOptions.tooltip">
+                </apx-chart>
+            </div>
+
+        </div> -->
+        <!-- <div class="h-full overflow-scroll">
+            <div class="pt-2 bg-card shadow rounded-2xl">
+                <div class="flex items-start justify-between">
+                    <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                        Food Inventory
+                    </div>
+                    <div class="mt-3 mb-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="invpicker">
+                                <input matStartDate placeholder="Start date" #invStartDate />
+                                <input matEndDate placeholder="End date" #invEndDate />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="invpicker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #invpicker></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <div class="flex flex-row gap-4 p-2">
+                        <select name="" id="" class="form-control" [formControl]="stallControl">
+                            <option value="All">All</option>
+                            <option [value]="stall.stallid" *ngFor="let stall of stallData">
+                                {{ stall.stallid }}-{{ stall.name }}
+                            </option>
+                        </select>
+                        <select name="" id="" class="form-control" [formControl]="subCatControl">
+                            <option value="All">All</option>
+                            <option [value]="subcat.subCatId" *ngFor="let subcat of subCatData">
+                                {{ subcat.subCatId }}-{{ subcat.subCatName }}
+                            </option>
+                        </select>
+                        <button class="btn btn-primary" (click)="OnGoPress()">
+                            Go
+                        </button>
+                    </div>
+                    <div class="mt-6">
+                        <div class="table-responsive">
+                            <table class="table table-bordernone">
+                                <thead>
+                                    <tr>
+                                        <th>Stall ID</th>
+                                        <th>Item Id/Name</th>
+                                        <th>Date</th>
+                                        <th class="text-center">
+                                            Packed Count
+                                        </th>
+                                        <th class="text-center">Sale Count</th>
+                                        <th class="text-center">Balance</th>
+                                        <th>
+                                            <mat-icon (click)="open(content)">add</mat-icon>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="
+                                            let table of menuInventoryList;
+                                            let i = index
+                                        " [ngClass]="{
+                                            'text-red-500': table.balance == 0
+                                        }">
+                                        <td>
+                                            <label>{{ table.stallid }}-{{
+                                                table.stallName
+                                                }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.itemID }}-{{
+                                                table.itemName
+                                                }}</label>
+                                        </td>
+                                       <td>
+                                                   <label>{{table.itemName}}</label>
+                                                  </td> -->
+                                        <!-- <td>
+                                            <label>{{ table.date }}</label>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <label>{{
+                                                table.packedCount
+                                                }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{ table.saleCount }}</label>
+                                        </td>
+                                        <td class="text-center">
+                                            <label>{{ table.balance }}</label>
+                                        </td>
+
+                                        <td>
+                                            <div class="all-icons">
+                                                <mat-icon color="accent" (click)="
+                                                        onEdit(content, table)
+                                                    ">edit</mat-icon>
+                                                <mat-icon color="primary" (click)="
+                                                        onDelPopup(
+                                                            template,
+                                                            table
+                                                        )
+                                                    ">delete</mat-icon>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="pt-2 bg-card shadow rounded-2xl">
+            <div class="flex items-start justify-between">
+                <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                    Purchase & Sales Report
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="purchaseSalesReport">
+                        <input matStartDate placeholder="Start date" #startDateReportSaleItems />
+                        <input matEndDate placeholder="End date" #endDateReportSaleItems (dateChange)="
+                            dateRangeReportOrderData(
+                                startDateReportSaleItems,
+                                endDateReportSaleItems
+                                )
+                            " />
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="purchaseSalesReport"></mat-datepicker-toggle>
+                    <mat-date-range-picker #purchaseSalesReport></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            <div>
+
+                <!-- <input type="date" [(ngModel)]="selectedDate" (change)="filterDataByDate()"/> -->
+                <apx-chart [chart]="ReopertchartOptions.chart" [xaxis]="ReopertchartOptions.xaxis"
+                    [markers]="ReopertchartOptions.markers" [stroke]="ReopertchartOptions.stroke"
+                    [yaxis]="ReopertchartOptions.yaxis" [dataLabels]="ReopertchartOptions.dataLabels"
+                    [series]="ReopertchartOptions.series" [title]="ReopertchartOptions.title"
+                    [fill]="ReopertchartOptions.fill" [tooltip]="ReopertchartOptions.tooltip"
+                    [plotOptions]="ReopertchartOptions.tooltip">
+                </apx-chart>
+            </div>
+        </div>
+
+
+        <div class="h-full overflow-scroll">
+            <!-- <div class="auto-refresh pl-1">
+                <mat-slide-toggle
+
+                    (change)="toggleAutoRefresh($event)"
+                    >Auto Refresh</mat-slide-toggle
+                >
+            </div> -->
+            <div *ngIf="mobileNumber != '9618812143'">
+                <div class="pt-2 bg-card shadow rounded-2xl h-120 overflow-auto">
+                    <div class="text-lg font-medium tracking-tight leading-6 truncate p-3">
+                        Item Sale Report
+                    </div>
+                    <form [formGroup]="ItemSaleReportForm">
+                        <div class="flex items-start justify-between p-2">
+                           <div>
+                                <mat-form-field>
+                                    <mat-label>StallID/Name</mat-label>
+                                    <mat-select formControlName="stallid">
+                                        <mat-option value="0">All</mat-option>
+                                        <mat-option *ngFor="let options of itemsaleReportData"
+                                            [value]="options.stallid">{{ options.stallid }}-{{
+                                            options.name
+                                            }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                            <mat-form-field appearance="fill">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="vendorsaleorderitems">
+                                    <input matStartDate placeholder="Start date" formControlName="startDate"
+                                        #startDateSaleItems />
+                                    <input matEndDate placeholder="End date" formControlName="endDate"
+                                        #endDateSaleItems />
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="vendorsaleorderitems"></mat-datepicker-toggle>
+                                <mat-date-range-picker #vendorsaleorderitems></mat-date-range-picker>
+                            </mat-form-field>
+
+                            <div>
+                                <mat-form-field>
+                                    <mat-label>Dispense status:</mat-label>
+                                    <mat-select formControlName="dStatus">
+                                        <mat-option value="all">All</mat-option>
+                                        <mat-option *ngFor="let options of itemdispenseStatus" [value]="options.key">{{
+                                            options.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <button class="btn btn-primary" (click)="onGo()" style="margin-top: 1.75rem;">Go</button>
+                        </div>
+                    </form>
+                    <div class="form-inline grid ml-3">
+                        <div>
+                            Total Price : {{totalPrice}}
+                        </div>
+                        <div>
+                            Total Average Price : {{AveragePrice}}
+                        </div>
+                        <div>
+                            Total Quantity : {{listlength}}
+                        </div>
+
+                    </div>
+                    <div class="flex flex-col flex-auto"></div>
+                    <div class="mt-8">
+                        <table class="table table-bordernone">
+                            <thead>
+                                <tr>
+                                    <th scope="col">SNO</th>
+                                    <th scope="col">Item Id/Name</th>
+                                    <th scope="col">Total Quantity</th>
+                                    <th scope="col">Item Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="
+                                        let vendorSaleOrderItem of vendorSaleOrderItemsList;
+                                        index as i
+                                    ">
+                                    <td>
+                                        <label>{{ i + 1 }}</label>
+                                    </td>
+                                    <td>
+                                        <label>{{ vendorSaleOrderItem?.itemId }}-{{
+                                            vendorSaleOrderItem?.itemName
+                                            }}-{{
+                                            vendorSaleOrderItem?.tName
+                                            }}</label>
+                                    </td>
+                                    <td class="font-danger">
+                                        <label>{{
+                                            vendorSaleOrderItem?.totalQuantity
+                                            }}</label>
+                                    </td>
+                                    <td class="font-danger">
+                                        <label>{{
+                                            vendorSaleOrderItem.itemPrice
+                                            }}</label>
+                                    </td>
+                                    <td class="font-danger">
+                                        <label for="">{{
+                                            vendorSaleOrderItem.totalPrice
+                                            }}</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #addtoPoModal>
+        <div mat-dialog-title class="dialog-title">
+            <h4>Assign to po</h4>
+            <button mat-icon-button aria-label="close dialog" matDialogClose>
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <mat-dialog-content class="mat-typography">
+            <form [formGroup]="adhocItemformGroup">
+                <div class="form">
+                    <div class="form-group">
+                        <label for="" class="mb-1">Purchase Order</label>
+                        <select class="form-control" formControlName="adhocpoid">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let adhoc of adhocPoData" [value]="adhoc.adhocpoid">
+                                {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Category:</label>
+                        <select class="form-control" formControlName="category">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let all of categories" [value]="all">
+                                {{ all }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field style="width: 100% !important">
+                            <mat-label>Products</mat-label>
+                            <mat-select formControlName="productlist" #singleSelect class="form-control-plain-text"
+                                (selectionChange)="
+                                    onSelectProducts($event.source.value)
+                                " aria-readonly="true">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="itemControl"
+                                        placeholderLabel="Search"></ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option *ngFor="let all of filtereditems" [value]="all.itemId">
+                                    {{ all.itemId }}-{{ all.itemName }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="mb-1">Quantity</label>
+                        <input type="number" class="form-control" formControlName="quantity" />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">UOM</label>
+                        <select class="form-control" formControlName="uom">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let all of uomData" [value]="all">
+                                {{ all }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-raised-button color="primary" matDialogClose (cilck)="OnClose()">
+                Close
+            </button>
+            <button class="btn btn-primary" (click)="OnSavePO()">Save</button>
+        </mat-dialog-actions>
+    </ng-template>
+</div>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">
+            Add Stall Inventory
+        </h5>
+        <button type="button" class="close" aria-label="Close" (click)="OnClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="needs-validation" [formGroup]="TableFieldsForm">
+            <div class="form">
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Stall ID:</label>
+                    <!-- <select class="form-control" required="" formControlName="stallid" type="number">
+                  <option value="">--Select--</option>
+                <option *ngFor="let id of stallid" [value]="id.stallid">{{id.stallid}}-{{id.name}}</option>
+              </select> -->
+                    <mat-form-field style="width: 100%">
+                        <mat-label>Stall ID</mat-label>
+                        <mat-select formControlName="stallid" #singleSelect class="form-control-plain-text">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="stallsearch"
+                                    placeholderLabel="Search"></ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let bank of filteredStalls" [value]="bank.stallid">
+                                {{ bank.stallid }}-{{ bank.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Category:</label>
+
+            <mat-form-field style="width: 100%">
+              <mat-select
+              disabled
+                #singleSelect
+                class="form-control-plain-text"
+                [formControl]="catformcontrol"
+                (selectionChange)="onCategoryChange($event)"
+              >
+                <mat-option>
+                  <ngx-mat-select-search
+                    [formControl]="categoryfilter"
+                    placeholderLabel="Search"
+                  ></ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option
+                  *ngFor="let bank of filteredcategory"
+                  [value]="bank.catId"
+                >
+                  {{ bank.catId }}-{{ bank.catName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>-->
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Item ID-Name:</label>
+                    <!-- <select class="form-control" required="" formControlName="itemID" type="text" (change)="OnItemSelect($event.target.value)">
+                      <option value="">--Select--</option>
+                    <option *ngFor="let id of products" [value]="id.prodId">{{id.prodId}}-{{id.prodName}}</option>
+                  </select> -->
+                    <mat-form-field style="width: 100%">
+                        <mat-label>Item ID</mat-label>
+                        <mat-select formControlName="itemID" #singleSelect class="form-control-plain-text"
+                            (selectionChange)="OnItemSelect($event)">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="itemfilter"
+                                    placeholderLabel="Search"></ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let bank of filteredIngrs" [value]="bank.prodId">
+                                {{ bank.prodId }}-{{ bank.prodName }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div *ngIf="validation">
+                        <mat-error *ngIf="
+                                TableFieldsForm.controls['itemID'].hasError(
+                                    'required'
+                                )
+                            ">
+                            <strong>required</strong>
+                        </mat-error>
+                    </div>
+                </div>
+                <!-- <div class="form-group mb-0">
+                    <label for="validationCustom02" class="mb-1">Item Name:</label>
+                    <input matInput class="form-control" formControlName="itemName" required type="text" />
+                    <div *ngIf="validation">
+                    <mat-error *ngIf="TableFieldsForm.controls['itemName'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                    </div>
+
+                </div> -->
+                <div class="form-group">
+                    <label for="" class="mb-1">Subcategory :</label>
+                    <select class="form-control" formControlName="subCategory">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let all of subCatData" [value]="all.subCatId">
+                            {{ all.subCatId }}-{{ all.subCatName }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group mb-0">
+                    <label for="validationCustom02" class="mb-1">Item UOM:</label>
+                    <input class="form-control" formControlName="itemUOM" type="text" />
+                    <div *ngIf="validation">
+                        <mat-error *ngIf="
+                                TableFieldsForm.controls['itemUOM'].hasError(
+                                    'required'
+                                )
+                            ">
+                            <strong>required</strong>
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="form-group mb-0">
+                    <label for="validationCustom02" class="mb-1">Date :</label>
+                    <div class="md-form">
+                        <input type="date" id="inputMDEx" class="form-control" formControlName="date"
+                            format="MM-DD-YYYY" />
+                    </div>
+                    <div *ngIf="validation">
+                        <mat-error *ngIf="
+                                TableFieldsForm.controls['date'].hasError(
+                                    'required'
+                                )
+                            ">
+                            <strong>required</strong>
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1">Packed Count:</label>
+                <input class="form-control" formControlName="packedCount" type="number" />
+                <div *ngIf="validation">
+                    <mat-error *ngIf="
+                            TableFieldsForm.controls['packedCount'].hasError(
+                                'required'
+                            )
+                        ">
+                        <strong>required</strong>
+                    </mat-error>
+                </div>
+            </div>
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1">Reserved Quantity:</label>
+                <input class="form-control" formControlName="reserveQuantity" type="number" />
+            </div>
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1">Packed Date :</label>
+                <div class="md-form">
+                    <input type="date" id="inputMDEx" class="form-control" formControlName="packedDate"
+                        format="MM-DD-YYYY" />
+                </div>
+            </div>
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1">Expiry :</label>
+                <input class="form-control" formControlName="expiryInDays" type="number" />
+            </div>
+            <!-- <div class="form-group mb-0">
+          <label for="validationCustom02" class="mb-1">Sale Count:</label>
+          <input matInput class="form-control" formControlName="saleCount" required type="number"  />
+        <div *ngIf="validation">
+        <mat-error *ngIf="TableFieldsForm.controls['saleCount'].hasError('required')">
+            <strong >required</strong>
+          </mat-error>
+        </div>
+      </div> -->
+            <!-- <div class="form-group mb-0">
+        <label for="validationCustom02" class="mb-1">Balance :</label>
+        <input matInput class="form-control" formControlName="balance" required type="number"  />
+      <div *ngIf="validation">
+      <mat-error *ngIf="TableFieldsForm.controls['balance'].hasError('required')">
+          <strong >required</strong>
+        </mat-error>
+      </div>
+    </div> -->
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+            Save
+        </button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="OnClose()">
+            Close
+        </button>
+    </div>
+</ng-template>
+<!-- ItemStock popup -->
+ <ng-template #itemStock>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Item stock </h4>
+        <button type="button" class="close" aria-label="Close" (click)="OnClose()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        
+            <strong class="mt-1 mb-2">Item-{{stockProdId.prodId}}-{{stockProdId.prodName}}-{{stockProdId.quom}}{{stockProdId.muom}}-{{stockProdId.mrpprice}}</strong><br>
+            <span>Total Quantity : {{ItemStockQty}}</span>
+            <div style="max-height: 300px; overflow-y: auto;">
+        <table class="table table-bordernone">
+            <thead>
+                <tr>
+                    <th scope="col">SNO</th>
+                    <!-- <th scope="col">Item Id</th> -->
+                    <th scope="col">Stall/Type</th>
+                    <th scope="col">Avbl Qty</th>
+                    <!-- <th scope="col">Order Type</th>
+                    <th>Ref. TransId</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="
+                        let Item of ItemStockData;
+                        index as i
+                    ">
+                    <td>
+                        <label>{{ i + 1 }}</label>
+                    </td>
+                    <!-- <td>
+                        <label>{{ Item?.itemId }}</label>
+                    </td> -->
+                    <td>
+                        <label>{{ Item?.stallId }}-{{Item?.name}}-{{Item?.type}}</label>
+                    </td>
+                    <td class="text-center">
+                        <label>{{ Item?.availQuantity }}</label>
+                    </td>
+                    <!-- <td>
+                        <label>{{ Item?.orderType }}</label>
+                    </td>
+                    <td>
+                        <label>{{ Item?.refTransId }}</label>
+                    </td> -->
+                    <!-- <td class="font-danger">
+                        <label>{{
+                            vendorSaleOrderItem?.totalQuantity
+                            }}</label>
+                    </td>
+                    <td class="font-danger">
+                        <label>{{
+                            vendorSaleOrderItem.itemPrice
+                            }}</label>
+                    </td>
+                    <td class="font-danger">
+                        <label for="">{{
+                            vendorSaleOrderItem.totalPrice
+                            }}</label>
+                    </td> -->
+                </tr>
+            </tbody>
+        </table>
+            </div>
+    </div>
+ </ng-template>
+<!-- Delete Popup -->
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Delete Record</h4>
+    </div>
+    <div class="modal-body text-center">
+        <p>Do you really want to delete this record?</p>
+        <button type="button" class="btn btn-primary" (click)="decline()">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-default" (click)="confirm()">
+            Delete
+        </button>
+    </div>
+</ng-template>

@@ -1,0 +1,42 @@
+<section class="login-section">
+  <div class="card text-center">
+    <div class="card-header h1">Welcome to NFM Portal</div>
+    <div class="card-body">
+      <button class="btn btn-primary" (click)="OnLoginPress(loginModal)">
+        Login
+      </button>
+    </div>
+  </div>
+</section>
+<ng-template #loginModal>
+  <div class="modal-header">
+    <p class="h4 text-center" id="exampleModalLabel">Sign Up/Login</p>
+    <button type="button" class="close" aria-label="Close" (click)="OnClose()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="needs-validation" [formGroup]="loginForm">
+      <div class="form">
+        <div class="form-group">
+          <label>Mobile No.</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="username"
+            pattern="[789][0-9]{9}"
+            [class.error-border]="isSubmitted && !isLoginValid"
+          />
+        </div>
+        <div *ngIf="isSubmitted && !isLoginValid">
+          <p style="color: red">Please Enter Mobile No.</p>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer text-center">
+    <button type="submit" class="btn btn-success" (click)="OnSubmit()">
+      Login/Sign Up
+    </button>
+  </div>
+</ng-template>

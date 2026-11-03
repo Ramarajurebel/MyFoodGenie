@@ -1,0 +1,11 @@
+.allcards {
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+// for mobile
+@media only screen and (max-width: 480px) {
+    .allcards {
+        flex-direction: column;
+    }
+}

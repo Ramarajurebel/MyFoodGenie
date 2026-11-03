@@ -1,0 +1,41 @@
+.adhoc-po {
+    gap: 40px;
+    background-color: rgba(128, 128, 128, 0.2901960784);
+}
+.po {
+    width:7rem !important;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+    overflow: auto;
+}
+.container{
+    
+    justify-content: center;
+    display: flex;
+}
+.container img {
+    max-width: 100px;
+   
+}
+@media only screen and (max-width: 480px) {
+    .adhoc-po {
+        gap: 15px;
+        background-color: #8080804a;
+    }
+    .p-3 {
+        padding: 1.5rem;
+    }
+    .example-container {
+        display: flex;
+    }
+    .table-mobile-view {
+        display: flex;
+        flex-direction: column;
+    }
+}

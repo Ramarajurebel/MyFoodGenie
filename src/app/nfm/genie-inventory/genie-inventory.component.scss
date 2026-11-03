@@ -1,0 +1,138 @@
+
+select {
+  -webkit-appearance: listbox !important;
+  }
+  .mat-snack-bar-container.ok-button-blue {
+    color: white !important; /* Set the color you want */
+  }
+.row-container {
+    display: flex;
+    align-items: center; /* Vertically center the elements */
+  }
+
+  .mat-form-field {
+    margin-right: 10px; /* Add some space between the label and select */
+  }
+  .main-container{
+    position: relative;
+}
+.heading-div{
+    position: fixed;
+width: 100% ;
+}
+.heading{
+    height: 3rem;
+    background-color: green;
+    columns: white;
+
+}
+.bottom-section{
+    position: absolute;
+    z-index: -9999;
+    overflow: hidden;
+
+}
+.line{
+    background-color: rgba(255, 255, 0, 0.856);
+    height: 4px;
+}
+.inline-prods{
+    gap: 0.5rem;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+.card-img-top{
+    width: 100% !important;
+
+    height: 6rem;
+    object-fit: fill;
+    border-radius: 12px 12px 0 0;
+}
+.buy-btn{
+    background-color: rgba(128, 128, 128, 0.664);
+    color: black;
+    height: 3rem;
+}
+.additem{
+  margin-left: 43rem !important;
+}
+.pricing{
+    gap: 1rem;
+}
+.line-through{
+    text-decoration: line-through;
+}
+.item-count{
+    border: none;
+    background-color: transparent;
+    width: 2.5rem; /* Adjust the width as needed */
+    text-align: center;
+    font-size: large;
+
+}
+.custom-btn{
+    height: 2rem;
+    border:none;
+    border-radius: 0 0 12px 12px !important;
+    background-color: rgba(13, 13, 212, 0.692);
+    color: white;
+    font-weight: 600;
+}
+::-webkit-scrollbar {
+    height: 4px;              /* height of horizontal scrollbar ← You're missing this */
+    width: 4px;               /* width of vertical scrollbar */
+    border: 1px solid #d5d5d5;
+    display: none;
+  }
+  .red-text {
+    color: red;
+  }
+
+  .orange-text {
+    color: orange;
+  }
+
+  .green-text {
+    color: green;
+  }
+  .yellow-text{
+    color: yellow;
+  }
+  .pricing{
+    gap: 1rem;
+}
+.dialog-image {
+  width: 100%; /* Make sure images take up the full width of the container */
+  height: auto; /* Maintain the aspect ratio of the images */
+}
+.dialog-content {
+  max-width: 300px !important; /* Set the maximum width of the dialog content */
+  margin: 0 auto; /* Center the dialog content horizontally */
+}
+.main-section-products{
+  height: calc(100vh - 150px);
+  padding-bottom: 150px !important;
+  overflow: auto;
+}
+.custom-chip{
+  background-color: green;
+  color: white;
+}
+.card-btns{
+
+    color: white;
+    width: 50%;
+}
+.left-btn{
+    background-color: rgba(13,13,212,.692);
+    border-radius: 0 0 0 0.75rem;
+    color: white;
+    font-size: 15px;
+}
+.right-btn{
+    background-color: rgba(13,103,13,.692);
+    border-radius: 0 0 0.75rem 0;
+    color: white;
+}
+

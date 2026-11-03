@@ -1,0 +1,398 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="matDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div class="flex flex-auto" *ngIf="matDrawerOpened">
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="TableFieldsForm"
+                >
+                    <!-- Header -->
+                    <div class="flex justify-between -mt-3 -ml-4">
+                        <div class="flex items-center">
+                            <!-- Close button -->
+                            <a mat-icon-button (click)="OnClose()">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="img">
+                        <img
+                            [src]="imageFile"
+                            style="width: 100px; height: 100px"
+                        />
+                    </div>
+                    <!-- <div class="form-group">
+                        <label class="mb-1">Vendor</label>
+                        <select class="form-control" formControlName="vendorId">
+                            <option value="">--Select--</option>
+                            <option
+                                [value]="vendor.vendorId"
+                                *ngFor="let vendor of vendorData"
+                            >
+                                {{ vendor.vendorName }}
+                            </option>
+                        </select>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Stall Name:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="name"
+                            required
+                            type="text"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Stall Code:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="stallCode"
+                            
+                            type="text"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Org Id:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="orgId"
+                            
+                            type="text"
+                        />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Address :</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="address"
+                            required
+                            type="text"
+                        />
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Location Owner :</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="locationOwner"
+                            required
+                            type="text"
+                        />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Location Owner Contact:</label
+                        >
+                        <input
+                            class="form-control"
+                            formControlName="locationOwnerContact"
+                            required
+                            type="number"
+                        />
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Stall Supervisor:</label
+                        >
+                        <select
+                            class="form-control"
+                            formControlName="stallSupervisor"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                [value]="op.stalloperatorid"
+                                *ngFor="let op of operatorData"
+                            >
+                                {{ op.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-1">
+                        <label for="" class="mb-1">Token Amount</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            formControlName="tokenAmount"
+                        />
+                    </div>
+
+                    <div class="form-group mb-1">
+                        <label for="" class="mb-1">Commission</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Enter commissin in percentage"
+                            formControlName="commission"
+                        />
+                    </div>
+                    <div class="form-group mb-0">
+                        <label
+                            for="validationCustom02"
+                            class="form-inline"
+                            >Type:</label
+                        >
+                        <select
+                            formControlName="type"
+                            class="form-control"
+                           (change)="OnCounterType($event.target.value)"
+                          
+                        >
+                        <option value="0">--Select--</option>
+                            <option
+                                *ngFor="let tp of type"
+                                [value]="tp"
+                            >
+                                {{ tp }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-1" *ngIf="CounterType">
+                        <label for="" class="mb-1">Refstallid:</label>
+                        <select
+                            formControlName="refStallId"
+                            class="form-control"
+                          
+                          
+                        >
+                        <!-- <option value="0">--Select--</option> -->
+                            <option
+                                *ngFor="let tp of filteredRefillIds"
+                                [value]="tp.stallid"
+                            >
+                                {{tp.stallid}}-{{ tp.name }}-{{ tp.vmsMachineId }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label
+                            for="validationCustom02"
+                            class="form-inline"
+                            >Dispense Type:</label
+                        >
+                        <select
+                            formControlName="dispenseType"
+                            class="form-control"
+                           
+                          
+                        >
+                        <option value="0">--Select--</option>
+                            <option
+                                *ngFor="let dispense of dispensetype"
+                                [value]="dispense"
+                            >
+                                {{ dispense }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Status :</label
+                        >
+                        <select
+                            class="form-control"
+                            formControlName="status"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let stat of Status"
+                                [value]="stat"
+                            >
+                                {{ stat }}
+                            </option>
+                        </select>
+                       
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom02" class="mb-1"
+                            >Start Date:</label
+                        >
+                        <input
+                            class="form-control"
+                            id="validationCustom03"
+                            type="date"
+                            formControlName="startDate"
+                        />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label for="" class="mb-1">Print Label</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            formControlName="printLabel"
+                        />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label for="" class="mb-1">Is Print Default</label>
+                        <input
+                            type="checkbox"
+                            class="form-check"
+                            (change)="OnPrintDefault($event.target.checked)"
+                            formControlName="isPrintDefault"
+                        />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label for="" class="mb-1">Is Gst Enabled</label>
+                        <input
+                            type="checkbox"
+                            class="form-check"
+                            (change)="OnGstCheck($event.target.checked)"
+                            formControlName="isGstEnabled"
+                        />
+                    </div>
+
+                    <div class="form-group mb-1">
+                        <label for="" class="mb-1">Uplaod Logo</label>
+                        <input
+                            type="file"
+                            class="form-control"
+                            (change)="OnImageSelect($event)"
+                        />
+                    </div>
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="d-flex flex-row justify-content-between">
+                        <button class="btn btn-danger" (click)="onDel()">
+                            Delete
+                        </button>
+                        <button class="btn btn-primary" (click)="onSavePopup()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Counter Management
+                        </div>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <ng-container>
+                        <div class="table-responsive">
+                            <table class="table table-bordernone">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            Stall ID/Name
+                                        </th>
+                                        <th>Address</th>
+                                        <th>Location Owner/Contact</th>
+                                        <th>Stall Supervisor</th>
+                                        <!-- <th>Stall Operator</th> -->
+                                        <th (click)="open()">
+                                            <mat-icon>add</mat-icon>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="
+                                            let table of stalldata;
+                                            let i = index
+                                        "
+                                    >
+                                        <td class="text-center">
+                                            <label
+                                                >{{ table.stallid }}-{{
+                                                    table.name
+                                                }}</label
+                                            >
+                                        </td>
+                                        <td>
+                                            <label>{{ table.address }}</label>
+                                        </td>
+
+                                        <td>
+                                            <label
+                                                >{{ table.locationOwner }}-{{
+                                                    table.locationOwnerContact
+                                                }}</label
+                                            >
+                                        </td>
+
+                                        <td class="text-center">
+                                            <label
+                                                >{{ table.stallSupervisor }}-{{
+                                                    table.opName
+                                                }}</label
+                                            >
+                                        </td>
+                                        <!-- <td>
+                                        <label>{{table.stallOperator}}</label>
+                                      </td> -->
+
+                                        <td>
+                                            <div class="all-icons">
+                                                <mat-icon
+                                                    color="accent"
+                                                    (click)="onEdit(table)"
+                                                    >edit</mat-icon
+                                                >
+                                                <mat-icon
+                                                    color="primary"
+                                                    (click)="
+                                                        onDelPopup(
+                                                            template,
+                                                            table
+                                                        )
+                                                    "
+                                                    >delete</mat-icon
+                                                >
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- dialog  -->
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Delete Record</h4>
+    </div>
+    <div class="modal-body text-center">
+        <p>Do you really want to delete this record?</p>
+        <button type="button" class="btn btn-primary" (click)="decline()">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-default" (click)="confirm()">
+            Delete
+        </button>
+    </div>
+</ng-template>

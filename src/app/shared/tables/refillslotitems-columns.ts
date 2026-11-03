@@ -1,0 +1,103 @@
+export const refillSlotItems = [
+    {
+        key: 'available',
+        type: 'checkbox',
+        label: '',
+        disabled: false,
+        controlName: 'available',
+        isColumnActive: true,
+        isSort: false,
+    },
+  
+  
+    {
+        key: 'prodName',
+        type: 'prodName',
+        label: 'Prod Name',
+        disabled: true,
+        controlName: 'prodName',
+        isColumnActive: true,
+        isSort: true,
+    },
+  
+    {
+        key: 'refillQty',
+        type: 'refillQty',
+        label: 'Refill Qty',
+        disabled: false,
+        controlName: 'refillQty',
+        isColumnActive: true,
+        isSort: true,
+    },
+    {
+        key: 'packingQty',
+        type: 'packingQty',
+        label: 'Packing Qty',
+        disabled: false,
+        controlName: 'packingQty',
+        isColumnActive: true,
+        isSort: true,
+    },
+    {
+        key: 'maxQty',
+        type: 'maxQty',
+        label: 'Max Qty',
+        disabled: false,
+        controlName: 'maxQty',
+        isColumnActive: true,
+        isSort: true,
+    },
+    
+  
+  
+    {
+        key: 'slotId',
+        type: 'slotId',
+        label: 'rackId/slotId',
+        disabled: false,
+        controlName: 'slotId',
+        isColumnActive: true,
+        isSort: true,
+    },
+    // {
+    //     key: 'slotId',
+    //     type: 'slotId',
+    //     label: 'Slot Id',
+    //     disabled: false,
+    //     controlName: 'slotId',
+    //     isColumnActive: true,
+    //     isSort: true,
+    // },
+    // {
+    //     key: 'isinstock',
+    //     type: 'button',
+    //     label: 'Add to Stock',
+    //     disabled: false,
+    //     controlName: 'ininstock',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+    // {
+    //     key: 'updateprice',
+    //     type: 'updateprice',
+    //     label: 'Update Price',
+    //     disabled: false,
+    //     controlName: 'ininstock',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+    // {
+    //     key: 'isEdit',
+    //     type: 'isEdit',
+    //     label: 'Edit',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+    // {
+    //     key: 'isDelete',
+    //     type: 'isDelete',
+    //     label: 'Del',
+    //     isColumnActive: true,
+    //     isSort: false,
+    // },
+];

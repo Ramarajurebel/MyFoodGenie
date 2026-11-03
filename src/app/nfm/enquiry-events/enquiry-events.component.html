@@ -1,0 +1,686 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <mat-drawer-container
+        class="flex-auto h-full bg-card dark:bg-transparent overflow-scroll"
+    >
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="enquiryForm"
+                >
+                    <div class="flex justify-end">
+                        <div class="close">
+                            <a mat-icon-button (click)="OnCloseMatDrawer()">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- <mat-divider class="mt-6 mb-8"></mat-divider> -->
+                    <!-- <div class="flex justify-between" *ngIf="showAddButton">
+                        <button
+                            mat-mini-fab
+                            color="primary"
+                            (click)="OnAddCommentClick(addCmnts)"
+                        >
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div> -->
+                    <!-- <mat-divider class="mt-6 mb-8"></mat-divider> -->
+
+                    <div class="form">
+                        <div class="form-group">
+                    <label for="validationCustom01" class="mb-1"
+                        >Enquiry Date:</label
+                    >
+
+                    <input
+                        type="date"
+                        class="form-control"
+                        formControlName="enqDate"
+                    />
+
+
+                </div>
+                <!-- <div class="form-group">
+                    <label for="" class="mb-1">Vendor Id</label>
+                    <select
+                        name=""
+                        id=""
+                        class="form-control"
+                        formControlName="vendorId"
+                    >
+                        <option value="">--Select--</option>
+                        <option
+                            *ngFor="let obj of vendorData"
+                            [value]="obj.vendorId"
+                        >
+                            {{ obj.vendorName }}
+                        </option>
+                    </select>
+                </div> -->
+                      
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                > Name:</label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                formControlName="name"
+                            />
+                            <!-- <div *ngIf="validation">
+                <mat-error *ngIf="TableFieldsForm.controls['productId'].hasError('required')">
+                  <strong >required</strong>
+                </mat-error>
+              </div> -->
+                        </div>
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Type:</mat-label>
+                                <mat-select formControlName="type" multiple>
+                                    <mat-option *ngFor="let type of Type" [value]="type">
+                                        {{ type }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    > Area :</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="area"
+                                />
+                            </div>  
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Category:</label
+                            >
+                            <select
+                                class="form-control"
+                                formControlName="category"
+                            >
+                                <option value="">--Select--</option>
+                                <option
+                                    *ngFor="let cat of Category"
+                                    [value]="cat"
+                                >
+                                    {{ cat }}
+                                </option>
+                            </select>
+                            <!-- <div *ngIf="validation">
+                    <mat-error *ngIf="TableFieldsForm.controls['quantity'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                  </div> -->
+                        </div>
+
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Contact Name:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="text"
+                                formControlName="contactName"
+                            />
+                            <!-- <div *ngIf="validation">
+              <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+                <strong >required</strong>
+              </mat-error>
+            </div> -->
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Contact Number:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="number"
+                                formControlName="contactNumber"
+                            />
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >No Of Plates:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="number"
+                                formControlName="noofplates"
+                            />
+                          
+                        </div> -->
+                        <div class="form-group" *ngIf="isenquiryLocation">
+                            <label for="validationCustom01" class="mb-1"
+                                >Location:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="text"
+                                formControlName="location"
+                            />
+                          
+                        </div>
+                        <div class="form-group mt-2 mb-1" *ngIf="!isenquiryLocation">
+                            <label for="" class="mb-1">Location:</label>
+                            <a
+                            class="cursor-pointer"
+                            (click)="onLocationPress(selectedEnq.location)"
+                        >{{selectedEnq.location}}</a>
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >No of Machines:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="number"
+                                formControlName="noOfMachines"
+                            />
+                            <!-- <div *ngIf="validation">
+      <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+        <strong >required</strong>
+      </mat-error>
+    </div> -->
+    <div class="form-group">
+        <lable class="mb-1">Rental Amount</lable>
+        <input
+            type="number"
+            formControlName="rentalAmount"
+            class="form-control"
+        />
+    </div>
+    <div class="form-group">
+        <lable class="mb-1">Commision</lable>
+        <input
+            type="number"
+            formControlName="commission"
+            class="form-control"
+        />
+    </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Reference By:</label
+                            >
+                            <select
+                                name=""
+                                id=""
+                                class="form-control"
+                                formControlName="referenceBy"
+                                (change)="onReferenceChange()"
+                            >
+                                <option value="">--select--</option>
+                                <option
+                                    [value]="op.name"
+                                    *ngFor="let op of stallOperator"
+                                >
+                                    {{ op.name }}
+                                </option>
+                            </select>
+                          
+                        </div>
+                        <div class="form-group" *ngIf="showCustomInput">
+                            <label for="customReference" class="mb-1">Custom Reference:</label>
+                            <input
+                                type="text"
+                                id="customReference"
+                                class="form-control"
+                                formControlName="customReference"
+                            />
+                        </div> 
+                       
+<!--                   
+                        <div class="form-group row">
+                            <label
+                                for="validationCustom02"
+                                class="col-sm-4 col-form-label"
+                                >Serving Needed:</label
+                            >
+                            <div class="row-sm-4">
+                                <mat-radio-group
+                                    aria-label="Select an option"
+                                    class="form-inline"
+                                    formControlName="serviceneeded"
+                                >
+                                    <mat-radio-button
+                                        value="true"
+                                        class="form-group mx-sm-3 mb-2 mr-2"
+                                        >Yes</mat-radio-button
+                                    >
+                                    <mat-radio-button
+                                        value="false"
+                                        checked="true"
+                                        class="form-group mx-sm-3 mb-2"
+                                        >No</mat-radio-button
+                                    >
+                                </mat-radio-group>
+                            </div>
+                          
+                        </div> -->
+                        <!-- <div class="form-group row">
+                            <label
+                                for="validationCustom02"
+                                class="col-sm-4 col-form-label"
+                                >Tables Needed:</label
+                            >
+                            <div class="row-sm-4">
+                                <mat-radio-group
+                                    aria-label="Select an option"
+                                    class="form-inline"
+                                    formControlName="tablesneeded"
+                                >
+                                    <mat-radio-button
+                                        value="true"
+                                        class="form-group mx-sm-3 mb-2 mr-2"
+                                        >Yes</mat-radio-button
+                                    >
+                                    <mat-radio-button
+                                        value="false"
+                                        checked="true"
+                                        class="form-group mx-sm-3 mb-2"
+                                        >No</mat-radio-button
+                                    >
+                                </mat-radio-group>
+                            </div>
+                           
+                        </div> -->
+                        <!-- <div class="form-group row">
+                            <label
+                                for="validationCustom02"
+                                class="col-sm-4 col-form-label"
+                                >Water Needed:</label
+                            >
+                            <div class="row-sm-4">
+                                <mat-radio-group
+                                    aria-label="Select an option"
+                                    class="form-inline"
+                                    formControlName="waterneeded"
+                                >
+                                    <mat-radio-button
+                                        value="true"
+                                        class="form-group mx-sm-3 mb-2 mr-2"
+                                        >Yes</mat-radio-button
+                                    >
+                                    <mat-radio-button
+                                        value="false"
+                                        checked="true"
+                                        class="form-group mx-sm-3 mb-2"
+                                        >No</mat-radio-button
+                                    >
+                                </mat-radio-group>
+                            </div>
+                          
+                        </div> -->
+                        <!-- <div class="form-group row">
+                            <label
+                                for="validationCustom02"
+                                class="col-sm-6 col-form-label"
+                                >Transport Charges:</label
+                            >
+                            <div class="row-sm-4">
+                                <mat-radio-group
+                                    aria-label="Select an option"
+                                    class="form-inline"
+                                    formControlName="transportcharges"
+                                >
+                                    <mat-radio-button
+                                        value="true"
+                                        class="form-group mx-sm-3 mb-2 mr-2"
+                                        >Yes</mat-radio-button
+                                    >
+                                    <mat-radio-button
+                                        value="false"
+                                        class="form-group mx-sm-3 mb-2"
+                                        checked="true"
+                                        >No</mat-radio-button
+                                    >
+                                </mat-radio-group>
+                            </div>
+                          
+                        </div> -->
+                        <!-- <div class="form-group">
+                            <lable class="mb-1">Total Amount</lable>
+                            <input
+                                type="number"
+                                formControlName="totalamount"
+                                class="form-control"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Advance Amount:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="number"
+                                formControlName="advanceamount"
+                            />
+                           
+                        </div> -->
+                        <!-- <div class="form-group">
+                            <label for="time" class="mb-1">Time:</label>
+                            <input
+                                type="time"
+                                class="form-control"
+                                formControlName="eventtime"
+                            />
+                        </div> -->
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Status:</label
+                            >
+                            <select
+                                class="form-control"
+                                formControlName="status"
+                                (change)="OnStatusChange($event.target.value)"
+                            >
+                                <option value="">--Select--</option>
+                                <option
+                                    *ngFor="let all of Status"
+                                    [value]="all"
+                                >
+                                    {{ all }}
+                                </option>
+                            </select>
+                            <!-- <div *ngIf="validation">
+                                <mat-error
+                                    *ngIf="
+                                        enquiryForm.controls[
+                                            'comments'
+                                        ].hasError('required')
+                                    "
+                                >
+                                    <strong>required</strong>
+                                </mat-error>
+                            </div> -->
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Location Owner:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="text"
+                                formControlName="locationOwnerName"
+                            />
+                          
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Location Contact:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="text"
+                                formControlName="locationOwnerContact"
+                            />
+                          
+                        </div>
+                        
+                        <div class="form-group"  *ngIf="selectedEnq?.comments.length>0">
+                            <div >
+                                <div  class="flex justify-between mt-4">
+                                    <div>
+                                        <label for="validationCustom01" class="mb-2"
+                                        ><strong>Comments:</strong></label
+                                    >
+                                     </div>  
+                                       
+                                    <div >
+                                        <button
+                                       class =" btn btn-primary"
+                                            color="primary"
+                                            (click)="OnAddCommentClick(addCmnts)"
+                                            *ngIf="showAddButton"
+                                        >
+                                           Add Comment
+                                        </button>
+                                    </div>
+
+                                </div>
+                           
+                            <div class="enq-div"  *ngFor="let com of selectedEnq.comments">
+                               <div class="font-weight-bold text-dark mb-3">
+                                <div class="font-weight-bold text-dark ">
+                                  <strong> {{com.dateTime}}</strong> 
+                                  </div>
+                            
+                                {{com.comments}}
+                               </div></div>
+                            </div>
+                           
+                           
+                          
+                        </div>
+                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                        <div class="d-flex flex-row justify-content-between">
+                            <button
+                                class="btn btn-danger"
+                                *ngIf="editmode"
+                                (click)="onDelPopup(template)"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                (click)="onSavePopup()"
+                            >
+                                Save
+                            </button>
+                           
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Enquiry
+                        </div>
+                    </div>
+                    <div class="div header-btns" >
+                        <button
+                            class="ml-3"
+                            mat-flat-button
+                            [color]="'primary'"
+                            (click)="OnAddClick()"
+                        >
+                            <mat-icon
+                                [svgIcon]="'heroicons_outline:plus'"
+                            ></mat-icon>
+                            <span class="ml-2 mr-1">Add</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <ng-container>
+                        <div *ngFor="let enquiry of enquiryData">
+                            <div
+                                class="d-flex flex-row items-center pl-3 w-100 h-auto p-3 adhoc-po"
+                                (click)="OnEnquiryClick(enquiry)"
+                            >
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary description"
+                                    >
+                                        {{ enquiry?.genieEnqId }}-{{
+                                            enquiry?.name
+                                        }}
+                                    </div>
+                                    <div
+                                        class="text-lg font-semibold text-primary adhoc"
+                                    >
+                                        {{ enquiry?.enqDate }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        Contact Name:
+                                        {{ enquiry?.contactName }}
+                                    </div>
+                                    <div
+                                        class="h-auto text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Contact Number:
+                                        {{ enquiry?.contactNumber }}
+                                    </div>
+                                </div>
+                                <!-- <button (click)="OnPdfPress(po)">PDF</button> -->
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        <div>
+                                            Category :
+                                            {{ enquiry?.category }}
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="h-auto text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Status: {{ enquiry.status }}
+                                    </div>
+                                    <div
+                                        class="h-auto text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Location: {{ enquiry.location }}
+                                    </div>
+                                </div>
+
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button mat-icon-button color="primary">
+                                        <mat-icon
+                                            >keyboard_arrow_right</mat-icon
+                                        >
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- add item popup -->
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Delete Record</h4>
+        <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+    </div>
+    <div class="modal-body text-center">
+        <p>Do you really want to delete this record?</p>
+        <button type="button" class="btn btn-primary" (click)="decline()">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-default" (click)="confirm()">
+            Delete
+        </button>
+    </div>
+</ng-template>
+<ng-template #addRcps>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">
+            Add Enquiry Items
+        </h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnCloseTable()"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="platter-typ">{{ selectedPlatterType }}</div>
+        <table class="table-responsive">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Type</th>
+                    <th>
+                        <mat-icon
+                            [svgIcon]="'heroicons_outline:plus'"
+                        ></mat-icon>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let table of platterTypeItems">
+                    <td>
+                        <input
+                            type="checkbox"
+                            [(ngModel)]="table.isDefault"
+                            class="form-check"
+                            [value]="table.isDefault"
+                        />
+                    </td>
+                    <td>
+                        <label>{{ table.name }}</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>
+<ng-template #addCmnts>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">
+            Add Comments
+        </h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnCloseTable()"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <label>Comments:</label>
+            <textarea
+            rows="5"
+            cols="12"
+            class="form-control"
+            [formControl]="Comments"
+        ></textarea>
+        
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary mt-4" (click)="onSaveComment()">
+                Save
+            </button>  
+        </div>
+    </div>
+</ng-template>

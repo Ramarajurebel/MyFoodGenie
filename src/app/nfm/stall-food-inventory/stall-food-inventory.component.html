@@ -1,0 +1,752 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex-auto h-full bg-card dark:bg-transparent overflow-scroll">
+        <div class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Stall Food Inventory
+                        </div>
+                    </div>
+                    <form [formGroup]="searchFormGroup" class="mainForm">
+                        <!-- <div class="dates"> -->
+
+                        <div class="form-row flex searchform" style="gap: 10px">
+                            <div>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input
+                                        [rangePicker]="picker"
+                                    >
+                                        <input
+                                            matStartDate
+                                            placeholder="Start date"
+                                            formControlName="startDate"
+                                        />
+                                        <input
+                                            matEndDate
+                                            placeholder="End date"
+                                            formControlName="endDate"
+                                        />
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle
+                                        matSuffix
+                                        [for]="picker"
+                                    ></mat-datepicker-toggle>
+                                    <mat-date-range-picker
+                                        #picker
+                                    ></mat-date-range-picker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="flex">
+                                <div style="align-self: center">
+                                    <button
+                                        class="btn btn-primary mb-2"
+                                        (click)="OnSearch()"
+                                    >
+                                        Go
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="divide-y">
+                    <ng-container>
+                        <div>
+                            <ng-container
+                                class="accordion-body"
+                                *ngIf="inventoryJson.length > 0"
+                            >
+                                <!-- <div
+                                        class="text-lg font-semibold text-primary category p-2"
+                                    >
+                                        Category : {{ selectedPoCategory }}
+                                    </div> -->
+                                <div class="example-container">
+                                    <table
+                                        mat-table
+                                        [dataSource]="inventoryJson"
+                                    >
+                                        <ng-container
+                                            [matColumnDef]="col.key"
+                                            *ngFor="let col of columnsSchema"
+                                        >
+                                            <th
+                                                mat-header-cell
+                                                *matHeaderCellDef
+                                            >
+                                                {{ col.label }}
+                                            </th>
+
+                                            <td
+                                                mat-cell
+                                                *matCellDef="let element"
+                                            >
+                                                <div class="mobile-label">
+                                                    <span
+                                                        >{{ col.label }}:</span
+                                                    >
+                                                </div>
+                                                <div
+                                                    [ngSwitch]="col.type"
+                                                    *ngIf="!element.isEdit"
+                                                >
+                                                    <div
+                                                        *ngSwitchCase="
+                                                            'isSelected'
+                                                        "
+                                                    ></div>
+
+                                                    <!-- <div
+                                                        *ngSwitchCase="
+                                                            'itemImage'
+                                                        "
+                                                    >
+                                                        <img
+                                                            [src]="
+                                                                ingredientsImagePath +
+                                                                element.itemImage
+                                                            "
+                                                            onerror="this.style.display='none'"
+                                                            class="w-8"
+                                                        />
+                                                    </div> -->
+                                                    <div
+                                                        *ngSwitchCase="
+                                                            'Item Id/Name'
+                                                        "
+                                                    >
+                                                        <span
+                                                            >{{
+                                                                element.itemID
+                                                            }}-{{
+                                                                element.itemName
+                                                            }}</span
+                                                        >
+                                                    </div>
+                                                    <div
+                                                        *ngSwitchCase="
+                                                            'StallId/Name'
+                                                        "
+                                                    >
+                                                        <span
+                                                            >{{
+                                                                element.stallid
+                                                            }}-{{
+                                                                element.stallName
+                                                            }}</span
+                                                        >
+                                                    </div>
+                                                    <div
+                                                        class="btn-edit"
+                                                        *ngSwitchCase="'isEdit'"
+                                                    >
+                                                        <button
+                                                            mat-button
+                                                            (click)="
+                                                                element.isEdit = !element.isEdit
+                                                            "
+                                                        >
+                                                            <mat-icon
+                                                                color="primary"
+                                                                >edit</mat-icon
+                                                            >
+                                                        </button>
+                                                        <!-- <button
+                                                                mat-button
+                                                                class="button-remove"
+                                                            >
+                                                                <mat-icon
+                                                                    color="warn"
+                                                                    (click)="
+                                                                        OnDeletePoItem(
+                                                                            element
+                                                                        )
+                                                                    "
+                                                                    >delete</mat-icon
+                                                                >
+                                                            </button> -->
+                                                    </div>
+
+                                                    <div
+                                                        *ngSwitchDefault
+                                                        style="
+                                                            display: flex;
+                                                            gap: 5px;
+                                                            justify-content: center;
+                                                        "
+                                                    >
+                                                        {{ element[col.key] }}
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    [ngSwitch]="col.type"
+                                                    *ngIf="element.isEdit"
+                                                    style="
+                                                        display: flex;
+                                                        gap: 5px;
+                                                    "
+                                                >
+                                                    <div
+                                                        *ngSwitchCase="
+                                                            'isSelected'
+                                                        "
+                                                    ></div>
+
+                                                    <!-- <div
+                                                        *ngSwitchCase="
+                                                            'itemImage'
+                                                        "
+                                                    >
+                                                        <img
+                                                            [src]="
+                                                                ingredientsImagePath +
+                                                                element.itemImage
+                                                            "
+                                                            onerror="this.style.display='none'"
+                                                            class="w-8"
+                                                        />
+                                                    </div> -->
+                                                    <div
+                                                        *ngSwitchCase="
+                                                            'Item Id/Name'
+                                                        "
+                                                    >
+                                                        <span
+                                                            >{{
+                                                                element.itemID
+                                                            }}-{{
+                                                                element.itemName
+                                                            }}</span
+                                                        >
+                                                    </div>
+                                                    <div
+                                                        *ngSwitchCase="
+                                                            'StallId/Name'
+                                                        "
+                                                    >
+                                                        <span
+                                                            >{{
+                                                                element.stallid
+                                                            }}-{{
+                                                                element.stallName
+                                                            }}</span
+                                                        >
+                                                    </div>
+                                                    <div
+                                                        class="btn-edit"
+                                                        *ngSwitchCase="'isEdit'"
+                                                    >
+                                                        <button
+                                                            mat-button
+                                                            color="primary"
+                                                            (click)="
+                                                                InventorySave(
+                                                                    element
+                                                                )
+                                                            "
+                                                        >
+                                                            <mat-icon
+                                                                color="primary"
+                                                                >check</mat-icon
+                                                            >
+                                                        </button>
+                                                        <button
+                                                            mat-button
+                                                            color="primary"
+                                                            (click)="
+                                                                element.isEdit = !element.isEdit
+                                                            "
+                                                        >
+                                                            <mat-icon
+                                                                color="warn"
+                                                                >cancel</mat-icon
+                                                            >
+                                                        </button>
+                                                    </div>
+                                                    <div
+                                                        class="want-to-delete"
+                                                        *ngIf="element.isDelete"
+                                                    >
+                                                        <div
+                                                            *ngSwitchCase="
+                                                                'isEdit'
+                                                            "
+                                                        >
+                                                            Delete ?<button
+                                                                mat-icon-button
+                                                            >
+                                                                <mat-icon
+                                                                    (click)="
+                                                                        (Delete)
+                                                                    "
+                                                                    >check</mat-icon
+                                                                ></button
+                                                            ><button
+                                                                mat-icon-button
+                                                            >
+                                                                <mat-icon
+                                                                    (click)="
+                                                                        CancelDel(
+                                                                            element
+                                                                        )
+                                                                    "
+                                                                    >cancel</mat-icon
+                                                                >
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngSwitchDefault>
+                                                        {{ element[col.key] }}
+                                                    </div>
+                                                    <div
+                                                        class="form-group"
+                                                        *ngSwitchCase="'number'"
+                                                        style="
+                                                            display: flex;
+                                                            justify-content: center;
+                                                        "
+                                                    >
+                                                        <input
+                                                            [type]="col.type"
+                                                            [(ngModel)]="
+                                                                element[col.key]
+                                                            "
+                                                            [disabled]="
+                                                                col.disabled
+                                                            "
+                                                            class="form-control"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <tr
+                                            mat-header-row
+                                            *matHeaderRowDef="displayedColumns"
+                                        ></tr>
+                                        <tr
+                                            mat-row
+                                            *matRowDef="
+                                                let row;
+                                                columns: displayedColumns
+                                            "
+                                        ></tr>
+                                    </table>
+                                </div>
+                                <div class="table-mobile-view">
+                                    <div class="row-data">
+                                        <ng-container
+                                            *ngFor="let row of mobileInvItems"
+                                        >
+                                            <div
+                                                class="container"
+                                                *ngFor="
+                                                    let col of columnsSchema
+                                                "
+                                            >
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <span
+                                                            class="heading font-bold"
+                                                            >{{
+                                                                col.label
+                                                            }}:</span
+                                                        >
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <ng-container>
+                                                            <div
+                                                                class="switch-div"
+                                                                [ngSwitch]="
+                                                                    col.type
+                                                                "
+                                                                *ngIf="
+                                                                    !row.isEdit
+                                                                "
+                                                            >
+                                                                <div
+                                                                    *ngSwitchDefault
+                                                                    style="
+                                                                        display: flex;
+                                                                        gap: 5px;
+                                                                    "
+                                                                >
+                                                                    <span>{{
+                                                                        row[
+                                                                            col
+                                                                                .key
+                                                                        ]
+                                                                    }}</span>
+                                                                </div>
+                                                                <!-- <div
+                                                                    *ngSwitchCase="
+                                                                        'checkbox'
+                                                                    "
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        (change)="
+                                                                            InventorySave(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            row.checked
+                                                                        "
+                                                                    />
+                                                                </div> -->
+                                                                <!-- <div
+                                                                    *ngSwitchCase="
+                                                                        'itemImage'
+                                                                    "
+                                                                >
+                                                                    <img
+                                                                        [src]="
+                                                                            ingredientsImagePath +
+                                                                            row.itemImage
+                                                                        "
+                                                                        onerror="this.style.display='none'"
+                                                                        class="w-8"
+                                                                    />
+                                                                </div> -->
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'Item Id/Name'
+                                                                    "
+                                                                >
+                                                                    <span
+                                                                        >{{
+                                                                            row.itemID
+                                                                        }}-{{
+                                                                            row.itemName
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'StallId/Name'
+                                                                    "
+                                                                >
+                                                                    <span
+                                                                        >{{
+                                                                            row.stallid
+                                                                        }}-{{
+                                                                            row.stallName
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'isEdit'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        mat-button
+                                                                        (click)="
+                                                                            row.isEdit = !row.isEdit
+                                                                        "
+                                                                    >
+                                                                        <mat-icon
+                                                                            color="primary"
+                                                                            >edit</mat-icon
+                                                                        >
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="switch-div"
+                                                                [ngSwitch]="
+                                                                    col.type
+                                                                "
+                                                                *ngIf="
+                                                                    row.isEdit
+                                                                "
+                                                            >
+                                                                <div
+                                                                    *ngSwitchDefault
+                                                                >
+                                                                    {{
+                                                                        row[
+                                                                            col
+                                                                                .key
+                                                                        ]
+                                                                    }}
+                                                                </div>
+
+                                                                <div
+                                                                    class="btn-edit"
+                                                                    *ngSwitchCase="
+                                                                        'isEdit'
+                                                                    "
+                                                                >
+                                                                    <button
+                                                                        mat-button
+                                                                        color="primary"
+                                                                        (click)="
+                                                                            InventorySave(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        <mat-icon
+                                                                            color="primary"
+                                                                            >check</mat-icon
+                                                                        >
+                                                                    </button>
+                                                                    <button
+                                                                        mat-button
+                                                                        color="primary"
+                                                                        (click)="
+                                                                            row.isEdit = !row.isEdit
+                                                                        "
+                                                                    >
+                                                                        <mat-icon
+                                                                            color="warn"
+                                                                            >cancel</mat-icon
+                                                                        >
+                                                                    </button>
+                                                                </div>
+                                                                <div
+                                                                    class="form-group"
+                                                                    *ngSwitchCase="
+                                                                        'number'
+                                                                    "
+                                                                >
+                                                                    <input
+                                                                        [type]="
+                                                                            col.type
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            row[
+                                                                                col
+                                                                                    .key
+                                                                            ]
+                                                                        "
+                                                                        [disabled]="
+                                                                            col.disabled
+                                                                        "
+                                                                        class="form-control"
+                                                                    />
+                                                                </div>
+                                                                <!-- <div
+                                                                    *ngSwitchCase="
+                                                                        'checkbox'
+                                                                    "
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        (change)="
+                                                                            InventorySave(
+                                                                                row
+                                                                            )
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            row[
+                                                                                col
+                                                                                    .key
+                                                                            ]
+                                                                        "
+                                                                    />
+                                                                </div> -->
+                                                                <!-- <div
+                                                                    *ngSwitchCase="
+                                                                        'itemImage'
+                                                                    "
+                                                                >
+                                                                    <img
+                                                                        [src]="
+                                                                            ingredientsImagePath +
+                                                                            row.itemImage
+                                                                        "
+                                                                        onerror="this.style.display='none'"
+                                                                        class="w-8"
+                                                                    />
+                                                                </div> -->
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'Item Id/Name'
+                                                                    "
+                                                                >
+                                                                    <span
+                                                                        >{{
+                                                                            row.itemID
+                                                                        }}-{{
+                                                                            row.itemName
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngSwitchCase="
+                                                                        'StallId/Name'
+                                                                    "
+                                                                >
+                                                                    <span
+                                                                        >{{
+                                                                            row.stallid
+                                                                        }}-{{
+                                                                            row.stallName
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <!-- <ng-container *ngIf="todayCompletedTasks.length > 0">
+                        <div
+                            class="completed-heading"
+                            (click)="toggleCompletedTasks()"
+                        >
+                            <span>Today Completed Tasks</span>
+
+                            <div class="down-arrow">
+                                <button mat-icon-button>
+                                    <mat-icon (click)="toggleCompletedTasks()"
+                                        >keyboard_arrow_down</mat-icon
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="isCompletedTasksVisible">
+                            <div
+                                *ngFor="let task of todayCompletedTasks"
+                                class="cont-completed"
+                            >
+                                <div class="completed-task-name">
+                                    {{ task.taskname }}
+                                </div>
+
+                                <div
+                                    class="assd-to"
+                                    *ngIf="user.role == 'admin'"
+                                >
+                                    {{ task.assignedto }}
+                                </div>
+                                <div class="duration-date">
+                                    <div class="duration">
+                                        {{ task.duration }} min
+                                    </div>
+                                    <div
+                                        class="date text-sm whitespace-nowrap text-secondary"
+                                    >
+                                        {{ task.duedate | date: "LLL dd" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose</h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnClose('Cross Click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <form class="needs-validation">
+                <div class="form">
+                    <div class="form-group">
+                        <label class="mb-1">Purchase Order:</label>
+                        <select
+                            class="form-control"
+                            [formControl]="purchaseorder"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let adhoc of adhocPoData"
+                                [value]="adhoc.adhocpoid"
+                            >
+                                {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Categories:</label>
+                        <select class="form-control" [formControl]="category">
+                            <option value="All">All</option>
+                            <option
+                                [value]="val"
+                                *ngFor="let val of categories"
+                            >
+                                {{ val }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Available:</label
+                        >
+                        <select class="form-control" [formControl]="available">
+                            <option value="All">All</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <!-- <div *ngIf="validation">
+                    <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                  </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+            Save
+        </button>
+        <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+            (click)="OnClose('Cross Click')"
+        >
+            Close
+        </button>
+    </div>
+</ng-template>
+<ng-template #ElseBlock>
+    <div
+        style="
+            margin-top: auto;
+
+            margin-left: auto;
+            margin-right: auto;
+        "
+        class="no-items-found h-3"
+    >
+        No Purchase orders assigned to you
+    </div>
+</ng-template>

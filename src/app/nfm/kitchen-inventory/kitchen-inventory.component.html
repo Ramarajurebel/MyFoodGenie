@@ -1,0 +1,474 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <mat-drawer-container
+        class="flex-auto h-full bg-card dark:bg-transparent overflow-scroll"
+    >
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="tableFieldsForm"
+                >
+                    <!-- Header -->
+                    <div class="flex justify-between -mt-3 -ml-4">
+                        <div class="flex items-center">
+                            <!-- Close button -->
+                            <a mat-icon-button (click)="OnClose()">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div
+                        class="border-4 border-indigo-600 mb-6 w-30"
+                        *ngIf="currentObj?.itemImage"
+                    >
+                        <img
+                            [src]="ingredientsImagePath + currentObj.itemImage"
+                            onerror="this.style.display='none'"
+                            class="w-30 item-image"
+                        />
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="" class="mb-1">Vendor Id</label>
+                        <select
+                            name=""
+                            id=""
+                            class="form-control"
+                            formControlName="vendorId"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let obj of vendorData"
+                                [value]="obj.vendorId"
+                            >
+                                {{ obj.vendorName }}
+                            </option>
+                        </select>
+                    </div> -->
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Category:</label
+                        >
+                        <!-- <select class="form-control" required="" formControlName="itemID" type="text" (change)="OnItemSelect($event.target.value)">
+                                  <option value="">--Select--</option>
+                                <option *ngFor="let id of products" [value]="id.prodId">{{id.prodId}}-{{id.prodName}}</option>
+                              </select> -->
+                        <select class="form-control" formControlName="category">
+                            <option value="">All</option>
+                            <option *ngFor="let cat of rcpcat" [value]="cat">
+                                {{ cat }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field style="width: 100% !important">
+                            <mat-label>Products</mat-label>
+                            <mat-select
+                                formControlName="itemId"
+                                #singleSelect
+                                class="form-control-plain-text"
+                                (selectionChange)="
+                                    onSelectProducts($event.source.value)
+                                "
+                            >
+                                <mat-option>
+                                    <ngx-mat-select-search
+                                        [formControl]="itemControl"
+                                        placeholderLabel="Search"
+                                    ></ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option
+                                    *ngFor="let all of filteredProductsList"
+                                    [value]="all.prodId"
+                                >
+                                    {{ all.prodId }}-{{ all.prodName }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >UOM:</label
+                        >
+                        <select class="form-control" formControlName="uom">
+                            <option value="">All</option>
+                            <option *ngFor="let unit of uom" [value]="unit">
+                                {{ unit }}
+                            </option>
+                        </select>
+                        <!-- <div *ngIf="validation">
+                            <mat-error *ngIf="TableFieldsForm.controls['itemUOM'].hasError('required')">
+                              <strong>required</strong>
+                            </mat-error>
+                            </div> -->
+                    </div>
+                    <div class="form-group mb-0">
+                        <label for="validationCustom02" class="mb-1"
+                            >Transaction Date:</label
+                        >
+                        <input
+                            class="form-control"
+                            type="date"
+                            formControlName="purchasedDate"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Available Quantity:</label
+                        >
+                        <input
+                            type="number"
+                            class="form-control"
+                            (input)="
+                                OnAvailableQuantityEnter(
+                                    $event.target.valueAsNumber
+                                )
+                            "
+                            formControlName="availableQuantity"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Sale Quantity:</label
+                        >
+                        <input
+                            type="number"
+                            class="form-control"
+                            (input)="
+                                OnSaleQuantityEnter($event.target.valueAsNumber)
+                            "
+                            formControlName="saleQuantity"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Balance:</label
+                        >
+                        <input
+                            type="number"
+                            readonly
+                            formControlName="balance"
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="checked" class="mb-1">Verified</label>
+                        <input
+                            type="checkbox"
+                            class="form-check"
+                            formControlName="checked"
+                        />
+                    </div>
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+
+                    <div class="d-flex flex-row justify-content-between">
+                        <button
+                            class="btn btn-danger"
+                            (click)="OnDelete(deleteDialog)"
+                        >
+                            Delete
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            (click)="InventorySave()"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Kitchen Inventory
+                        </div>
+                    </div>
+                    <form [formGroup]="searchFormGroup" class="mainForm">
+                        <!-- <div class="dates"> -->
+
+                        <div class="form-row flex searchform" style="gap: 10px">
+                            <div>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input
+                                        [rangePicker]="picker"
+                                    >
+                                        <input
+                                            matStartDate
+                                            placeholder="Start date"
+                                            formControlName="startDate"
+                                        />
+                                        <input
+                                            matEndDate
+                                            placeholder="End date"
+                                            formControlName="endDate"
+                                        />
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle
+                                        matSuffix
+                                        [for]="picker"
+                                    ></mat-datepicker-toggle>
+                                    <mat-date-range-picker
+                                        #picker
+                                    ></mat-date-range-picker>
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Category</mat-label>
+                                    <mat-select formControlName="category">
+                                        <mat-option value="">All</mat-option>
+                                        <mat-option
+                                            *ngFor="let all of categories"
+                                            [value]="all"
+                                            >{{ all }}</mat-option
+                                        >
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="flex">
+                                <div style="align-self: center">
+                                    <button
+                                        class="btn btn-primary mb-2"
+                                        (click)="OnSearch()"
+                                    >
+                                        Go
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-auto">
+                            <button class="btn btn-primary" (click)="OnAdd()">
+                                Add Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="divide-y">
+                    <ng-container *ngFor="let types of groupingCategory">
+                        <div
+                            class="d-flex flex-row items-center pl-3 w-100 p-3 adhoc-po"
+                            (click)="activatingChild(types)"
+                        >
+                            <div class="d-flex flex-column w-50 adhoc">
+                                <div
+                                    class="text-lg font-semibold text-primary description"
+                                >
+                                    {{ types.value }}
+                                </div>
+                                <!-- purchased by only in desktops -->
+
+                                <!-- Amount and itemscount in mobile only -->
+                            </div>
+                            <div class="adhoc" style="margin-left: auto">
+                                <button
+                                    mat-icon-button
+                                    color="primary"
+                                    (click)="activatingChild(types)"
+                                >
+                                    <mat-icon>keyboard_arrow_down</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="types.childActive">
+                            <ng-container *ngFor="let data of types.mobileData">
+                                <div class="grid grid-cols-5 pl-2">
+                                    <div class="col-span-1">
+                                        <div
+                                            class="row-span-1 cursor-pointer"
+                                            (click)="onEdit(data)"
+                                        >
+                                            <a class="cursor-pointer"
+                                                >{{ data.itemId }}-{{
+                                                    data.itemName
+                                                }}</a
+                                            >
+                                        </div>
+                                        <div class="row-span-1">
+                                            {{ data.uom }}
+                                        </div>
+                                    </div>
+                                    <div class="col-span-1">
+                                        <img
+                                            [src]="
+                                                ingredientsImagePath +
+                                                data.itemImage
+                                            "
+                                            onerror="this.style.display='none'"
+                                            class="w-10 item-image"
+                                        />
+                                    </div>
+                                    <div class="col-span-1">
+                                        <div class="row-span-1">
+                                            <span class="font-bold"
+                                                >Avbl Qty:</span
+                                            >
+                                            {{ data.availableQuantity }}
+                                        </div>
+                                        <div class="row-span-1">
+                                            <span class="font-bold"
+                                                >Sale Qty:</span
+                                            >
+                                            {{ data.saleQuantity }}
+                                        </div>
+                                    </div>
+                                    <div class="col-span-1">
+                                        <div>
+                                            <span class="font-bold">Bal :</span>
+                                            {{ data.balance }}
+                                        </div>
+                                    </div>
+                                    <div class="col-span-1">
+                                        <button mat-icon-button color="primary">
+                                            <mat-icon
+                                                >keyboard_arrow_right</mat-icon
+                                            >
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr />
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose</h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnClose('Cross Click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <form class="needs-validation">
+                <div class="form">
+                    <div class="form-group">
+                        <label class="mb-1">Purchase Order:</label>
+                        <select
+                            class="form-control"
+                            [formControl]="purchaseorder"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let adhoc of adhocPoData"
+                                [value]="adhoc.adhocpoid"
+                            >
+                                {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Categories:</label>
+                        <select class="form-control" [formControl]="category">
+                            <option value="All">All</option>
+                            <option
+                                [value]="val"
+                                *ngFor="let val of categories"
+                            >
+                                {{ val }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Available:</label
+                        >
+                        <select class="form-control" [formControl]="available">
+                            <option value="All">All</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <!-- <div *ngIf="validation">
+                    <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                  </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+            Save
+        </button>
+        <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+            (click)="OnClose('Cross Click')"
+        >
+            Close
+        </button>
+    </div>
+</ng-template>
+<ng-template #ElseBlock>
+    <div
+        style="
+            margin-top: auto;
+
+            margin-left: auto;
+            margin-right: auto;
+        "
+        class="no-items-found h-3"
+    >
+        No Purchase orders assigned to you
+    </div>
+</ng-template>
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>

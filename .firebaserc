@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "push-notification-b0af3": {
+      "hosting": {
+        "fuse": [
+          "push-notification-b0af3"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "push-notification-b0af3"
+  }
+}

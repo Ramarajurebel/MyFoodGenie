@@ -1,0 +1,954 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+            ><div>
+                <ng-container *ngIf="isFoodMenuRcp">
+                    <div class="flex flex-auto">
+                        <form
+                            class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="foodMenuRcpsFormGroup"
+                        >
+                            <!-- Header -->
+                            <div class="flex justify-between -mt-3 -ml-4">
+                                <div class="flex items-center">
+                                    <a
+                                        mat-icon-button
+                                        (click)="OnCloseItem(false, false)"
+                                    >
+                                        <mat-icon
+                                            [svgIcon]="'heroicons_outline:x'"
+                                        ></mat-icon>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="form-group">
+                                <label class="mb-1"> </label>
+                                <mat-form-field style="width: 100%">
+                                    <mat-label> Menu</mat-label>
+                                    <mat-select
+                                        formControlName="menuId"
+                                        required
+                                        #singleSelect
+                                        class="form-control-plain-text"
+                                        (selectionChange)="
+                                            OnFoodMenuChange(
+                                                $event.source.value
+                                            )
+                                        "
+                                    >
+                                        <mat-option>
+                                            <ngx-mat-select-search
+                                                [formControl]="menuSearch"
+                                                placeholderLabel="Search"
+                                            ></ngx-mat-select-search>
+                                        </mat-option>
+
+                                        <mat-option
+                                            *ngFor="
+                                                let bank of filteredFoodMenuData
+                                            "
+                                            [value]="bank.menuId"
+                                        >
+                                            {{ bank.menuId }}-{{
+                                                bank.menuName
+                                            }}-{{ bank.type
+                                            }}<span
+                                                *ngIf="bank.frequency != 'Once'"
+                                                >-{{ bank.day }}</span
+                                            ><span
+                                                *ngIf="
+                                                    bank.frequency != 'Weekly'
+                                                "
+                                                >-{{ bank.date }}</span
+                                            >
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group" *ngIf="!isTypeEvent">
+                                <label class="mb-1"></label>
+                                <mat-form-field style="width: 100%">
+                                    <mat-label>Product</mat-label>
+                                    <mat-select
+                                        formControlName="itemId"
+                                        required
+                                        #singleSelect
+                                        class="form-control-plain-text"
+                                    >
+                                        <mat-option>
+                                            <ngx-mat-select-search
+                                                [formControl]="recipeFilter"
+                                                placeholderLabel="Search"
+                                            ></ngx-mat-select-search>
+                                        </mat-option>
+
+                                        <mat-option
+                                            *ngFor="let bank of filteredRecipes"
+                                            [value]="bank.prodId"
+                                        >
+                                            {{ bank.prodId }}-{{
+                                                bank.prodName
+                                            }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group" *ngIf="isTypeEvent">
+                                <label class="mb-1"></label>
+                                <mat-form-field style="width: 100%">
+                                    <mat-label>Product</mat-label>
+                                    <mat-select
+                                        formControlName="itemId"
+                                        required
+                                        #singleSelect
+                                        class="form-control-plain-text"
+                                    >
+                                        <mat-option>
+                                            <ngx-mat-select-search
+                                                [formControl]="recipeFilter"
+                                                placeholderLabel="Search"
+                                            ></ngx-mat-select-search>
+                                        </mat-option>
+
+                                        <mat-option
+                                            *ngFor="
+                                                let bank of tempNormalRecipesList
+                                            "
+                                            [value]="bank.rcpid"
+                                        >
+                                            {{ bank.rcpid }}-{{ bank.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Sub Category:</label
+                                >
+                                <select
+                                    class="form-control"
+                                    formControlName="subCategory"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let typ of subCategoryData"
+                                        [value]="typ.subCatId"
+                                    >
+                                        {{ typ.subCatName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Sequence:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    type="number"
+                                    formControlName="sequence"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1"
+                                    >Required Quantity</label
+                                >
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    formControlName="requiredQuantity"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Category:</label>
+                                <select
+                                    name=""
+                                    formControlName="category"
+                                    id=""
+                                    class="form-control"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option value="Kitchen">Kitchen</option>
+
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Short Name:</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="shortName"
+                                />
+                            </div>
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div
+                                class="d-flex flex-row justify-content-between"
+                            >
+                                <button
+                                    class="btn btn-danger"
+                                    (click)="onDelFoodMenu(template)"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    (click)="OnSaveFoodMenuRcp()"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isFoodMenu">
+                    <div class="flex flex-auto">
+                        <form
+                            class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="foodMenuFormGroup"
+                        >
+                            <div class="flex justify-between -mt-3 -ml-4">
+                                <div class="flex items-center">
+                                    <a
+                                        mat-icon-button
+                                        (click)="OnCloseItem(false)"
+                                    >
+                                        <mat-icon
+                                            [svgIcon]="'heroicons_outline:x'"
+                                        ></mat-icon>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="flex flex-row justify-between">
+                                <button
+                                    mat-mini-fab
+                                    color="primary"
+                                    (click)="AddFoodMenuRcp()"
+                                >
+                                    <mat-icon>add</mat-icon>
+                                </button>
+
+                                <!-- <button
+                                    mat-mini-fab
+                                    color="accent"
+                                    (click)="OnExport(content)"
+                                >
+                                    <mat-icon>cloud_download</mat-icon>
+                                </button>
+                                <button
+                                    mat-mini-fab
+                                    color="basic"
+                                    (click)="OnExportByQuantity(content)"
+                                >
+                                    <mat-icon color="primary"
+                                        >cloud_download</mat-icon
+                                    >
+                                </button> -->
+                            </div>
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Menu Name:</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="menuName"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="mb-1"
+                                    >Category:</label
+                                >
+
+                                <select
+                                    class="form-control"
+                                    formControlName="category"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let typ of evtCategory"
+                                        [value]="typ"
+                                    >
+                                        {{ typ }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Frequency :</label
+                                >
+                                <div class="md-form">
+                                    <select
+                                        class="form-control"
+                                        formControlName="frequency"
+                                    >
+                                        <option value="">--Select--</option>
+                                        <option value="Once">Once</option>
+                                        <option value="Daily">Daily</option>
+                                        <option value="Weekly">Weekly</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Day :</label
+                                >
+                                <div class="md-form">
+                                    <select
+                                        class="form-control"
+                                        formControlName="day"
+                                    >
+                                        <option value="">--Select--</option>
+                                        <option
+                                            *ngFor="let day of days"
+                                            [value]="day"
+                                        >
+                                            {{ day }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Date :</label
+                                >
+                                <div class="md-form">
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        formControlName="date"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Status :</label
+                                >
+                                <div class="md-form">
+                                    <select
+                                        class="form-control"
+                                        formControlName="status"
+                                    >
+                                        <option value="">--Select--</option>
+                                        <option
+                                            *ngFor="let typeof of status"
+                                            [value]="typeof"
+                                        >
+                                            {{ typeof }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1"
+                                    >Total Recipes :</label
+                                >
+                                <div class="md-form">
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        formControlName="totalNoOfRecipes"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="mb-1">Counter Id:</label>
+                                <select
+                                    name=""
+                                    formControlName="stallId"
+                                    id=""
+                                    class="form-control"
+                                >
+                                    <option value="0">--Select--</option>
+                                    <option
+                                        [value]="stall.stallid"
+                                        *ngFor="let stall of stallData"
+                                    >
+                                        {{ stall.stallid }}-{{ stall.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label class="mb-1">Vendor</label>
+                                <select
+                                    class="form-control"
+                                    formControlName="vendorId"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        [value]="vendor.vendorId"
+                                        *ngFor="let vendor of vendorData"
+                                    >
+                                        {{ vendor.vendorName }}
+                                    </option>
+                                </select>
+                            </div> -->
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div
+                                class="d-flex flex-row justify-content-between"
+                            >
+                                <button
+                                    class="btn btn-danger"
+                                    (click)="onDelFoodMenu(template)"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    (click)="OnSaveFoodMenu()"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Menu
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row gap-1 ml-auto">
+                        <button
+                            class="ml-3"
+                            mat-flat-button
+                            [color]="'primary'"
+                            (click)="AddFoodMenu()"
+                        >
+                            <!-- <mat-icon
+                            [svgIcon]="'heroicons_outline:plus'"
+                        ></mat-icon> -->
+                            <!-- <mat-icon></mat-icon> -->
+
+                            <span class="ml-2 mr-1">Add Food Menu</span>
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            (click)="OpenCopyModal(copycontent)"
+                        >
+                            Copy Food Menu
+                        </button>
+                        <button
+                            class="btn btn-secondary"
+                            (click)="OpenEvent(eventmenu)"
+                        >
+                            Create Events
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            (click)="OpenInv(invmodal)"
+                        >
+                            Add to Inventory
+                        </button>
+                    </div>
+                    <div class="div"></div>
+                    <div class="export"></div>
+                </div>
+
+                <div class="divide-y">
+                    <ng-container>
+                        <div *ngFor="let menu of foodMenuData; let i = index">
+                            <div
+                                class="d-flex flex-row items-center pl-3 w-100 h12 p-3 adhoc-po"
+                                (click)="activatingChild(menu)"
+                            >
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary description"
+                                    >
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="OnEditFoodMenu(menu)"
+                                        >
+                                            {{ menu.menuId }}-{{
+                                                menu.menuName
+                                            }}
+                                        </a>
+                                    </div>
+                                    <div
+                                        class="text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Category : {{ menu.category }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        Day/Date: {{ menu.day }}/{{ menu.date }}
+                                    </div>
+                                    <div
+                                        class="h-8 text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Frequency: {{ menu?.frequency }}
+                                    </div>
+                                </div>
+                                <!-- <button (click)="OnPdfPress(rcp)">PDF</button> -->
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        Status: {{ menu.status }}
+                                    </div>
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        Total Rcps: {{ menu.totalNoOfRecipes }}
+                                    </div>
+                                </div>
+
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="activatingChild(menu)"
+                                    >
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <ng-container
+                                class="accordion-body"
+                                *ngIf="menu.childActive"
+                            >
+                                <div class="example-container">
+                                    <table class="table table-bordernone">
+                                        <thead>
+                                            <tr>
+                                                <th>Menu Name</th>
+                                                <th>Items</th>
+
+                                                <th>Sub Category</th>
+                                                <th>Sequence</th>
+                                                <th>Required Qty</th>
+                                                <th>
+                                                    <i
+                                                        class="fa fa-plus fa-2x"
+                                                    ></i>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                *ngFor="
+                                                    let table of foodMenuRcpsTable.data;
+                                                    let i = index
+                                                "
+                                                (click)="
+                                                    OnEditFoodMenuRcp(table)
+                                                "
+                                            >
+                                                <td>
+                                                    <label
+                                                        >{{ table.menuId }}-{{
+                                                            table.menuName
+                                                        }}-{{
+                                                            table.day
+                                                        }}</label
+                                                    >
+                                                </td>
+
+                                                <td>
+                                                    <label
+                                                        >{{ table.itemId }}-{{
+                                                            table?.itemName
+                                                        }}</label
+                                                    >
+                                                </td>
+
+                                                <td>
+                                                    <label
+                                                        >{{
+                                                            table.subCategory
+                                                        }}-{{
+                                                            table.subCatName
+                                                        }}</label
+                                                    >
+                                                </td>
+                                                <td>
+                                                    <label>{{
+                                                        table?.sequence
+                                                    }}</label>
+                                                </td>
+                                                <td>
+                                                    <label>{{
+                                                        table?.requiredQuantity
+                                                    }}</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-mobile-view"></div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose</h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnClose('Cross Click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <form class="needs-validation">
+                <div class="form">
+                    <div class="form-group">
+                        <label class="mb-1">Purchase Order:</label>
+                        <select
+                            class="form-control"
+                            [formControl]="purchaseorder"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let adhoc of adhocPoData"
+                                [value]="adhoc.adhocpoid"
+                            >
+                                {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Categories:</label>
+                        <select class="form-control" [formControl]="category">
+                            <option value="All">All</option>
+                            <option
+                                [value]="val"
+                                *ngFor="let val of categories"
+                            >
+                                {{ val }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Available:</label
+                        >
+                        <select class="form-control" [formControl]="available">
+                            <option value="All">All</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <!-- <div *ngIf="validation">
+                    <mat-error *ngIf="recipeFormgroup.controls['prodname'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                  </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+            Save
+        </button>
+        <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+            (click)="OnClose('Cross Click')"
+        >
+            Close
+        </button>
+    </div>
+</ng-template>
+<ng-template #invmodal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">
+            Add to Inventory
+        </h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnClose('Cross Click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <form class="needs-validation">
+                <div class="form">
+                    <div class="form-group">
+                        <mat-form-field style="width: 100%">
+                            <mat-select [formControl]="menuIdControl">
+                                <mat-option>
+                                    <ngx-mat-select-search
+                                        [formControl]="menuSearch"
+                                        placeholderLabel="Search"
+                                    ></ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option
+                                    *ngFor="let all of filteredFoodMenuData"
+                                    [value]="all.menuId"
+                                >
+                                    {{ all.menuId }}-{{ all.menuName }}-{{
+                                        all.category
+                                    }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Date:</label>
+                        <input
+                            type="date"
+                            class="form-control"
+                            [formControl]="dateControl"
+                        />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="OnSaveInv()">
+            Save
+        </button>
+        <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+            (click)="OnClose('Cross Click')"
+        >
+            Close
+        </button>
+    </div>
+</ng-template>
+<!-- delete dialog from below -->
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Delete Record</h4>
+    </div>
+    <div class="modal-body text-center">
+        <p>Do you really want to delete this record?</p>
+        <button type="button" class="btn btn-primary" (click)="decline()">
+            Cancel
+        </button>
+        <button
+            type="button"
+            class="btn btn-default"
+            *ngIf="isFoodMenuRcp"
+            (click)="DelConfirmMenuRcp()"
+        >
+            Delete
+        </button>
+        <button
+            type="button"
+            class="btn btn-default"
+            *ngIf="isFoodMenu"
+            (click)="DelConfirmFoodMenu()"
+        >
+            Delete
+        </button>
+    </div>
+</ng-template>
+
+<!-- copy food menu -->
+<ng-template #copycontent let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">
+            Add Food Menu
+        </h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="decline()"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="copyForm">
+            <div class="form">
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1"
+                        >New Menu Name:</label
+                    >
+                    <input
+                        type="text"
+                        class="form-control"
+                        formControlName="menuName"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1"
+                        >Frequency:</label
+                    >
+                    <select
+                        class="form-control"
+                        formControlName="frequency"
+                        (change)="OnFrequencyChange($event.target.value)"
+                    >
+                        <option value="">--Select--</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Once">Once</option>
+                        <option value="Weekly">Weekly</option>
+                    </select>
+                </div>
+                <div
+                    class="form-group"
+                    *ngIf="
+                        copyForm.controls['frequency'].value != 'Once' &&
+                        copyForm.controls['frequency'].value != null
+                    "
+                >
+                    <label for="validationCustom01" class="mb-1">Day:</label>
+                    <select class="form-control" formControlName="day">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let day of days" [value]="day">
+                            {{ day }}
+                        </option>
+                    </select>
+                </div>
+                <div
+                    class="form-group"
+                    *ngIf="
+                        copyForm.controls['frequency'].value == 'Once' &&
+                        copyForm.controls['frequency'].value != null
+                    "
+                >
+                    <label for="" class="mb-1">Date:</label>
+                    <input
+                        type="date"
+                        class="form-control"
+                        formControlName="date"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1"
+                        >Menu Id:</label
+                    >
+                    <mat-form-field style="width: 100%">
+                        <mat-select formControlName="menuid">
+                            <mat-option>
+                                <ngx-mat-select-search
+                                    [formControl]="menuSearch"
+                                    placeholderLabel="Search"
+                                ></ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option
+                                *ngFor="let all of filteredFoodMenuData"
+                                [value]="all.menuId"
+                            >
+                                {{ all.menuId }}-{{ all.menuName }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="form-group">
+                    <label class="mb-1">Vendor</label>
+                    <select class="form-control" formControlName="vendorId">
+                        <option value="">--Select--</option>
+                        <option
+                            [value]="vendor.vendorId"
+                            *ngFor="let vendor of vendorData"
+                        >
+                            {{ vendor.vendorName }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSaveCopy()">
+            Save
+        </button>
+        <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+            (click)="decline()"
+        >
+            Close
+        </button>
+    </div>
+</ng-template>
+<ng-template #eventmenu>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Create Events</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form">
+            <div class="form-group">
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input
+                            matStartDate
+                            placeholder="Start date"
+                            [formControl]="startDate"
+                            #dateRangeStart
+                        />
+                        <input
+                            matEndDate
+                            placeholder="End date"
+                            [formControl]="endDate"
+                            #dateRangeEnd
+                        />
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" (click)="decline()">
+            Cancel
+        </button>
+        <button
+            class="btn btn-primary"
+            type="button"
+            (click)="OnSaveCreateEvents()"
+        >
+            Save
+        </button>
+    </div>
+</ng-template>

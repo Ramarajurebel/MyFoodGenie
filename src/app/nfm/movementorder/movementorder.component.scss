@@ -1,0 +1,226 @@
+@use '@angular/material';
+mat-option{
+    width: auto !important;
+    height: max-content !important;
+    white-space: pre-wrap !important;
+}
+.center{
+    text-indent: 5px;
+}
+.Avblcenter{
+    text-indent: 11px;
+}
+.Refillcenter{
+    text-indent: 14px;
+}
+.spinner-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.highlight-row {
+    font-size: 20px !important;
+    font-weight: bold;
+  }
+.Createbutton{
+    display: flex;
+    justify-content:flex-end;
+    margin-top: 15px;
+}
+::ng-deep.mat-progress-spinner {
+    display: flex;
+   position:absolute;
+    overflow: hidden;
+   
+}
+.MultipleField{
+    width: 100% !important
+}
+.dialogWidth{
+    width: 18rem !important
+}
+select {
+    -webkit-appearance: listbox !important;
+}
+.sort-indicator {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px; // adjust as needed
+  }
+  
+  .arrow-up,
+  .arrow-down {
+   
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin: 2px 0 0 3px;
+  }
+  .imgdiv{
+    display: flex;
+    justify-content: center;
+  }
+  .arrow-up {
+    border-bottom: 5px solid #000; /* Black color for arrow up */
+  }
+  
+  .arrow-down {
+    border-top: 5px solid #000; /* Black color for arrow down */
+  }
+  .selected {
+    /* Red color for selected arrow */
+//   pointer-events: none; /* Disable click on selected arrow */
+  opacity: 0.5;
+  }
+// header buttons
+.header-btns {
+    margin-left: auto;
+}
+.adhoc-po {
+    gap: 40px;
+    background-color: #8080804a;
+}
+.name {
+    width: 40%;
+    height: max-content;
+    word-wrap: break-word;
+}
+
+// .description:hover {
+//     cursor: pointer;
+//     text-decoration: underline;
+//     color: red !important;
+// }
+.product-name {
+    width: 75%;
+    word-wrap: break-word;
+}
+.quantity-uom {
+    justify-self: end;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.qty-uom {
+    width: 50%;
+    word-wrap: break-word;
+}
+// below is for table css
+table {
+    width: 90%;
+    margin: auto;
+    margin-top: 25px;
+}
+// .btn-edit {
+//     text-align: right;
+// }
+h2 {
+    text-align: center;
+    padding-top: 20px;
+}
+.isAvailable {
+    text-decoration: line-through;
+}
+.table-header {
+    width: 90%;
+    margin: auto;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.button-add-row {
+    background: #1b9e1b;
+    color: #ffffff;
+}
+
+.button-remove-rows {
+    background: red;
+    color: #ffffff;
+    margin-right: 5px;
+}
+
+.button-remove {
+    color: red;
+}
+
+::ng-deep .mat-form-field-infix {
+    width: 100% !important;
+}
+select {
+    -webkit-appearance: listbox !important;
+}
+
+.form-input {
+    padding-right: 5px;
+}
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+    overflow: auto;
+}
+
+.mobile-label {
+    visibility: hidden;
+}
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}
+.td {
+    padding-right: 10px;
+}
+mat-form-field {
+    width: 60% !important;
+}
+.table-mobile-view {
+    display: none;
+}
+.iconsvg {
+    font-size: 50px !important;
+}
+// img:hover,
+// img:active {
+//     position: relative;
+//     left: 25%;
+//     transform: scale(5);
+//     // left: 25%;
+// }
+// table css completed here
+.colcolorREd{
+color:red;
+font-size: 12px;
+}
+.colcolor{
+    color:#64748b;
+    font-size: 12px;
+}
+.colorgreen{
+    color:green !important
+}
+.coloryellow{
+    color:yellow !important
+}
+.itemcolor{
+    color: blue !important;
+}
+@media only screen and (max-width: 480px) {
+    .adhoc-po {
+        gap: 15px;
+        background-color: #8080804a;
+    }
+    .p-3 {
+        padding: 1.5rem;
+    }
+    .example-container {
+        display: flex;
+    }
+    .table-mobile-view {
+        display: flex;
+        flex-direction: column;
+    }
+}

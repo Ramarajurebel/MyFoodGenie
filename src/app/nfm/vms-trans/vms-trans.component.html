@@ -1,0 +1,338 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent overflow-scroll">
+        <mat-drawer class="w-full sm:w-128 dark:bg-gray-900" [mode]="drawerMode" [opened]="isMatDrawerOpened"
+            [position]="'end'" [disableClose]="true" #matDrawer>
+            <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+                <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto">
+                    <div class="flex justify-between">
+                        <div class="grid">
+                            <div class="status">
+                                Status: {{ selectedVmsOrder.status }}
+                            </div>
+
+                            <div class="status">
+                                Dispense TransId: {{ selectedVmsOrder.machineTransactionId }}
+                            </div>
+                         
+                        </div>
+
+
+
+                        <div class="close">
+                            <a mat-icon-button (click)="isMatDrawerOpened = !isMatDrawerOpened">
+                                <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="order-items flex flex-col mt-8 mb-4">
+                        <div class="grid grid-cols-3">
+                            <div class="col-span-1 font-bold">Item ID/Name</div>
+                            <div class="col-span-1 font-bold text-center">
+                                Qty
+                            </div>
+
+                        </div>
+
+                        <div class="orderitems justify-between" *ngFor="let orderitems of selectedVmsOrder.cartData">
+                            <div class="grid grid-cols-3">
+                                <div class="col-span-1">
+                                    <label>{{ orderitems?.productName }}-{{orderitems?.status}}</label>
+                                </div>
+                                <div class="col-span-1 text-center">
+                                    {{ orderitems.qty }}
+                                </div>
+
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-1">
+                            <div class="flex flex-col">
+                                <span class="font-bold">Id :</span>
+                                <span class="font-bold">Machine Id :</span>
+                                <span class="font-bold">Machine Transaction Id :</span>
+                                <span class="font-bold">Auth Type Id :</span>
+                                <span class="font-bold">Status :</span>
+                                <span class="font-bold">Client Id :</span>
+                                <span class="font-bold">Transaction Time :</span>
+                            </div>
+                        </div>
+                        <div class="col-span-1">
+                            <div class="flex flex-col">
+                                <span>{{selectedVmsOrder.id}}</span>
+                                <span>{{selectedVmsOrder.machineId}}</span>
+                                <span>{{selectedVmsOrder.machineTransactionId}}</span>
+                                <span>{{selectedVmsOrder.authTypeId}}</span>
+                                <span>{{selectedVmsOrder.status}}</span>
+                                <span>{{selectedVmsOrder.clientId}}</span>
+                                <span>{{selectedVmsOrder.transactionTime | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                            Vms Sale Transactions
+                            <div class="flex flex-col">
+                                <div class="ml-auto">
+                                    <mat-slide-toggle color="primary" (change)="
+                                            OnRefreshPress($event.checked)
+                                        " class="text-lg" [checked]="false">Auto Refresh</mat-slide-toggle>
+                                </div>
+                            </div>
+                        </div>
+                        <form [formGroup]="orderForm" class="d-flex flex-row gap-2 flex-wrap mt-4 orderform">
+                            <div class="flex justify-between">
+                            <div class="form-group mx-sm-3 mb-2 w-25 filters">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [rangePicker]="picker">
+                                        <input matStartDate placeholder="Start date" formControlName="startDate" />
+                                        <input matEndDate placeholder="End date" formControlName="endDate" />
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                </mat-form-field>
+                            </div>
+
+
+
+                            <div class="form-group mx-sm-3 mb-2 w-25 filters">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Machines</mat-label>
+                                    <mat-select formControlName="machineId">
+                                        <mat-option value="">All</mat-option>
+
+                                        <mat-option *ngFor="let options of machList" [value]="options.id">{{
+                                            options.machineDisplayId }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="form-group mx-sm-3 mb-2 w-25 filters">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Order Filter:</mat-label>
+                                    <mat-select formControlName="orderfilter">
+                                        <mat-option value="">All</mat-option>
+
+                                        <mat-option *ngFor="let order of orderfilter" [value]="order.key">{{order.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="btn self-center gobtn flex justify-between">
+                                <div>
+                                <button class="btn btn-primary mb-2" (click)="onSearch()">
+                                    Go
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary ml-2" (click)="OnExport()">
+                                    Export
+                                </button>
+                            </div>
+                              
+                            </div>
+                          
+                        </div>
+                        </form>
+                        <span>Total Transactions / Item count : {{totaltransactions}} / {{totalItemcount}}</span>
+                        <span class="ml-5">Dispense Items: {{totalSuccessCount}} / {{totalFailureCount}}</span>
+                        <span class="ml-5">Without Order Count: {{withoutOrderCount}}</span>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <ng-container *ngIf="vmsSaleList">
+                        <div *ngFor="let order of vmsSaleList">
+                            <div class="d-flex flex-row items-center pl-3 w-100 h-auto p-3 adhoc-po"
+                                (click)="OnOrderClick(order)">
+
+
+                                <div class="d-flex flex-column w-50 adhoc">
+
+                                    <span [ngClass]="{
+                                        'text-red-500':
+                                        order.naviOrderId==null
+                                    }">{{ order?.machineTransactionId }}-{{
+                                        order?.customerName
+                                        }}
+                                    </span>
+                                    <span>{{order?.naviOrderId}}<span *ngIf="order?.naviOrderId != null"> / </span>{{ order?.status }}
+                                    </span>
+
+
+                                </div>
+
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div class="">
+                                        Created At:
+                                        {{
+                                        order?.createdAt | date: 'yyyy-MM-dd HH:mm:ss'
+
+                                        }}
+                                    </div>
+                                    <div class="item-count">
+                                      Machine Id: {{order?.machineId}} / Item Count: {{order.cartData.length}}
+                                    </div>
+                                </div>
+                                <!-- <button (click)="OnPdfPress(po)">PDF</button> -->
+
+
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button mat-icon-button color="primary">
+                                        <mat-icon>play_arrow</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Container-fluid starts-->
+                        <div>
+                            <!-- Container-fluid Ends-->
+                            <ng-template #items let-modal>
+                                <div class="modal-header">
+                                    <h5 class="modal-title f-w-600" id="exampleModalLabel">
+                                        Order No:{{ orderId }}
+                                    </h5>
+                                    <button type="button" class="close" aria-label="Close" (click)="OnClose()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card-body">
+                                        <div class="custom-datatable">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordernone">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col"></th>
+                                                            <th scope="col"></th>
+                                                            <th scope="col"></th>
+                                                            <th scope="col"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="
+                                                                let order of orderitems;
+                                                                index as i
+                                                            ">
+                                                            <td>
+                                                                <label>{{
+                                                                    i + 1
+                                                                    }}</label>
+                                                            </td>
+                                                            <td>
+                                                                <label>{{
+                                                                    order?.itemName
+                                                                    }}</label><br />
+                                                                <label>{{
+                                                                    order?.uom
+                                                                    }}-
+                                                                    {{
+                                                                    order.itemPrice
+                                                                    }}</label>
+                                                            </td>
+                                                            <td class="font-danger">
+                                                                <label>Qty:{{
+                                                                    order.quantity
+                                                                    }}</label>
+                                                            </td>
+                                                            <td class="font-danger">
+                                                                <label>{{
+                                                                    order.totalPrice
+                                                                    | currency
+                                                                    : "INR"
+                                                                    }}</label>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <!-- <tfoot>
+                <tr class="row d-flex justify-content-between">
+                  <td colspan="3" >
+
+                 </td>
+                </tr>
+              </tfoot> -->
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="form-control-plaintext">Total Items:
+                                                {{ totalitems }}</label>
+                                        </div>
+                                        <div class="col">
+                                            <label class="form-control-plaintext">
+                                                Price:
+                                                {{
+                                                totalitemsprice
+                                                | currency: "INR"
+                                                }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal"
+                                        (click)="OnClose()">
+                                        Close
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- for accepting order -->
+<ng-template #acceptOrder>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Accept Order</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form">
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1">Prep Time:</label>
+                <input type="number" class="form-control" [formControl]="prepTime" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" (click)="OnCancel()">Cancel</button>
+        <button class="btn btn-secondary" data-dismiss="modal" (click)="ConfirmOrder()">
+            Accept Order
+        </button>
+    </div>
+</ng-template>
+<ng-template #refundItemPopup>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Refund </h4>
+    </div>
+    <div class="modal-body">
+        <div class="form">
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1">Refund Quantity:</label>
+                <input type="number" class="form-control" [formControl]="refundQty" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" (click)="OnCancel()">Cancel</button>
+        <button class="btn btn-secondary" data-dismiss="modal" (click)="initiateRefund()">
+            Refund
+        </button>
+    </div>
+</ng-template>
+<!-- Container-fluid Ends-->

@@ -1,0 +1,541 @@
+<!-- Delete Popup -->
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Delete Record</h4>
+    </div>
+    <div class="modal-body text-center">
+        <p>Do you really want to delete this record?</p>
+        <button type="button" class="btn btn-primary" (click)="decline()">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-default" (click)="confirm()">
+            Delete
+        </button>
+    </div>
+</ng-template>
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="AddItemForm"
+                >
+                    <!-- Header -->
+                    <div class="flex justify-between -mt-3 -ml-4">
+                        <div class="flex items-center">
+                            <!-- Close button -->
+                            <a mat-icon-button (click)="OnCloseItem(false)">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="mt-1 mb-2 d-flex">
+                        <div class="button ml-auto">
+                            <button class="btn btn-primary" (click)="OnVMSSyncPress()">Sync To VMS</button>
+
+                        </div>
+                    </div>
+                    <div class="form">
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Name:</label
+                            >
+                            <input
+                                class="form-control mt-0 amber-border"
+                                formControlName="itemname"
+                                type="text"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Telugu Name:</label
+                            >
+                            <input
+                                class="form-control mt-0 amber-border"
+                                formControlName="tname"
+                                type="text"
+                            />
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="" class="mb-1">Vendor Id</label>
+                            <select
+                                name=""
+                                id=""
+                                class="form-control"
+                                formControlName="vendorid"
+                            >
+                                <option value="">--Select--</option>
+                                <option
+                                    [value]="data.vendorId"
+                                    *ngFor="let data of vendorData"
+                                >
+                                    {{ data.vendorId }}-{{ data.vendorName }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <mat-form-field class="form-control">
+                                <mat-label>Category:</mat-label>
+                                <mat-select formControlName="catIdList" multiple  (selectionChange)="OnCatSelect($event)">
+                                  <mat-option *ngFor="let cat of categories" [value]="cat.catId">
+                                    {{ cat.catId }}-{{ cat.catName }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <!-- catIdList -->
+                            <!-- <label for="validationCustom02" class="mb-1"
+                                >Category:</label
+                            >
+                            <select
+                                formControlName="catid"
+                                class="form-control"
+                                
+                                (change)="OnCatSelect($event.target.value)"
+                            >
+                                <option
+                                    *ngFor="let cat of categories"
+                                    [value]="cat.catId"
+                                >
+                                    {{ cat.catId }}-{{ cat.catName }}
+                                </option>
+                            </select> -->
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Subcat Id:</label
+                            >
+                            <select
+                                formControlName="subcatid"
+                                class="form-control"
+                                required
+
+                            >
+                                <option
+                                    *ngFor="let cat of SubcategoryID"
+                                    [value]="cat.subCatId"
+                                >
+                                    {{ cat.subCatId }}-{{ cat.subCatName }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Quantity:</label>
+                            <input matInput class="form-control " formControlName="quantity" type="number">
+                          </div> -->
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Quantity:</label
+                            >
+                            <input
+                                class="form-control"
+                                formControlName="quom"
+                                required
+                            />
+                            <!-- <select class="form-control" required="" formControlName="uom" >
+                              <option value="">--Select--</option>
+                              <option *ngFor="let all of uom" [value]="all">{{all}}</option>
+                          </select> -->
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >UOM:</label
+                            >
+
+                            <select
+                                class="form-control"
+                                required=""
+                                formControlName="muom"
+                                required
+                            >
+                                <option value="">--Select--</option>
+                                <option *ngFor="let all of uom" [value]="all">
+                                    {{ all }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >UOM Size:</label
+                            >
+                            <input
+                                class="form-control"
+                                formControlName="uomSize"
+                                type="number"
+                                
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Purchase UOM:</label
+                            >
+                            <select
+                                formControlName="purchaseUom"
+                                class="form-control"
+                              
+                            >
+                                <option
+                                    *ngFor="let cat of purchaseuom"
+                                    [value]="cat"
+                                >
+                                    {{ cat }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >UOM Price:</label
+                            >
+                            <input
+                                class="form-control"
+                                formControlName="uomPrice"
+                                type="number"
+                                
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Price:</label
+                            >
+                            <input
+                                class="form-control"
+                                formControlName="price"
+                                type="number"
+                                required
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="" class="mb-1">Location:</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                formControlName="location"
+                            />
+                        </div>
+                       
+                            <div class="form-group mb-0">
+                                <mat-form-field style="width: 100% !important">
+                                    <mat-label>HSN Code:</mat-label>
+                                    
+                                    
+                                
+                            <mat-select formControlName="hsnCode" #singleSelect
+                            class="form-control-plain-text" aria-readonly="true">
+                            <mat-option>
+                                <ngx-mat-select-search 
+                                    placeholderLabel="Search" [formControl]="itemControl"></ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let all of filtereditems" [value]="all.hsnCode">
+                                {{ all.hsnCode }}
+                            </mat-option>
+
+                        </mat-select>
+                    
+                        <mat-icon matSuffix class="ml-1" (click)="onAddHsnCode(hsnCodeform,$event)">add</mat-icon>
+                            </mat-form-field>
+
+                            </div>
+                        <div class="form-group">
+                            <label for="" class="mb-1">Pre Order:</label>
+                            <input
+                                type="checkbox"
+                                class="form-check"
+                                formControlName="preorder"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Shelf life:</label
+                            >
+                            <input
+                                class="form-control"
+                                formControlName="shelflife"
+                                type="number"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="saleprice" class="mb-1"
+                                >Sale Price</label
+                            >
+                            <input
+                                class="form-control"
+                                type="number"
+                                formControlName="saleprice"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="mb-1">Pack Size</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                formControlName="packsize"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="" class="mb-1">Reservation:</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                formControlName="reservation"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="" class="mb-1">ExpiryDate:</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                formControlName="expirydate"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="" class="mb-1">Gross Weight:</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                formControlName="grossWeight"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="mb-1">Vms Ref. Id</label>
+                            <input type="text" formControlName="vmsRefId" class="form-control">
+                        </div>
+                    </div>
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="d-flex flex-row justify-content-between">
+                        <button class="btn btn-primary" (click)="OnSaveProd()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div class="flex flex-column gap-2">
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Products List
+                        </div>
+                        <div
+                            class="flex flex-row gap-2"
+
+                        >
+                            <div class="form-group">
+                                <label for="" class="mb-1">Categories</label>
+                                <select
+                                    name=""
+                                    id=""
+                                    class="form-control"
+                                    [formControl]="categoryControl"
+                                >
+                                    <option value="">--select--</option>
+                                    <option
+                                        [value]="data.catId"
+                                        *ngFor="let data of categories"
+                                    >
+                                        {{ data.catId }}-{{ data.catName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="self-end">
+                                <button
+                                class="btn btn-primary"
+                                (click)="onSearch()"
+                            >
+                                Go
+                            </button>
+                            </div>
+
+                            <div class="prod-count text-dark self-end font-weight-bold">
+                              Product Count:  {{productsCount}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <ng-container
+                        ><div
+                            id="batchDelete"
+                            class="custom-datatable vendor-list"
+                        >
+                            <div class="table-responsive">
+                                <!-- <ng2-smart-table  [settings]="settings" [source]="Suppliers"   (create)="onAddClick($event)"></ng2-smart-table> -->
+
+                                <table class="table table-bordernone">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>Category ID/Name</th> -->
+                                            <th class="text-left">
+                                                Product ID/Name
+                                            </th>
+                                            <th>Quantity</th>
+                                            <th class="text-center">Price</th>
+
+                                            <th (click)="Add()">
+                                                <mat-icon>add</mat-icon>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let table of prodsList">
+                                            <td class="text-left">
+                                                <label
+                                                    >{{ table.prodId }}-{{
+                                                        table.prodName
+                                                    }}<span *ngIf="table?.tname"
+                                                        >-({{
+                                                            table?.tname
+                                                        }})</span
+                                                    ></label
+                                                >
+                                            </td>
+                                            <td>
+                                                <label
+                                                    >{{ table.quom }}
+                                                    {{ table.muom }}</label
+                                                >
+                                            </td>
+                                            <td class="text-center">
+                                                <label>{{
+                                                    table.offerprice
+                                                }}</label>
+                                            </td>
+
+                                            <td>
+                                                <div class="all-icons">
+                                                    <mat-icon
+                                                        color="accent"
+                                                        (click)="onEdit(table)"
+                                                        >edit</mat-icon
+                                                    >
+                                                    <mat-icon
+                                                        color="primary"
+                                                        (click)="
+                                                            onDel(
+                                                                table,
+                                                                deleteDialog
+                                                            )
+                                                        "
+                                                        >delete</mat-icon
+                                                    >
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- dialog  -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="OnCloseItem(true)"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="OnCloseItem(true)">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- HSN code form -->
+<ng-template #hsnCodeform>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h6>Create HSN Code</h6>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="OnCloseItem(true)"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography">
+       <form class="flex flex-col flex-auto" [formGroup]="hsncodeform">
+        <div class="form">
+            <div class="form-group mb-0">
+                <label class="mb-1">HSN Code:</label>
+                <input
+                    class="form-control mt-0 amber-border"
+                    formControlName="hsnCode"
+                    type="text" 
+                />
+            </div>
+            <div class="form-group mb-0">
+                <label class="mb-1">CGST:</label>
+                <input
+                    class="form-control mt-0 amber-border"
+                    formControlName="cgst"
+                    type="number" 
+                />
+            </div>
+            <div class="form-group mb-0">
+                <label class="mb-1">SCGST:</label>
+                <input
+                    class="form-control mt-0 amber-border"
+                    formControlName="scgst"
+                    type="number" 
+                />
+            </div>
+            <div class="form-group mb-0">
+                <label class="mb-1">CESS:</label>
+                <input
+                    class="form-control mt-0 amber-border"
+                    formControlName="cess"
+                    type="number" 
+                />
+            </div>
+            </div>
+          
+       </form>
+       <div class="flex justify-between mt-3">
+        <button class="btn btn-danger" (click)="onCancelhsnCode()">
+            Cancel
+        </button>
+        <button  class="btn btn-primary" (click)="onSavehsnCode()">
+            Save
+        </button>
+       </div>
+       
+   
+    </mat-dialog-content>
+  
+</ng-template>

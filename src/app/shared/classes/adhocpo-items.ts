@@ -1,0 +1,31 @@
+export interface AdhocPoItems {
+    itemId: any;
+    adhocpoitemid?: number;
+    adhocpoid?: number;
+    adhocponame?: number;
+    category?: string;
+    productlist?: string;
+    quantity?: number;
+    uom?: string;
+    price?: number;
+    available?: boolean;
+    adhocdate?: null;
+    itemname?: null;
+    finalprice?: number;
+    isEdit?: boolean;
+    isStockAdded?: boolean;
+    stockButton?: string;
+    prodName?: string;
+    prodImage?: string;
+    itemName?: string;
+    purchasedquantity?: number;
+    balanceQty?: number;
+    lastpddate?: string;
+    lastpdprice?: number;
+    lastpdfrom?: string;
+    ispacked?: boolean;
+    isreceived?: boolean;
+    sortKey?: number;
+    status?:string;
+    purchasedfrom?: string;
+}

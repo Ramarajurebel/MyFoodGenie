@@ -1,0 +1,283 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div class="flex flex-auto" *ngIf="isMatDrawerOpened">
+                <form
+                    class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                    [formGroup]="TableFieldsForm"
+                >
+                    <!-- Header -->
+                    <div class="flex justify-between -mt-3 -ml-4">
+                        <div class="toggle">
+                            <!-- <mat-slide-toggle>Edit Mode</mat-slide-toggle> -->
+                        </div>
+                        <div class="flex items-center">
+                            <!-- Close button -->
+                            <a mat-icon-button (click)="OnClose()">
+                                <mat-icon
+                                    [svgIcon]="'heroicons_outline:x'"
+                                ></mat-icon>
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+
+                    <!-- Title -->
+                    <!-- <div class="form-group">
+                        <label for="" class="mb-1">Vendor Id</label>
+                        <select
+                            name=""
+                            id=""
+                            class="form-control"
+                            formControlName="vendorId"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let obj of vendorData"
+                                [value]="obj.vendorId"
+                            >
+                                {{ obj.vendorName }}
+                            </option>
+                        </select>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="" class="mb-1">Stall ID</label>
+                        <select
+                            class="form-control"
+                            formControlName="stallId"
+                            (change)="OnStallChange($event.target.value)"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                             
+                                *ngFor="let stall of stallData"
+                                [value]="stall.stallid"
+                            >
+                                {{ stall.stallid }}-{{ stall.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Sale Date:</label>
+                        <input
+                            type="date"
+                            class="form-control"
+                            formControlName="saleDate"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Vendor Amount</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            (input)="VendorEnter($event.target.valueAsNumber)"
+                            formControlName="vendorAmt"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Cash Amount</label>
+                        <input
+                            type="number"
+                            (input)="CashEnter($event.target.valueAsNumber)"
+                            class="form-control"
+                            formControlName="cashAmt"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Tokens</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            (input)="TokenEnter($event.target.valueAsNumber)"
+                            formControlName="tokens"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Each Token Amount</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            disabled="true"
+                            formControlName="eachTokenAmt"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Commission</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            disabled="true"
+                            formControlName="commission"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="mb-1">Total Amount</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            formControlName="totalAmount"
+                        />
+                    </div>
+                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                    <div class="d-flex flex-row justify-content-between">
+                        <button
+                            class="btn btn-danger"
+                            (click)="onDelPopup(deleteDialog)"
+                        >
+                            Delete
+                        </button>
+                        <button class="btn btn-primary" (click)="OnSavePopup()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row justify-between py-8 px-6 md:px-8">
+                    <!-- Title -->
+
+                    <div
+                        class="text-4xl font-extrabold tracking-tight leading-none"
+                    >
+                        Sale Transactions
+                    </div>
+                    <div class="button">
+                        <button class="btn btn-primary" (click)="OnAdd()">
+                            Add
+                        </button>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <ng-container>
+                        <div class="table-responsive">
+                            <table class="table table-bordernone">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            Sale Transaction ID
+                                        </th>
+                                        <th>StallId/Name</th>
+                                        <th>Sale Date</th>
+                                        <th>Vendor Amount</th>
+                                        <th>Cash Amount</th>
+                                        <th>Tokens</th>
+                                        <th>Each Token Amount</th>
+                                        <th>Commission</th>
+                                        <th>Total Amount</th>
+
+                                        <th>
+                                            <button
+                                                mat-mini-fab
+                                                (click)="
+                                                    isMatDrawerOpened = !isMatDrawerOpened
+                                                "
+                                            >
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="
+                                            let table of saleTransactionsData;
+                                            let i = index
+                                        "
+                                    >
+                                        <td class="text-center">
+                                            <label>{{
+                                                table.saleTransactionId
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label
+                                                >{{ table.stallId }}-{{
+                                                    table.stallName
+                                                }}</label
+                                            >
+                                        </td>
+                                        <td>
+                                            <label>{{ table.saleDate }}</label>
+                                        </td>
+
+                                        <td>
+                                            <label>{{ table.vendorAmt }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.cashAmt }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{ table.tokens }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{
+                                                table.eachTokenAmt
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{
+                                                table.commission
+                                            }}</label>
+                                        </td>
+                                        <td>
+                                            <label>{{
+                                                table.totalAmount
+                                            }}</label>
+                                        </td>
+
+                                        <td>
+                                            <div class="all-icons">
+                                                <mat-icon
+                                                    color="accent"
+                                                    (click)="OnEdit(table)"
+                                                    >edit</mat-icon
+                                                >
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- dialog  -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,30 @@
+
+{
+   
+    "/api/*": {
+        "target": "http://localhost:8080/nfmgenieapi",
+        "secure": false,
+        "pathRewrite": {
+            "^/api": ""
+        }
+    },
+    "/google/*": {
+        "target": "https://texttospeech.googleapis.com/",
+        "secure": true,
+        "pathRewrite": {
+            "^/google": ""
+        },
+        "changeOrigin": true,
+        "logLevel": "debug"
+    },
+    "/translate/*": {
+        "target": "https://translate.google.com",
+        "secure": true,
+        "pathRewrite": {
+            "^/translate": ""
+        },
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+      
+}

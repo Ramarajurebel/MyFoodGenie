@@ -1,0 +1,274 @@
+<div class="flex flex-auto">
+    <div
+        class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+    >
+        <!-- Header -->
+        <div class="flex justify-between -mt-3 -ml-4">
+            <span *ngIf="selectedTask">
+                Current Status is : {{ selectedTask?.status }}</span
+            >
+
+            <!-- Mark as ... button -->
+            <!-- <button class="pr-4 pl-3.5" mat-button> -->
+            <!-- Mark as complete -->
+            <ng-container>
+                <div class="play-pause-buttons">
+                    <div *ngIf="selectedTask?.status == 'Open'">
+                        <button mat-mini-fab color="primary">
+                            <mat-icon (click)="OnStatusClick('In Progress')"
+                                >play_circle_filled</mat-icon
+                            >
+                        </button>
+                    </div>
+                    <div
+                        *ngIf="selectedTask?.status == 'In Progress'"
+                        class="d-flex justify-content-between"
+                    >
+                        <div>
+                            <button mat-mini-fab color="accent">
+                                <mat-icon (click)="OnStatusClick('On Hold')"
+                                    >pause_circle_filled</mat-icon
+                                >
+                            </button>
+                        </div>
+                        <div>
+                            <button mat-mini-fab color="warn">
+                                <mat-icon (click)="OnStatusClick('Completed')"
+                                    >stop</mat-icon
+                                >
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        *ngIf="selectedTask?.status == 'On Hold'"
+                        class="d-flex justify-content-between"
+                    >
+                        <button mat-mini-fab color="primary">
+                            <mat-icon (click)="OnStatusClick('In Progress')"
+                                >play_circle_filled</mat-icon
+                            >
+                        </button>
+                        <button mat-mini-fab color="warn">
+                            <mat-icon (click)="OnStatusClick('Completed')"
+                                >stop</mat-icon
+                            >
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- Mark as incomplete -->
+            <!-- </button> -->
+
+            <div class="flex items-center">
+                <!-- More menu -->
+                <!-- <button mat-icon-button [matMenuTriggerFor]="moreMenu">
+                    <mat-icon
+                        [svgIcon]="'heroicons_outline:dots-vertical'"
+                    ></mat-icon>
+                </button> -->
+                <!-- <mat-menu #moreMenu="matMenu">
+                    <button
+                        mat-menu-item
+                        (click)="deleteTask()">
+                        <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                        <span>Delete {{task.type === 'task' ? 'task' : 'section'}}</span>
+                    </button>
+                </mat-menu> -->
+
+                <!-- Close button -->
+                <a mat-icon-button (click)="OnClose()">
+                    <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                </a>
+            </div>
+        </div>
+
+        <mat-divider class="mt-6 mb-8"></mat-divider>
+
+        <!-- Title -->
+        <form [formGroup]="taskForm">
+            <!-- <div class="form-group">
+                <label for="" class="mb-1">Vendor Id</label>
+                <select
+                    name=""
+                    id=""
+                    class="form-control"
+                    formControlName="vendorId"
+                >
+                    <option value="">--Select--</option>
+                    <option
+                        *ngFor="let obj of vendorData"
+                        [value]="obj.vendorId"
+                    >
+                        {{ obj.vendorName }}
+                    </option>
+                </select>
+            </div> -->
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1"
+                    >Task List Name :</label
+                >
+                <select
+                    class="form-control"
+                    formControlName="tasklistNameId"
+                    (change)="OnTaskGroup($event.target.value)"
+                >
+                    <option value="">Select</option>
+                    <option
+                        *ngFor="let drop of taskListGroup"
+                        [value]="drop.tasklistNameId"
+                    >
+                        {{ drop.tasklistNameId }}-{{ drop.tasklistName }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group mb-0">
+                <mat-form-field style="width: 100%">
+                    <mat-label>Tasks</mat-label>
+                    <mat-select
+                        formControlName="tasklistId"
+                        #singleSelect
+                        class="form-control-plain-text"
+                        (selectionChange)="onSelect($event.source.value)"
+                    >
+                        <mat-option>
+                            <ngx-mat-select-search
+                                [formControl]="tasknameControl"
+                                placeholderLabel="Search"
+                            ></ngx-mat-select-search>
+                        </mat-option>
+
+                        <mat-option
+                            *ngFor="let bank of filteredTaskList"
+                            [value]="bank.tasklistId"
+                        >
+                            {{ bank.tasklistId }}-{{ bank.name }}
+                        </mat-option>
+                        <mat-option>None</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Title</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="tasknameid"
+                    aria-describedby="emailHelp"
+                    formControlName="taskname"
+                />
+            </div>
+            <div class="form-group" *ngIf="!selectedTask">
+                <label for="exampleInputPassword1">Description</label>
+                <textarea
+                    rows="5"
+                    class="form-control"
+                    formControlName="description"
+                ></textarea>
+            </div>
+            <div *ngIf="descriptionPoints" class="form-group mb-2 mt-2">
+                <ng-container
+                    *ngFor="let desc of descriptionPoints; let i = index"
+                >
+                    <div class="group flex items-center">
+                        <mat-checkbox
+                            class="flex items-center"
+                            [color]="'primary'"
+                            [(ngModel)]="desc.checked"
+                            (change)="descriptionCheckbox($event.checked, desc)"
+                            [ngModelOptions]="{ standalone: true }"
+                        ></mat-checkbox>
+                        <div
+                            [ngClass]="{
+                                'text-secondary line-through': desc.checked
+                            }"
+                        >
+                            {{ desc.value }}
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label" for="exampleCheck1"
+                    >Due Date</label
+                >
+                <input
+                    type="date"
+                    class="form-control"
+                    id="exampleCheck1"
+                    formControlName="duedate"
+                />
+            </div>
+            <div class="form-group">
+                <label class="form-check-label" for="exampleCheck1"
+                    >Assigned To:</label
+                >
+                <select
+                    formControlName="assignedto"
+                    class="form-control"
+                    (change)="OnAssignedTo($event.target.value)"
+                >
+                    <option
+                        *ngFor="let all of stalloperator"
+                        [value]="all.mobile"
+                    >
+                        {{ all.name }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-check-label" for="exampleCheck1"
+                    >Start Time:</label
+                >
+                <input
+                    type="time"
+                    class="form-control"
+                    id="exampleCheck1"
+                    formControlName="starttime"
+                />
+            </div>
+            <div class="form-group">
+                <label class="form-check-label" for="exampleCheck1"
+                    >End Time:</label
+                >
+                <input
+                    type="time"
+                    class="form-control"
+                    id="exampleCheck1"
+                    formControlName="endtime"
+                />
+            </div>
+            <div class="form-group mb-0">
+                <label for="validationCustom02" class="mb-1">Status:</label>
+
+                <select formControlName="status" class="form-control">
+                    <option *ngFor="let all of Status" [value]="all">
+                        {{ all }}
+                    </option>
+                </select>
+                <!-- <div *ngIf="validation">
+            <mat-error *ngIf="taskForm.controls['status'].hasError('required')">
+                <strong >required</strong>
+              </mat-error>
+            </div> -->
+            </div>
+            <mat-divider class="mt-6 mb-8"></mat-divider>
+            <div class="form-group">
+                <label>Add Comments</label>
+                <textarea
+                    rows="5"
+                    [formControl]="comment"
+                    class="form-control"
+                ></textarea>
+            </div>
+            <mat-divider class="mt-6 mb-8"></mat-divider>
+            <div class="flex" *ngIf="!selectedTask">
+                <button class="btn btn-primary" (click)="OnSaveTask()">
+                    Save
+                </button>
+            </div>
+        </form>
+
+        <!-- Tags -->
+    </div>
+</div>

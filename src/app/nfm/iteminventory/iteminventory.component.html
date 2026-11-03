@@ -1,0 +1,650 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+            ><div>
+
+                <ng-container *ngIf="isItemAdd">
+                    <div class="flex flex-auto">
+                        <form
+                            class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="ItemInventoryFormGroup"
+                        >
+                            <div class="flex justify-between -mt-3 -ml-4 mb-3">
+                                <div class="flex items-center">
+                                    <a mat-icon-button (click)="OnClose(false)">
+                                        <mat-icon
+                                            [svgIcon]="'heroicons_outline:x'"
+                                        ></mat-icon>
+                                    </a>
+                                </div>
+                                <div class="flex">
+                                    <button mat-mini-fab color="primary" (click)="OnAddItemransClick()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                           
+                            <mat-divider></mat-divider>    
+                            <div>
+                                <mat-form-field appearance="fill" style="width: 100% !important">
+                                    <mat-label>Products</mat-label>
+                                    <mat-select formControlName="itemId">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="itemControl"
+                                                placeholderLabel="Search"></ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let all of filtereditems"
+                                            [value]="all.prodId"
+                                            >{{ all.prodId }}-{{all.prodName}}-{{all?.quom}}{{all?.muom}}-{{all?.mrpprice}}</mat-option
+                                        >
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                   Balance:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="balanceQty"
+                                    required
+                                    type="number"
+                                />
+                            </div>
+                           
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                    Expiry Date:</label
+                                >
+                                <input type="date" class="form-control" formControlName="minExpDate" />
+                              
+                            </div>
+                          
+
+                            <!-- <div class="form-group mb-0">
+                                      <label for="validationCustom02" class="mb-1">Description:</label>
+                                      <input matInput class="form-control" formControlName="description" required type="text"  />
+                                      <div *ngIf="validation">
+                                      <mat-error *ngIf="recipeFormgroup.controls['description'].hasError('required')">
+                                        <strong>required</strong>
+                                      </mat-error>
+                                      </div>
+
+                                  </div> -->
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div
+                                class="d-flex flex-row justify-content-between"
+                            >
+                                <button
+                                    class="btn btn-danger"
+                                    (click)="onDeleteItem(deleteDialog)"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    (click)="onSaveItem()"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isItemdetails">
+                    <div class="flex flex-auto">
+                        <form
+                            class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                            [formGroup]="ItemInventoryTransFormGroup"
+                        >
+                            <div class="flex justify-between -mt-3 -ml-4 mb-3">
+                                <div class="flex items-center">
+                                    <a mat-icon-button (click)="OnClose(false)">
+                                        <mat-icon
+                                            [svgIcon]="'heroicons_outline:x'"
+                                        ></mat-icon>
+                                    </a>
+                                </div>
+                             
+                            </div>
+                           
+                            <mat-divider></mat-divider>    
+                            <div>
+                                <mat-form-field appearance="fill" style="width: 100% !important">
+                                    <mat-label>Products</mat-label>
+                                    <mat-select formControlName="itemId">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="itemControl"
+                                                placeholderLabel="Search"></ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let all of filtereditems"
+                                            [value]="all.prodId"
+                                            >{{ all.prodId }}-{{all.prodName}}-{{all?.quom}}{{all?.muom}}-{{all?.mrpprice}}</mat-option
+                                        >
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-group">
+                                <mat-form-field appearance="fill" style="width: 100% !important">
+                                    <mat-label>Supplier:</mat-label>
+                                    <mat-select formControlName="supId">
+                                      
+                                        <mat-option
+                                            *ngFor="let supp of suppliersList"
+                                            [value]="supp.supId"
+                                            >{{ supp.supId }}-{{
+                                                supp.name
+                                            }}</mat-option
+                                        >
+                                    </mat-select>
+                                </mat-form-field>
+                               
+
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                   Purchase Price:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="purchasePrice"
+                                    required
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                   Quantity:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="quantity"
+                                    required
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                   Refill Order Id:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="refOrdId"
+                                    required
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                   Reference Trans Id:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="refTransId"
+                                    required
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                  Avbl Qty:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="avblQty"
+                                    required
+                                    type="number"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                   MFG Date:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="mfgDate"
+                                    required
+                                    type="date"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                    Expiry Date:</label
+                                >
+                                <input type="date" class="form-control" formControlName="expDate" />
+                              
+                            </div>
+                            <div class="form-group mb-0">
+                                <label for="validationCustom02" class="mb-1">
+                                   Batch Code:</label
+                                >
+                                <input
+                                    class="form-control"
+                                    formControlName="batch"
+                                    required
+                                    type="text"
+                                />
+                            </div>
+                            <div class="form-group mb-0">
+                                <mat-form-field appearance="fill" style="width: 100% !important">
+                                    <mat-label>Type:</mat-label>
+                                    <mat-select formControlName="type">
+                                      
+                                        <mat-option
+                                            *ngFor="let trans of transtype" [value]="trans"
+                                            >{{trans}}
+                                            </mat-option
+                                        >
+                                    </mat-select>
+                                </mat-form-field>
+                              
+                            </div>
+                          
+                            <!-- <div class="form-group mb-0">
+                                      <label for="validationCustom02" class="mb-1">Description:</label>
+                                      <input matInput class="form-control" formControlName="description" required type="text"  />
+                                      <div *ngIf="validation">
+                                      <mat-error *ngIf="recipeFormgroup.controls['description'].hasError('required')">
+                                        <strong>required</strong>
+                                      </mat-error>
+                                      </div>
+
+                                  </div> -->
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                            <div
+                                class="d-flex flex-row justify-content-between"
+                            >
+                                <button
+                                    class="btn btn-danger"
+                                    (click)="onDeleteTransItem(deleteStockDialog)"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    (click)="onSaveTransItem()"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Item Stock
+                        </div>
+                    </div>
+
+                    
+                   
+                  
+                </div>
+                <div class="div header-btns">
+                    <form
+                [formGroup]="searchFormGroup"
+                class="flex lg:flex-row sm:flex-col lg:justify-center sm:align-items-center mainForm"
+            >
+            
+                <!-- <div class="dates"> -->
+
+                <div class="form-row flex searchform" style="gap: 5px">
+                    
+                    <div>
+                        <mat-form-field appearance="fill" style="width:20rem">
+                            <mat-label>Item Id:</mat-label>
+                            <mat-select formControlName="itemId">
+                                
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="itemControl"
+                                        placeholderLabel="Search"></ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option value="">--select--</mat-option>
+                                <mat-option
+                                    *ngFor="let all of filtereditems"
+                                    [value]="all.prodId"
+                                    >{{ all.prodId }}-{{all.prodName}}-{{all?.quom}}{{all?.muom}}-{{all?.mrpprice}}</mat-option
+                                >
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+               
+                  
+                    <div class="flex justify-content-between">
+                        <div style="align-self: center">
+                            <button
+                                class="btn btn-primary mb-2 mr-1"
+                                (click)="onSearch()"
+                            >
+                                Go
+                            </button>
+                           
+                        </div>
+                        <div style="align-self: center">
+                            <button
+                                class="btn btn-primary mb-2 ml-2"
+                                (click)="onAddItem()"
+                            >
+                                + Add Item
+                            </button>
+                           
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="flex justify-between">
+            <div>
+            <span class="mb-2">Total Items : {{totalItemsCount}}</span><br>
+            <span class="mb-2 mr-5">Total Balance : {{totalBalance}}</span>
+            </div>
+            <div>
+                <mat-form-field appearance="fill" style="width: 100% !important">
+                    <mat-label>Sort by :</mat-label>
+                    <mat-select (selectionChange)="onSortSelectionChange($event)">
+                        <mat-option>All</mat-option>
+                        <mat-option
+                            *ngFor="let all of ItemInventory"
+                            [value]="all"
+                            >{{ all }}</mat-option
+                        >
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+          <!-- <button class="btn" (click)="onSort()"><mat-icon>eject</mat-icon></button> -->
+                    <!-- <button
+                        class="btn btn-primary"
+                        (click)="CopyRecipeModal(newrcpmodal)"
+                    >
+                        Copy Recipe
+                    </button> -->
+                </div>
+               
+                <div class="divide-y">
+                    <ng-container>
+                        <div *ngFor="let item of InventoryData; let i = index">
+                            <div
+                                class="d-flex flex-row items-center pl-3 w-100 h12 p-3 adhoc-po"
+                                (click)="activatingChild(item, lastDivRef)"
+                                #lastDivRef
+                            >
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary description"
+                                    >Item Id:
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="
+                                                onItemClick(item, $event)
+                                            "
+                                        >
+                                           {{item.itemId}}-{{item?.itemName}}-{{item?.quom}}{{item?.muom}}-{{item?.mrpprice}}
+                                        </a>
+                                    </div>
+                                    <div
+                                    class="text-lg font-semibold text-primary"
+                                >
+                                    Expiry Date: {{item.expDate}} 
+                                </div>
+                                </div>
+
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                    class="text-lg font-semibold text-primary"
+                                >
+                                    Balance : {{ item.balanceQty}}
+                                </div>
+                                    <!-- <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        Created Date: {{ wallet.walletCreatedTime | date:'yyyy-MM-dd HH:mm:ss'}} 
+                                    </div>
+                                    <div
+                                        class="h-8 text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Updated Date:
+                                        {{ wallet.walletUpdatedTime | date:'yyyy-MM-dd HH:mm:ss'}}
+                                    </div> -->
+                                </div>
+                                <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        <button class="btn btn-primary po" (click)="onAddpo(item,addpo)">Add to po</button> 
+                                    </div>
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                      
+                                    >
+                                        <mat-icon  *ngIf="item.childActive!=true"  (click)="activatingChild(item)">keyboard_arrow_down</mat-icon>
+                                        <mat-icon *ngIf="item.childActive==true"   (click)="activatingChild(item)">keyboard_arrow_up</mat-icon>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                            <ng-container
+                            class="accordion-body"
+                            *ngIf="item.childActive">
+                            <div class="example-container">
+                                <table mat-table [dataSource]="itemStocktranstable" matSort class="mat-elevation-z8" 
+                                (matSortChange)="
+                                announceSortChange($event)">
+                                <!-- <ng-container matColumnDef="itemId" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header [mat-sort-start]="desc">ItemId</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{ table.itemId }}/{{ table.purchasePrice }}</label>
+                                    </td>
+                                </ng-container> -->
+                                <!-- <ng-container matColumnDef="supId" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Supplier Id</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <a class="text-blue-400" (click)="onEdittransItem(table)">{{ table.supId}}-{{table.supName}}</a>
+                                    </td>
+                                </ng-container> -->
+                                <ng-container matColumnDef="transId" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>TransId / RefTransId:</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <a class="text-blue-400" (click)="onEdittransItem(table)">{{ table.itemStockAutoId}}</a><span> / {{ table.refTransId}}</span><br>
+                                        <strong>Avbl Qty : {{table.avblQty}}</strong>
+                                        
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="supId" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reference Order</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <a class="text-blue-400" (click)="onReford(table)">{{ table.refOrdId}}</a><br>
+                                        <strong>Type : {{table.orderType}}</strong><br>
+                                        
+                                    </td>
+                                </ng-container>
+                                 <ng-container matColumnDef="uom" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>UOM</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{ table.purchaseUom}}</label><br>
+                                        <strong>Uom Size: {{table.uomSize}} </strong>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="quantity" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{ table.quantity}}</label>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="stall" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Stall Id</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{ table.stallId}}-{{ table.name}}-{{ table.stalltype}}</label><br>
+                                        <strong *ngIf="table.orderType=='PURO'">{{table.supId}}-{{table.suppname}}</strong>
+                                        <strong *ngIf="table.orderType=='PACO'">{{table.supId}}-{{table.paconame}}-{{table.pacoType}}</strong>
+                                    </td>
+                                </ng-container>
+                                <!-- <ng-container matColumnDef="mfgDate" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Mfg.Date</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{ table.mfgDate}}</label>
+                                    </td>
+                                </ng-container> -->
+                                <ng-container matColumnDef="expDate" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Exp.Date</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{ table.expDate}}</label>
+                                    </td>
+                                </ng-container>
+                                <!-- <ng-container matColumnDef="batch" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch Code</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{table.batch}}</label>
+                                    </td>
+                                </ng-container> -->
+                                <ng-container matColumnDef="type" class="ml-2">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                                    <td mat-cell *matCellDef="let table" class="center">
+                                        <label>{{ table.type }}</label>
+                                    </td>
+                                </ng-container>
+                              
+                            
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row;  let i = index; columns: displayedColumns;"  ></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+
+<!-- snackbar -->
+<ng-template #snackBar>
+    <div class="flex mt-auto">
+        <span class="example-pizza-party" matSnackBarLabel>
+            {{ responseMessage }}
+        </span>
+        <span matSnackBarActions class="ml-auto">
+            <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">
+                <mat-icon color="primary">close</mat-icon>
+            </button>
+        </span>
+    </div>
+</ng-template>
+<!-- delete dialog from below -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- stockTrans delete -->
+<ng-template #deleteStockDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="onStockTransconfirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+<!-- Add Po dialog -->
+<ng-template #addpo>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Add to Po</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <form
+        class="flex flex-col"
+        [formGroup]="poFormGroup"
+    >
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Purchase Order:</label>
+            <select class="form-control" formControlName="adhocpoid">
+                <option value="">--Select--</option>
+                <option *ngFor="let adhoc of adhocPoData" [value]="adhoc.adhocpoid">
+                    {{ adhoc.adhocpoid }}-{{
+                    adhoc.description
+                    }}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="validationCustom01" class="mb-1">Quantity:</label>
+            <input
+                                    class="form-control"
+                                    formControlName="Qty"
+                                    required
+                                    type="number"
+                                />
+        </div>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="onSavepo()">
+            Save
+        </button>
+       
+    </mat-dialog-actions>
+</ng-template>
+
+

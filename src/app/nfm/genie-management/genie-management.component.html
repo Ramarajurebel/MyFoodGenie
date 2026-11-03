@@ -1,0 +1,1978 @@
+<section class="inset-0 flex flex-col min-w-0 w-full">
+    <div class="flex flex-col p-6">
+        <div class="text-4xl font-extrabold tracking-tight leading-none">
+            Genie Management
+        </div>
+    </div>
+    <mat-tab-group>
+
+        <div class="scroll-container">
+            <mat-tab label="Configuration">
+
+                <ng-template matTabContent>
+                    <section class="flex flex-col h-screen min-w-0">
+                        <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+                        <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+                            <mat-drawer class="w-full sm:w-128 h-screen overflow-y-auto dark:bg-gray-900"
+                                [mode]="drawerMode" [opened]="isMatDrawerOpened" [position]="'end'"
+                                [disableClose]="true" #matDrawer>
+                                <div class="flex flex-auto overflow-y-auto" *ngIf="isMatDrawerOpened">
+                                    <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                                        [formGroup]="TableFieldsForm">
+                                        <!-- Header -->
+
+                                        <div class="flex justify-between -mt-3 -ml-4">
+                                            <div class="flex items-center">
+                                                <!-- Close button -->
+                                                <a mat-icon-button (click)="OnClose()">
+                                                    <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                                </a>
+                                            </div>
+
+                                            <div class="flex justify-between -mt-3 -ml-4">
+                                                <div class="button ml-auto">
+                                                    <!-- Close button -->
+                                                    <button class="btn btn-primary" (click)="onSyncVms()">
+                                                        Sync to VMS
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                                        <!-- <div class="img mt-2">
+                                            <img
+                                                [src]="imageFile"
+                                                style="width: 100px; height: 100px"
+                                            />
+                                        </div> -->
+                                        <!-- Title -->
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">
+                                                Serial No :</label>
+                                            <input class="form-control" formControlName="serialNo" />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">
+                                                Machine Id :</label>
+                                            <input class="form-control" formControlName="vmsMachId" disabled />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="mb-1">Stall Id :</label>
+                                            <select class="form-control" formControlName="stallId"
+                                                [(ngModel)]="selectedStall.stallid" (change)="onStallSelectionChange()">
+                                                <option value="">--Select--</option>
+                                                <option *ngFor="let stall of filteredstallData" [value]="stall.stallid">
+
+                                                    {{ stall.stallid }}-{{ stall.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">
+                                                Genie Id:</label>
+                                            <input class="form-control" formControlName="genieId" readonly />
+                                        </div>
+                                        <!-- Changed formcontrol names -->
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">
+                                                Name:</label>
+                                            <input class="form-control" formControlName="name" type="text" />
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Description:</label>
+                                            <input class="form-control" formControlName="description" type="text" />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Key Info:</label>
+                                            <input class="form-control" formControlName="keyInfo" type="text" />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Equipment Id:</label>
+                                            <input class="form-control" formControlName="equipmentId" type="text"
+                                                maxlength="5" />
+                                            <mat-error
+                                                *ngIf="TableFieldsForm.get('equipmentId').invalid && TableFieldsForm.get('equipmentId').dirty"
+                                                class="error-message">
+                                                Maximum length exceeded (4 characters max).
+                                            </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Functional Location:</label>
+                                            <input class="form-control" formControlName="functionalLocId" type="text"
+                                                maxlength="23" />
+                                            <mat-error
+                                                *ngIf="TableFieldsForm.get('functionalLocId').invalid && TableFieldsForm.get('functionalLocId').dirty"
+                                                class="error-message">
+                                                Maximum length exceeded (22 characters max).
+                                            </mat-error>
+                                        </div>
+                                        <!-- <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >State:</label
+                                            >
+                                            <input
+                                                class="form-control"
+                                                formControlName="state"
+                                                type="text"
+                                                maxlength="3"
+                                            />
+                                            <mat-error *ngIf="TableFieldsForm.get('state').invalid && TableFieldsForm.get('state').dirty" class="error-message">
+                                                Maximum length exceeded (2 characters max).
+                                              </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >City:</label
+                                            >
+                                            <input
+                                                class="form-control"
+                                                formControlName="city"
+                                                type="text"
+                                                maxlength="4"
+                                            />
+                                            <mat-error *ngIf="TableFieldsForm.get('city').invalid && TableFieldsForm.get('city').dirty" class="error-message">
+                                                Maximum length exceeded (3 characters max).
+                                              </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Village:</label
+                                            >
+                                            <input
+                                                class="form-control"
+                                                formControlName="village"
+                                                type="text"
+                                                maxlength="4"
+                                            />
+                                            <mat-error *ngIf="TableFieldsForm.get('village').invalid && TableFieldsForm.get('village').dirty" class="error-message">
+                                                Maximum length exceeded (3 characters max).
+                                              </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Building Id:</label
+                                            >
+                                            <input
+                                                class="form-control"
+                                                formControlName="buildingId"
+                                                type="text"
+                                                maxlength="6"
+                                            />
+                                            <mat-error *ngIf="TableFieldsForm.get('buildingId').invalid && TableFieldsForm.get('buildingId').dirty" class="error-message">
+                                                Maximum length exceeded (5 characters max).
+                                              </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >F Id:</label
+                                            >
+                                            <input
+                                                class="form-control"
+                                                formControlName="fid"
+                                                type="text"
+                                                maxlength="3"
+                                            />
+                                            <mat-error *ngIf="TableFieldsForm.get('fid').invalid && TableFieldsForm.get('fid').dirty" class="error-message">
+                                                Maximum length exceeded (2 characters max).
+                                              </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Serial:</label
+                                            >
+                                            <input
+                                                class="form-control"
+                                                formControlName="serial"
+                                                type="text"
+                                                maxlength="5"
+                                            />
+                                            <mat-error *ngIf="TableFieldsForm.get('serial').invalid && TableFieldsForm.get('serial').dirty" class="error-message">
+                                                Maximum length exceeded (4 characters max).
+                                              </mat-error>
+                                        </div> -->
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Date of Purchase :</label>
+                                            <input type="date" class="form-control" formControlName="date" />
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Manfacturer:</label>
+                                            <input class="form-control" formControlName="manufactureId" type="text" />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Model:</label>
+                                            <input class="form-control" formControlName="model" type="text" />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Dimensions :</label>
+                                            <input class="form-control" formControlName="dimensions" type="text" />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="" class="mb-1">Display Screen:</label>
+                                            <input type="text" formControlName="displayscreen" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="mb-1">Voltage:</label>
+                                            <input type="text" formControlName="voltage" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="mb-1">Power:</label>
+                                            <input type="text" formControlName="power" class="form-control" />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Weight :</label>
+                                            <input type="text" formControlName="weight" class="form-control" />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Temperature :</label>
+                                            <input type="text" formControlName="temperature" class="form-control"
+                                                maxlength="6" />
+                                            <mat-error
+                                                *ngIf="TableFieldsForm.get('temperature').invalid && TableFieldsForm.get('temperature').dirty"
+                                                class="error-message">
+                                                Maximum length exceeded (5 characters max).
+                                            </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Capacity :</label>
+                                            <input type="text" formControlName="capacity" class="form-control"
+                                                maxlength="4" />
+                                            <mat-error
+                                                *ngIf="TableFieldsForm.get('capacity').invalid && TableFieldsForm.get('capacity').dirty"
+                                                class="error-message">
+                                                Maximum length exceeded (3 characters max).
+                                            </mat-error>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Type :</label>
+                                            <input type="text" formControlName="type" class="form-control"
+                                                maxlength="3" />
+                                            <mat-error
+                                                *ngIf="TableFieldsForm.get('type').invalid && TableFieldsForm.get('type').dirty"
+                                                class="error-message">
+                                                Maximum length exceeded (2 characters max).
+                                            </mat-error>
+                                        </div>
+                                        <!-- <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Total Racks :</label
+                                            >
+                                            <input
+                                                type="number"
+                                                formControlName="totalRacks"
+                                                class="form-control"
+
+                                            />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Total Slots :</label
+                                            >
+                                            <input
+                                                type="number"
+                                                formControlName="totalSlots"
+                                                class="form-control"
+
+                                            />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Slots Per Rack :</label
+                                            >
+                                            <input
+                                                type="number"
+                                                formControlName="slotsPerRack"
+                                                class="form-control"
+
+                                            />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Max Tray Quantity :</label
+                                            >
+                                            <input
+                                                type="number"
+                                                formControlName="maxTrayQtyPerSlot"
+                                                class="form-control"
+
+                                            />
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Max Quantity :</label
+                                            >
+                                            <input
+                                                type="number"
+                                                formControlName="maxQuantity"
+                                                class="form-control"
+
+                                            />
+                                        </div> -->
+
+                                        <!-- <div class="form-group">
+                                            <label for="" class="mb-1">Location:</label>
+
+                                            <input
+                                            type="text"
+                                            formControlName="location"
+                                            class="form-control"
+                                        />
+                                        </div> -->
+                                        <div class="form-group">
+                                            <label class="mb-1">Status</label>
+                                            <select class="form-control" formControlName="status">
+                                                <option value="">--Select--</option>
+                                                <option *ngFor="let status of statusData" [value]="status">
+                                                    {{ status }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group mb-1">
+                                            <label for="" class="mb-1">Quantity</label>
+                                            <input type="text" class="form-control" formControlName="quantity" />
+                                        </div>
+                                        <div class="form-group mb-1">
+                                            <label for="" class="mb-1">Suitable For : </label>
+                                            <input type="text" class="form-control" formControlName="suitableFor" />
+                                        </div>
+                                        <!-- <div class="form-group">
+                                            <label for="validationCustom02" class="mb-1"
+                                                >Upload Image :</label
+                                            >
+                                            <input
+                                                type="file"
+                                                class="form-control"
+                                                (change)="OnImageSelect($event)"
+                                            />
+                                        </div> -->
+
+                                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                                        <!-- <div class="d-flex flex-row justify-content-between">
+                                            <button class="btn btn-primary" (click)="OnSavePopup()">
+                                                Save
+                                            </button>
+                                        </div> -->
+                                        <div class="d-flex flex-row justify-content-between">
+                                            <button class="btn btn-danger" (click)="onDelPopup(deleteDialog)">
+                                                Delete
+                                            </button>
+                                            <button class="btn btn-primary" (click)="OnSavePopup()">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </mat-drawer>
+
+                            <mat-drawer-content class="flex flex-col">
+                                <!-- <div class="flex flex-col flex-auto"> -->
+                                <div>
+                                    <!-- Header -->
+                                    <div class="flex flex-row py-8 px-6 md:px-8">
+                                        <!-- Title -->
+                                        <div class="flex flex-row ">
+                                            <div class="text-4xl font-extrabold tracking-tight leading-none">
+                                                Configuration
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- <div  class="mt-1 ml-4">
+                                        <label for="" ><strong>Genie Name :</strong></label>
+                                        <select
+                                            name=""
+
+                                            id=""
+                                            (change)="onConfigChange()"
+                                            [(ngModel)]="selectedConfigValue"
+
+
+                                        >
+                                            <option value="0">--Select--</option>
+                                            <option
+                                                [value]="stall.stallid"
+                                                *ngFor="let stall of stallList"
+                                            >
+                                                {{ stall.stallid }}-{{ stall.name }}
+                                            </option>
+                                        </select>
+
+                                    </div> -->
+                                </div>
+                                <div class="divide-y">
+                                    <ng-container>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordernone">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Name</th>
+                                                        <th>Description</th>
+                                                        <th>Date of Purchase</th>
+                                                        <th>Manfacturer</th>
+                                                        <th>Model</th>
+                                                        <th>Dimensions</th>
+                                                        <th>Display screen</th>
+                                                        <th>Voltage</th>
+                                                        <th>Power</th>
+                                                        <th>Weight</th>
+                                                        <th>Temperature</th>
+                                                        <th>Capacity</th>
+                                                        <th>Type</th>
+                                                        <th>
+                                                            <button mat-mini-fab (click)="open()">
+                                                                <mat-icon>add</mat-icon>
+                                                            </button>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- let table of configFilteredData; -->
+                                                    <!-- let table of configDetails; -->
+                                                    <tr *ngFor="
+                                                            let table of configDetails;
+                                                            let i = index
+                                                        ">
+
+                                                        <td>
+                                                            <a (click)="
+                                                            OnEdit(table)
+                                                        " class="cursor-pointer">{{ table.name }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.description }}</label>
+                                                        </td>
+
+                                                        <td>
+                                                            <label>{{ table.date }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.manufactureId }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.model }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>
+                                                                {{table.dimensions}}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.displayscreen }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{
+                                                                table.voltage
+                                                                }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{
+                                                                table.power
+                                                                }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table?.weight }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{
+                                                                table?.temperature
+                                                                }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{
+                                                                table.capacity
+                                                                }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table?.type }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="all-icons">
+                                                                <!-- <mat-icon
+                                                                    color="accent"
+                                                                    (click)="OnEdit(table)"
+                                                                    >edit</mat-icon
+                                                                > -->
+                                                                <!-- <mat-icon
+                                                                    color="primary"
+                                                                    (click)="
+                                                                        onDelPopup(
+                                                                           template,
+                                                                            table
+                                                                        )
+                                                                    "
+                                                                    >delete</mat-icon
+                                                                > -->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </mat-drawer-content>
+                        </mat-drawer-container>
+                    </section>
+
+
+                </ng-template>
+                <ng-template #deleteDialog>
+                    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+                        <h4>Delete Record</h4>
+                        <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    <mat-dialog-content class="mat-typography text-center">
+                        <p>Do you really want to delete this record?</p>
+                    </mat-dialog-content>
+                    <mat-dialog-actions>
+                        <button mat-raised-button color="primary" (click)="confirm()">
+                            Yes
+                        </button>
+                        <button mat-raised-button color="secondary" (click)="decline()">
+                            No
+                        </button>
+                    </mat-dialog-actions>
+                </ng-template>
+            </mat-tab>
+        </div>
+
+        <mat-tab label="Product Mapping">
+            <ng-template matTabContent>
+                <section class="flex flex-col h-screen min-w-0">
+                    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+                    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+                        <mat-drawer class="w-full sm:w-128 h-screen overflow-y-auto dark:bg-gray-900"
+                            [mode]="drawerMode" [opened]="isMatDrawerOpened" [position]="'end'" [disableClose]="true"
+                            #matDrawer>
+                            <div class="flex flex-auto overflow-y-auto" *ngIf="isMatDrawerOpened">
+                                <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                                    [formGroup]="ProductFieldsForm">
+                                    <!-- Header -->
+                                    <div class="flex justify-between -mt-3 -ml-4">
+                                        <div class="flex items-center">
+                                            <!-- Close button -->
+                                            <a mat-icon-button (click)="OnClose()">
+                                                <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <button class="btn btn-primary" (click)="UpdateMachineSlot()">Sync to
+                                            Vms</button>
+                                    </div>
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                                    <!-- <div class="img mt-2">
+                                        <img
+                                            [src]="imageFile"
+                                            style="width: 100px; height: 100px"
+                                        />
+                                    </div> -->
+                                    <!-- Title -->
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Genie Id:</label>
+                                        <mat-form-field style="width: 100%">
+
+                                            <mat-select formControlName="genieId" #singleSelect
+                                                class="form-control-plain-text">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="geniefilter"
+                                                        placeholderLabel="Search"></ngx-mat-select-search>
+                                                </mat-option>
+
+                                                <mat-option *ngFor="let status of filteredGenieData"
+                                                    [value]="status.autoGenieId">
+                                                    {{ status.description }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <!-- <select class="form-control" formControlName="genieId">
+                                            <option value="">--Select--</option>
+                                            <option
+
+                                                *ngFor="let status of configDetails"
+                                                [value]="status.autoGenieId"
+                                            >
+                                                {{ status.name }}
+                                            </option>
+                                        </select> -->
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Rack Id:</label>
+                                        <input class="form-control" formControlName="rackId" type="number" />
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Slot Id:</label>
+                                        <input class="form-control" formControlName="slotId" type="number" />
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Item Id:</label>
+                                        <mat-form-field style="width: 100%">
+
+                                            <mat-select [formControl]="mapngItemId" #singleSelect
+                                                class="form-control-plain-text"
+                                                (selectionChange)="OnItemSelectMpng($event.source.value)">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="itemfilter"
+                                                        placeholderLabel="Search"></ngx-mat-select-search>
+                                                </mat-option>
+
+                                                <mat-option *ngFor="let items of filteredItemData"
+                                                    [value]="items.supItemId">
+                                                    {{items.productId}}-{{ items.productname
+                                                    }}-{{items.supname}}-PP:{{items.purchasePrice}}-SP:{{items.salePrice}}-MG:{{items.margin}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <!-- <select class="form-control" formControlName="itemId">
+                                            <option value="">--Select--</option>
+                                            <option
+
+                                                *ngFor="let items of suppItems"
+                                                [value]="items.productId"
+                                            >
+                                               {{items.productId}}-{{ items.productname }}-{{items.salePrice}}-{{items.margin}}-{{items.supname}}
+                                            </option>
+                                        </select> -->
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="" class="mb-1">Supplier:</label>
+                                        <input type="text" [formControl]="mapngSupName" readonly class="form-control">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Quantity</label>
+                                        <input class="form-control" formControlName="quantity" type="number" />
+                                    </div>
+
+
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                                    <div class="d-flex flex-row justify-content-between">
+
+                                        <button class="btn btn-danger" (click)="onDelProduct(deleteProd)">
+                                            Delete
+                                        </button>
+                                        <button class="btn btn-primary" (click)="OnProductSave()">
+                                            Save
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </mat-drawer>
+
+                        <mat-drawer-content class="flex flex-col">
+                            <div class="flex flex-col flex-auto">
+                                <!-- Header -->
+                                <div class="flex flex-row py-8 px-6 md:px-8">
+                                    <!-- Title -->
+                                    <div flex flex-row justify-between>
+                                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                                            Product Mapping
+                                        </div>
+                                        <div class="mt-3 flex flex-row justify-between">
+                                            <div class="mr-3">
+                                                <label for=""><strong>Genie Name :</strong></label>
+                                            <select name="" id="" (change)="onProductChange()"
+                                                [(ngModel)]="selectedProductValue">
+                                                <option value="0">--Select--</option>
+                                                <option *ngFor="let stall of filteredGenieData"
+                                                    [value]="stall.autoGenieId">
+                                                    {{stall.autoGenieId}}-{{stall.description}}-{{ stall.name }}
+                                                    <!-- {{ stall.stallid }}-{{ stall.name }} -->
+                                                </option>
+                                            </select>
+                                            </div>
+                                            <div *ngIf="genieselected">
+                                                <button class="btn btn-primary mr-2" (click)="onCopy(copymapping)">+ Copy Mapping</button>
+                                            </div>
+                                            <div *ngIf="genieselected">
+                                            <button class="btn btn-primary" (click)="onRefreshGenie()">Refresh</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divide-y">
+                                    <ng-container>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordernone">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Genie Id</th>
+                                                        <th>rack Id</th>
+                                                        <th>Slot Id</th>
+                                                        <th>quantity</th>
+                                                        <th>item Id</th>
+                                                        <th>
+                                                            <button mat-mini-fab (click)="onAddProducts()">
+                                                                <mat-icon>add</mat-icon>
+                                                            </button>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- let table of productDetails; -->
+                                                    <tr *ngFor="
+                                                            let table of ProductFilteredData;
+                                                            let i = index
+                                                        ">
+
+                                                        <td>
+                                                            <a (click)="OnproductEdit(table)" class="cursor-pointer">{{
+                                                                table.genieId }}-{{table.genieName}}</a>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.rackId }}</label>
+                                                        </td>
+
+                                                        <td>
+                                                            <label>{{ table.slotId }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.quantity }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.itemId }}-{{table.productname}}</label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="all-icons">
+                                                                <!-- <mat-icon
+                                                                    color="accent"
+                                                                    (click)="OnproductEdit(table)"
+                                                                    >edit</mat-icon
+                                                                > -->
+                                                                <!-- <mat-icon
+                                                                    color="primary"
+                                                                    (click)="
+                                                                        onDelProduct(
+                                                                           template,
+                                                                            table
+                                                                        )
+                                                                    "
+                                                                    >delete</mat-icon
+                                                                > -->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </mat-drawer-content>
+                    </mat-drawer-container>
+                </section>
+            </ng-template>
+            <ng-template #deleteProd>
+                <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+                    <h4>Delete Record</h4>
+                    <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <mat-dialog-content class="mat-typography text-center">
+                    <p>Do you really want to delete this record?</p>
+                </mat-dialog-content>
+                <mat-dialog-actions>
+                    <button mat-raised-button color="primary" (click)="productconfirm()">
+                        Yes
+                    </button>
+                    <button mat-raised-button color="secondary" (click)="decline()">
+                        No
+                    </button>
+                </mat-dialog-actions>
+            </ng-template>
+
+        </mat-tab>
+        <mat-tab label="Refill">
+            <ng-template matTabContent>
+                <section class="flex flex-col h-screen min-w-0">
+                    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+                    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+                        <mat-drawer class="w-full sm:w-128 h-screen overflow-y-auto dark:bg-gray-900"
+                            [mode]="drawerMode" [opened]="isMatDrawerOpened" [position]="'end'" [disableClose]="true"
+                            #matDrawer>
+                            <div class="flex flex-auto overflow-y-auto" *ngIf="isMatDrawerOpened">
+                                <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                                    [formGroup]="RefillFieldsForm">
+                                    <!-- Header -->
+                                    <div class="flex justify-between -mt-3 -ml-4">
+                                        <div class="flex items-center">
+                                            <!-- Close button -->
+                                            <a mat-icon-button (click)="OnClose()">
+                                                <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                                    <!-- <div class="img mt-2">
+                                        <img
+                                            [src]="imageFile"
+                                            style="width: 100px; height: 100px"
+                                        />
+                                    </div> -->
+                                    <!-- Title -->
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Genie Id:</label>
+
+                                        <mat-form-field style="width: 100%">
+
+                                            <mat-select formControlName="genieId" #singleSelect
+                                                class="form-control-plain-text" (selectionChange)="onGenieChange()">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="geniefilter"
+                                                        placeholderLabel="Search"></ngx-mat-select-search>
+                                                </mat-option>
+
+                                                <mat-option *ngFor="let status of filteredGenieData"
+                                                    [value]="status.autoGenieId">
+                                                    {{status.autoGenieId}}-{{status.description}}-{{ status.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <!-- <select class="form-control" formControlName="genieId" (change)="onRefillSelection()">
+                                            <option value="">--Select--</option>
+                                            <option
+
+                                                *ngFor="let status of configDetails"
+                                                [value]="status.autoGenieId"
+                                            >
+                                                {{ status.name }}
+                                            </option>
+                                        </select> -->
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Rack Id:</label>
+                                        <select class="form-control" formControlName="rackId" (change)="onRackChange()">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let rack of genieRacks" [value]="rack">
+                                                {{ rack }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Slot Id:</label>
+
+                                        <select class="form-control" formControlName="slotId" (change)="onSlotChange()">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let status of genieSlots" [value]="status.slotId">
+                                                {{ status.slotId }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Supplier Id:</label
+                                        >
+                                        <input type="text" formControlName="supplierId" class="form-control">
+
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="" class="mb-1">Supplier Id:</label>
+                                        <input type="text" readonly [formControl]="refillSupId" class="form-control">
+                                    </div>
+
+                                    <!-- <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1"
+                                            >Item Id :</label
+                                        >
+                                        <input
+                                            class="form-control"
+                                            formControlName="itemId"
+                                            type="number"
+                                           readonly
+                                        />
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="" class="mb-1">Item Id:</label>
+                                        <input type="text" readonly [formControl]="refillItemId" class="form-control">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Quantity :</label>
+                                        <input min="0" class="form-control" formControlName="quantity" type="number" />
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Refilled By :</label>
+                                        <select class="form-control" formControlName="refilledBy"
+                                            (change)="onEmpChange()">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let status of filteredEmplist" [value]="status.name">
+                                                {{ status.name }}
+                                            </option>
+                                        </select>
+                                        <!-- <input
+                                            class="form-control"
+                                            formControlName="refilledBy"
+                                            type="text"
+
+                                        /> -->
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1"> Status :</label>
+                                        <select class="form-control" formControlName="status">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let status of refillData" [value]="status">
+                                                {{ status }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Date :</label>
+                                        <input type="date" class="form-control" formControlName="date" />
+                                    </div>
+
+
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                                    <div class="d-flex flex-row justify-content-between">
+
+                                        <button class="btn btn-danger" (click)="onDelRefill(deleterefill)">
+                                            Delete
+                                        </button>
+                                        <button class="btn btn-primary" (click)="OnRefillSave()">
+                                            Save
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </mat-drawer>
+
+                        <mat-drawer-content class="flex flex-col">
+                            <div class="flex flex-col flex-auto">
+                                <!-- Header -->
+                                <div class="flex flex-row py-8 px-6 md:px-8">
+                                    <!-- Title -->
+                                    <div>
+                                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                                            Refill
+                                        </div>
+                                        <div class="mt-3">
+                                            <label for=""><strong>Genie Name :</strong></label>
+                                            <select name="" id="" (change)="onRefillfilterChange()"
+                                                [(ngModel)]="selectedRefillValue">
+                                                <option value="0">--Select--</option>
+                                                <option *ngFor="let stall of filteredGenieData"
+                                                    [value]="stall.autoGenieId">
+                                                    {{stall.autoGenieId}}-{{stall.description}}-{{ stall.name }}
+                                                    <!-- {{ stall.stallid }}-{{ stall.name }} -->
+                                                </option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divide-y">
+                                    <ng-container>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordernone">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Genie Id</th>
+                                                        <th>Slot Id</th>
+                                                        <th>Item Id</th>
+                                                        <th>Quantity</th>
+                                                        <th>Refilled By</th>
+                                                        <th>Date</th>
+                                                        <th>Status</th>
+
+                                                        <th>
+                                                            <button mat-mini-fab (click)="onAddRefill()">
+                                                                <mat-icon>add</mat-icon>
+                                                            </button>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- let table of refillDetails; -->
+                                                    <tr *ngFor="
+                                                            let table of RefillFilteredData;
+                                                            let i = index
+                                                        ">
+
+                                                        <td>
+                                                            <a (click)="OnRefillEdit(table)" class="cursor-pointer">{{
+                                                                table.genieId }}-{{table.genieName}}</a>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.slotId }}</label>
+                                                        </td>
+
+                                                        <td>
+                                                            <label>{{ table.itemId }}-{{table.productname}}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.quantity }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.refilledBy }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.date }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.status }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="all-icons">
+                                                                <!-- <mat-icon
+                                                                    color="accent"
+                                                                    (click)="OnRefillEdit(table)"
+                                                                    >edit</mat-icon
+                                                                > -->
+                                                                <!-- <mat-icon
+                                                                    color="primary"
+                                                                    (click)="
+                                                                        onDelRefill(
+                                                                           template,
+                                                                            table
+                                                                        )
+                                                                    "
+                                                                    >delete</mat-icon
+                                                                > -->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </mat-drawer-content>
+                    </mat-drawer-container>
+                </section>
+            </ng-template>
+            <ng-template #deleterefill>
+                <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+                    <h4>Delete Record</h4>
+                    <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <mat-dialog-content class="mat-typography text-center">
+                    <p>Do you really want to delete this record?</p>
+                </mat-dialog-content>
+                <mat-dialog-actions>
+                    <button mat-raised-button color="primary" (click)="refillConfirm()">
+                        Yes
+                    </button>
+                    <button mat-raised-button color="secondary" (click)="decline()">
+                        No
+                    </button>
+                </mat-dialog-actions>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Transactions">
+            <ng-template matTabContent>
+                <section class="flex flex-col h-screen min-w-0">
+                    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+                    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+                        <mat-drawer class="w-full sm:w-128 h-screen overflow-y-auto dark:bg-gray-900"
+                            [mode]="drawerMode" [opened]="isMatDrawerOpened" [position]="'end'" [disableClose]="true"
+                            #matDrawer>
+                            <div class="flex flex-auto overflow-y-auto" *ngIf="isMatDrawerOpened">
+                                <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                                    [formGroup]="TransactionFieldsForm">
+                                    <!-- Header -->
+                                    <div class="flex justify-between -mt-3 -ml-4">
+                                        <div class="flex items-center">
+                                            <!-- Close button -->
+                                            <a mat-icon-button (click)="OnClose()">
+                                                <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                                    <!-- <div class="img mt-2">
+                                        <img
+                                            [src]="imageFile"
+                                            style="width: 100px; height: 100px"
+                                        />
+                                    </div> -->
+                                    <!-- Title -->
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Genie Id:</label>
+                                        <mat-form-field style="width: 100%">
+
+                                            <mat-select formControlName="genieId" #singleSelect
+                                                class="form-control-plain-text">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="geniefilter"
+                                                        placeholderLabel="Search"></ngx-mat-select-search>
+                                                </mat-option>
+
+                                                <mat-option *ngFor="let status of filteredGenieData"
+                                                    [value]="status.autoGenieId">
+                                                    {{ status.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Location:</label>
+                                        <input class="form-control" formControlName="location" type="text" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="mb-1">Status</label>
+                                        <select class="form-control" formControlName="status">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let status of statusData" [value]="status">
+                                                {{ status }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">StartDate :</label>
+                                        <input type="datetime-local" class="form-control"
+                                            formControlName="startDateTime" />
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">EndDate :</label>
+                                        <input type="datetime-local" class="form-control"
+                                            formControlName="endDateTime" />
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Remarks :</label>
+                                        <input class="form-control" formControlName="remarks" type="text" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="mb-1">StatusCheck :</label>
+                                        <select class="form-control" formControlName="statusCheck">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let status of CheckData" [value]="status">
+                                                {{ status }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-1">
+                                        <label class="mb-1">Power Status :</label>
+                                        <mat-slide-toggle [checked]="toggleValue" (change)="onToggleChange($event)"
+                                            formControlName="powerStatus">
+                                            {{ toggleValue ? 'On' : 'Off' }}
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="form-group mb-1">
+                                        <label class="mb-1">Internet Status :</label>
+                                        <mat-slide-toggle [checked]="toggleInternet" (change)="onToggleInteret($event)"
+                                            formControlName="internetStatus">
+                                            {{ toggleInternet ? 'Online' : 'Offline' }}
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="form-group mb-1">
+                                        <label class="mb-1">NFC Status :</label>
+                                        <mat-slide-toggle [checked]="toggleNfc" (change)="onToggleNfc($event)"
+                                            formControlName="nfcStatus">
+                                            {{ toggleNfc ? 'On' : 'Off' }}
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="form-group mb-1">
+                                        <label class="mb-1">Camera Status :</label>
+                                        <mat-slide-toggle [checked]="toggleCamera" (change)="onToggleCamera($event)"
+                                            formControlName="cameraStatus">
+                                            {{ toggleCamera ? 'On' : 'Off' }}
+                                        </mat-slide-toggle>
+                                    </div>
+
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+
+                                    <div class="d-flex flex-row justify-content-between">
+
+                                        <button class="btn btn-danger" (click)="onDelTransaction(deletetrans)">
+                                            Delete
+                                        </button>
+                                        <button class="btn btn-primary" (click)="OnTransSave()">
+                                            Save
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </mat-drawer>
+
+                        <mat-drawer-content class="flex flex-col">
+                            <div class="flex flex-col flex-auto">
+                                <!-- Header -->
+                                <div class="flex flex-row py-8 px-6 md:px-8">
+                                    <!-- Title -->
+                                    <div>
+                                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                                            Transactions
+                                        </div>
+                                        <div class="mt-3">
+                                            <label for=""><strong>Genie Name :</strong></label>
+                                            <select name="" id="" (change)="onTransactionfilterChange()"
+                                                [(ngModel)]="selectedTransactionValue">
+                                                <option value="0">--Select--</option>
+                                                <option *ngFor="let stall of filteredGenieData"
+                                                    [value]="stall.autoGenieId">
+                                                    {{stall.autoGenieId}}-{{stall.description}}-{{ stall.name }}
+                                                    <!-- {{ stall.stallid }}-{{ stall.name }} -->
+                                                </option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divide-y">
+                                    <ng-container>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordernone">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Genie Id</th>
+                                                        <th>Location</th>
+                                                        <th>Status</th>
+                                                        <th>StartDate Time</th>
+                                                        <th>EndDate Time</th>
+                                                        <th>Remarks</th>
+
+                                                        <th>
+                                                            <button mat-mini-fab (click)="onAddtransactions()">
+                                                                <mat-icon>add</mat-icon>
+                                                            </button>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- let table of transactionDetails; -->
+                                                    <tr *ngFor="
+                                                            let table of TransactionFilteredData;
+                                                            let i = index
+                                                        ">
+
+                                                        <td>
+                                                            <a (click)="OntranstEdit(table)" class="cursor-pointer">{{
+                                                                table.genieId }}-{{ table.genieName }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.location }}</label>
+                                                        </td>
+
+                                                        <td>
+                                                            <label>{{ table.status }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.startDateTime }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.endDateTime }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.remarks }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="all-icons">
+                                                                <!-- <mat-icon
+                                                                    color="accent"
+                                                                    (click)="OntranstEdit(table)"
+                                                                    >edit</mat-icon
+                                                                > -->
+                                                                <!-- <mat-icon
+                                                                    color="primary"
+                                                                    (click)="
+                                                                        onDelTransaction(
+                                                                           template,
+                                                                            table
+                                                                        )
+                                                                    "
+                                                                    >delete</mat-icon
+                                                                > -->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </mat-drawer-content>
+                    </mat-drawer-container>
+                </section>
+            </ng-template>
+            <ng-template #deletetrans>
+                <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+                    <h4>Delete Record</h4>
+                    <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <mat-dialog-content class="mat-typography text-center">
+                    <p>Do you really want to delete this record?</p>
+                </mat-dialog-content>
+                <mat-dialog-actions>
+                    <button mat-raised-button color="primary" (click)="transactionconfirm()">
+                        Yes
+                    </button>
+                    <button mat-raised-button color="secondary" (click)="decline()">
+                        No
+                    </button>
+                </mat-dialog-actions>
+            </ng-template>
+        </mat-tab>
+
+        <mat-tab label="Purchase & Sales">
+            <ng-template matTabContent>
+                <section class="flex flex-col h-screen min-w-0">
+                    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-light">
+                        <mat-drawer-content class="flex flex-col">
+                            <div class="flex flex-col flex-auto" style="
+                            background-color: #E9EAEC;
+                        ">
+
+                                <div class="flex flex-col py-8 px-6 md:px-8 ">
+                                    <!-- Title -->
+                                    <div class="flex">
+                                        <div class="flex-1">
+                                            <div class="h-full overflow-scroll">
+                                                <div class="pt-2 bg-card shadow rounded-2xl">
+                                                    <div class="flex flex-row justify-between">
+                                                        <div
+                                                            class="text-4xl font-extrabold tracking-tight leading-none mr-12 ">
+                                                            Purchase & Sales
+                                                        </div>
+                                                        <div appearance="fill" class="mt-1">
+                                                            <label for="">Genie Name :</label>
+                                                            <select name="" id="" (change)="onCounterChange()"
+                                                                [(ngModel)]="selectedValue">
+                                                                <option value="0">--Select--</option>
+                                                                <option [value]="stall.stallid"
+                                                                    *ngFor="let stall of stallList">
+                                                                    {{ stall.stallid }}-{{ stall.name }}
+                                                                </option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="mt-6">
+                                                        <div class="table-responsive">
+                                                            <div style="height: 400px; overflow-y: auto;">
+                                                                <ng-container
+                                                                    *ngFor="let table of purchaseTableData; let i = index">
+                                                                    <table class="table table-bordernone">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>Status:</td>
+                                                                                <td>{{ table.status }} </td>
+                                                                            </tr>
+
+
+
+
+                                                                            <!-- <tr>Liability Amount</tr> -->
+
+                                                                            <tr>
+                                                                                <td>Total Racks</td>
+                                                                                <td>{{
+                                                                                    table?.totalRacks
+                                                                                    }}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Total Slots</td>
+                                                                                <td>{{
+                                                                                    table.totalSlots
+                                                                                    }}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Total Qty</td>
+                                                                                <td>{{table.totalItemsQty}}</td>
+                                                                            </tr>
+
+                                                                            <!-- <th>Status</th> -->
+                                                                            <!-- <th>Assets Amount</th> -->
+                                                                            <tr>
+                                                                                <td>Available Quantity</td>
+                                                                                <td>{{table.totalAvblItemsQty}} </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Empty Items</td>
+                                                                                <td>{{ table.totalItemsQty -
+                                                                                    table.totalAvblItemsQty}}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>PO Amount</td>
+                                                                                <td>{{ table.totalItemsPoAmt }} </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Tax</td>
+                                                                                <td>{{
+                                                                                    table.totalItemsTax
+                                                                                    }}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Sale Amount</td>
+                                                                                <td>{{ table.totalItemsSaleAmt }}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Transaction Amount</td>
+                                                                                <td>{{ table?.totalTrscnAmt }}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Asset Amount:</td>
+                                                                                <td>{{ table.totalAsstsAmt }} </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Liability Amount:</td>
+                                                                                <td>{{ table.totalLbtyAmt }} </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Profit</td>
+                                                                                <td>{{ table?.totalProfit }}</td>
+                                                                            </tr>
+
+
+
+
+                                                                        </tbody>
+
+                                                                    </table>
+                                                                </ng-container>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="h-full overflow-scroll">
+                                                <div class="pt-2 bg-card shadow rounded-2xl">
+                                                    <div class="flex flex-row justify-content-end">
+                                                        <!-- <div
+                                                class="text-4xl font-extrabold tracking-tight leading-none mr-12 "
+                                            >
+                                                Sales Report
+                                            </div> -->
+                                                        <div appearance="fill" class="mt-1 mr-2">
+                                                            <label for="">Genie Name :</label>
+                                                            <select name="" id="" (change)="onChartCounterChange()"
+                                                                [(ngModel)]="selectedChartValue">
+                                                                <option value="0">--Select--</option>
+                                                                <option [value]="stall.stallid"
+                                                                    *ngFor="let stall of stallList">
+                                                                    {{ stall.stallid }}-{{ stall.name }}
+                                                                </option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+                                                    <div>
+
+                                                        <!-- <input type="date" [(ngModel)]="selectedDate" (change)="filterDataByDate()"/> -->
+                                                        <apx-chart *ngIf="chartOptions" [xaxis]="chartOptions.xaxis"
+                                                            [series]="chartOptions.series" [chart]="chartOptions.chart"
+                                                            [dataLabels]="chartOptions.dataLabels"
+                                                            [plotOptions]="chartOptions.plotOptions"
+                                                            [title]="chartOptions.title"
+                                                            [tooltip]="chartOptions.tooltip">
+                                                        </apx-chart>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </mat-drawer-content>
+                    </mat-drawer-container>
+                </section>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Genie Data">
+
+        </mat-tab>
+
+        <mat-tab label="ROI Projections">
+
+        </mat-tab>
+        <mat-tab label="VMS Product Mapping">
+            <ng-template matTabContent>
+                <section class="flex flex-col h-screen min-w-0">
+                    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+                    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+                        <mat-drawer class="w-full sm:w-128 h-screen overflow-y-auto dark:bg-gray-900"
+                            [mode]="drawerMode" [opened]="isMatDrawerOpened" [position]="'end'" [disableClose]="true"
+                            #matDrawer>
+                            <div class="flex flex-auto overflow-y-auto" *ngIf="isMatDrawerOpened">
+                                <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                                    [formGroup]="VMSFieldsForm">
+                                    <!-- Header -->
+                                    <div class="flex justify-between -mt-3 -ml-4">
+                                        <div class="flex items-center">
+                                            <!-- Close button -->
+                                            <a mat-icon-button (click)="OnClose()">
+                                                <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                                    <!-- <div class="img mt-2">
+                                        <img
+                                            [src]="imageFile"
+                                            style="width: 100px; height: 100px"
+                                        />
+                                    </div> -->
+                                    <!-- Title -->
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Slot Name :</label>
+                                        <input class="form-control" formControlName="slotName" type="text" readonly />
+                                        <!-- <select class="form-control" formControlName="genieId">
+                                            <option value="">--Select--</option>
+                                            <option
+
+                                                *ngFor="let status of configDetails"
+                                                [value]="status.autoGenieId"
+                                            >
+                                                {{ status.name }}
+                                            </option>
+                                        </select> -->
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">
+                                            Rack Id:</label>
+                                        <input class="form-control" formControlName="rowNumber" type="number"
+                                            readonly />
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Slot Id:</label>
+                                        <input class="form-control" formControlName="coloumnNumber" type="number"
+                                            readonly />
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Slot Id:</label>
+                                        <input class="form-control" formControlName="coloumnNumber" type="number"
+                                            readonly />
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Product Id:</label>
+                                        <select class="form-control" formControlName="productId">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let prod of VMSProducts" [value]="prod.productId">
+                                                {{prod.productId}}-{{ prod.name }}
+                                            </option>
+                                        </select>
+
+
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Show Product Cost:</label>
+                                        <select class="form-control" formControlName="showProductCost" disabled>
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let cost of costData" [value]="cost">
+                                                {{cost}}
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Show Product Name:</label>
+                                        <select class="form-control" formControlName="showProductName" disabled>
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let cost of costData" [value]="cost">
+                                                {{cost}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Show Product Cost:</label>
+                                        <select class="form-control" formControlName="showProductImage" disabled>
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let cost of costData" [value]="cost">
+                                                {{cost}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1">Stock Limit Enabled:</label>
+                                        <select class="form-control" formControlName="stocklimitEnabled" disabled>
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let cost of costData" [value]="cost">
+                                                {{cost}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label for="" class="mb-1">Supplier:</label>
+                                        <input type="text" [formControl]="mapngSupName" readonly class="form-control">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <label for="validationCustom02" class="mb-1"
+                                            >Quantity</label
+                                        >
+                                        <input
+                                            class="form-control"
+                                            formControlName="quantity"
+                                            type="number"
+
+                                        />
+                                    </div> -->
+
+
+                                    <mat-divider class="mt-6 mb-8"></mat-divider>
+                                    <div class="d-flex flex-row justify-content-between">
+
+                                        <button class="btn btn-danger" (click)="onDelProduct(deleteProd)">
+                                            Delete
+                                        </button>
+                                        <button class="btn btn-primary" (click)="OnUpdateSlotDetails()">
+                                            Save
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </mat-drawer>
+
+                        <mat-drawer-content class="flex flex-col">
+                            <div class="flex flex-col flex-auto">
+                                <!-- Header -->
+                                <div class="flex flex-row py-8 px-6 md:px-8">
+                                    <!-- Title -->
+                                    <div flex flex-row justify-between>
+                                        <div class="text-4xl font-extrabold tracking-tight leading-none">
+                                            VMS Product Mapping
+                                        </div>
+                                        <div class="flex justify-content-between">
+                                            <div class="mt-3 mb-2">
+                                                <label for=""><strong>VMS Machine Name :</strong></label>
+                                                <select name="" id="" (change)="onMachineChange()"
+                                                    [(ngModel)]="selectedMachineValue">
+                                                    <option value="0">--Select--</option>
+                                                    <option *ngFor="let machine of VMSMachineDetails"
+                                                        [value]="machine.machineDisplayId">
+                                                        {{machine.machineDisplayId}}
+                                                        <!-- {{ stall.stallid }}-{{ stall.name }} -->
+                                                    </option>
+                                                </select>
+
+                                            </div>
+
+                                            <div class="icons mt-11px"
+                                                *ngIf="selectedMachineValue !== '0' && selectedMachineValue">
+                                                <mat-icon color="primary"
+                                                    (click)="showMachineDetails(selectedMachineValue,machdetails)">info</mat-icon>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;"
+                                            *ngIf="selectedMachineValue !== '0' && selectedMachineValue">
+                                            <strong><label>Machine ID : </label></strong>
+                                            <strong><span>{{ MachineFilteredData.id }}</span></strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;"
+                                            *ngIf="selectedMachineValue !== '0' && selectedMachineValue">
+                                            <strong><label>Serial No. : </label></strong>
+                                            <strong><span>{{ MachineFilteredData.serialNumber }}</span></strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;"
+                                            *ngIf="selectedMachineValue !== '0' && selectedMachineValue">
+                                            <strong><label>Operation Status : </label></strong>
+                                            <strong><span>{{ MachineFilteredData.operationStatus }}</span></strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;"
+                                            *ngIf="selectedMachineValue !== '0' && selectedMachineValue">
+                                            <strong><label>Cloud Status : </label></strong>
+                                            <strong><span>{{ MachineFilteredData.cloudStatus }}</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divide-y">
+                                    <ng-container>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordernone">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Slot Name</th>
+                                                        <th>rack Id</th>
+                                                        <th>Slot Id</th>
+                                                        <th>Product Id</th>
+                                                        <!-- <th>quantity</th>
+                                                        <th>item Id</th> -->
+                                                        <th>
+                                                            <!-- <button
+                                                                mat-mini-fab
+                                                                (click)="onAddProducts()"
+                                                            >
+                                                                <mat-icon>add</mat-icon>
+                                                            </button> -->
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- let table of productDetails; -->
+                                                    <tr *ngFor="
+                                                            let table of MachineSlotDetails;
+                                                            let i = index
+                                                        ">
+
+                                                        <td>
+                                                            <a (click)="OnVMSSlotEdit(table)" class="cursor-pointer">{{
+                                                                table.slotName }}-{{table.slotId}}</a>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.rowNumber }}</label>
+                                                        </td>
+
+                                                        <td>
+                                                            <label>{{ table.coloumnNumber }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.productId }}</label>
+                                                        </td>
+                                                        <!-- <td>
+                                                            <label>{{ table.quantity }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{ table.itemId }}-{{table.productname}}</label>
+                                                        </td> -->
+                                                        <td>
+                                                            <div class="all-icons">
+                                                                <!-- <mat-icon
+                                                                    color="accent"
+                                                                    (click)="OnproductEdit(table)"
+                                                                    >edit</mat-icon
+                                                                > -->
+                                                                <!-- <mat-icon
+                                                                    color="primary"
+                                                                    (click)="
+                                                                        onDelProduct(
+                                                                           template,
+                                                                            table
+                                                                        )
+                                                                    "
+                                                                    >delete</mat-icon
+                                                                > -->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </mat-drawer-content>
+                    </mat-drawer-container>
+                </section>
+            </ng-template>
+            <ng-template #deleteProd>
+                <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+                    <h4>Delete Record</h4>
+                    <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <mat-dialog-content class="mat-typography text-center">
+                    <p>Do you really want to delete this record?</p>
+                </mat-dialog-content>
+                <mat-dialog-actions>
+                    <button mat-raised-button color="primary" (click)="productconfirm()">
+                        Yes
+                    </button>
+                    <button mat-raised-button color="secondary" (click)="decline()">
+                        No
+                    </button>
+                </mat-dialog-actions>
+            </ng-template>
+            <ng-template #machdetails>
+                <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+                    <h4>Machine Details</h4>
+                    <button mat-icon-button aria-label="close dialog" (click)="CloseDialog()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                <mat-dialog-content class="mat-typography text-center">
+                    <div style="display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Machine Display ID : </label></strong>
+                            <strong><span>{{ MachineInfo.machineDisplayId }}</span></strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;"> <strong><label>City :
+                                </label></strong>
+                            <strong><span>{{ MachineInfo.city }}</span></strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>State : </label></strong>
+                            <strong><span>{{ MachineInfo.state }}</span></strong>
+
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Installed At : </label></strong>
+                            <strong><span>{{ MachineInfo.installedAt }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Slot Rows : </label></strong>
+                            <strong><span>{{ MachineInfo.slotRowCount }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Slot Columns : </label></strong>
+                            <strong><span>{{ MachineInfo.slotColumnCount }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Serial Number : </label></strong>
+                            <strong><span>{{ MachineInfo.serialNumber }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Address : </label></strong>
+                            <strong><span>{{ MachineInfo.address }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Updated At : </label></strong>
+                            <strong><span>{{ MachineInfo.updatedAt }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Model : </label></strong>
+                            <strong><span>{{ MachineInfo.Model }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Type : </label></strong>
+                            <strong><span>{{ MachineInfo.Type }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Payment : </label></strong>
+                            <strong><span>{{ MachineInfo.PaymentOption }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Cloud Status : </label></strong>
+                            <strong><span>{{ MachineInfo.cloudStatus }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Cloud Status At : </label></strong>
+                            <strong><span>{{ MachineInfo.cloudStatusAt }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Operation Status : </label></strong>
+                            <strong><span>{{ MachineInfo.operationStatus }}</span></strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Operation Status Reason : </label></strong>
+                            <strong><span>{{ MachineInfo.operationStatusReason }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Operation Status At : </label></strong>
+                            <strong><span>{{ MachineInfo.operationStatusAt }}</span></strong>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong><label>Operation Status By : </label></strong>
+                            <strong><span>{{ MachineInfo.operationStatusBy }}</span></strong>
+                        </div>
+                    </div>
+                </mat-dialog-content>
+            </ng-template>
+
+        </mat-tab>
+        <!-- <mat-tab label="Employee Salaries">
+            <emp-salaries></emp-salaries>
+        </mat-tab>
+        <mat-tab label="Employee Payments">
+            <emp-payments></emp-payments>
+        </mat-tab>
+        <mat-tab label="Employee Assignement">
+            <employee-assignment></employee-assignment>
+        </mat-tab>
+        <mat-tab label="Punch In/Out">
+            <punch-in-out></punch-in-out>
+        </mat-tab> -->
+    </mat-tab-group>
+</section>
+<!-- copy event -->
+<ng-template #copymapping>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Create New Mapping</h4>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <form [formGroup]="copyMapping">
+            <div class="form-group mb-1 mt-1">
+               
+                <mat-form-field appearance="fill" style="width: 300px;">
+                    <mat-label>Current Genie</mat-label>
+                    <mat-select formControlName="existingGenieId">
+                      <!-- <mat-option value="0">--Select--</mat-option> -->
+                      <mat-option *ngFor="let stall of filteredGenieData" [value]="stall.autoGenieId">
+                        {{stall.autoGenieId}} - {{stall.description}} - {{ stall.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+            <div class="form-group" >
+                <mat-form-field appearance="fill" style="width: 300px;">
+                    <mat-label>Target Genie</mat-label>
+                    <mat-select formControlName="reqGenieId">
+                      <!-- <mat-option value="0">--Select--</mat-option> -->
+                      <mat-option *ngFor="let stall of filteredGenieData" [value]="stall.autoGenieId">
+                        {{stall.autoGenieId}} - {{stall.description}} - {{ stall.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary mr-2" (click)="onSaveMapping()">
+        Save
+      </button>
+      <button
+        class="btn btn-secondary"
+        type="button"
+       (click)="OnClose()"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>

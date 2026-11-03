@@ -1,0 +1,1125 @@
+<section class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+        class="w-full sm:w-128 dark:bg-gray-900"
+        [mode]="drawerMode"
+        [opened]="isMatDrawerOpened"
+        [position]="'end'"
+        [disableClose]="true"
+        #matDrawer
+        ><div>
+
+            <ng-container *ngIf="isEventDetails">
+                <div class="flex flex-auto">
+                    <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-autoneeds-validation" [formGroup]="TableFieldsForm">
+                        <div class="flex justify-between -mt-3 -ml-4">
+                            <div class="flex items-center">
+                                <a
+                                    mat-icon-button
+                                    (click)="OnClose()"
+                                >
+                                    <mat-icon
+                                        [svgIcon]="'heroicons_outline:x'"
+                                    ></mat-icon>
+                                </a>
+                                <!-- <span class="ml-2 mr-1">Add</span> -->
+                            </div>
+                            <div class="div header-btns ml-auto">
+                                <button
+                                    class="ml-3"
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    (click)="OnAddReceipeItem(Receipes)"
+                                >
+                                    <!-- <mat-icon
+                                    [svgIcon]="'heroicons_outline:plus'"
+                                ></mat-icon> -->
+                                    <!-- <mat-icon></mat-icon> -->
+
+                                    <span class="ml-2 mr-1">Add</span>
+                                </button>
+                                <!-- <button
+                                    class="btn btn-primary"
+                                    (click)="CopyRecipeModal(newrcpmodal)"
+                                >
+                                    Copy Recipe
+                                </button> -->
+                            </div>
+                        </div>
+                        <div class="form">
+                            <!-- <div class="form-group">
+                                <label for="" class="mb-1">Vendor Id</label>
+                                <select
+                                    name=""
+                                    id=""
+                                    class="form-control"
+                                    formControlName="vendorId"
+                                >
+                                    <option value="">--Select--</option>
+                                    <option
+                                        *ngFor="let obj of vendorData"
+                                        [value]="obj.vendorId"
+                                    >
+                                        {{ obj.vendorName }}
+                                    </option>
+                                </select>
+                            </div> -->
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Event Name:</label>
+                            <input
+                              class="form-control"
+                              formControlName="keventname"
+
+                              type="text"
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="
+                                  TableFieldsForm.controls['keventname'].hasError('required')
+                                "
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="stallid" class="mb-1">Stall ID</label>
+                            <select
+                              formControlName="stallid"
+                              class="form-control"
+                              (change)="onStallChange($event.target.value)"
+                            >
+                              <option value="">--Select--</option>
+                              <option [value]="stall.stallid" *ngFor="let stall of stallData">
+                                {{ stall.stallid }}-{{ stall.name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Event Date :</label>
+                            <input
+                              type="date"
+                              id="inputMDEx"
+                              class="form-control"
+                              formControlName="eventdate"
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="TableFieldsForm.controls['eventdate'].hasError('required')"
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">No of Platters:</label>
+                            <input
+                              class="form-control"
+                              formControlName="platterscount"
+                              required
+                              type="number"
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="
+                                  TableFieldsForm.controls['platterscount'].hasError('required')
+                                "
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Category :</label>
+                            <select class="form-control" formControlName="category">
+                              <option *ngFor="let cat of Categories" [value]="cat">
+                                {{ cat }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Status:</label>
+                            <!-- <input matInput class="form-control" formControlName="status" required type="number" /> -->
+
+                            <select class="form-control"  formControlName="status">
+                              <option value="">--Select--</option>
+                              <option *ngFor="let stat of evtStatus" [value]="stat">{{ stat }}</option>
+                            </select>
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="TableFieldsForm.controls['status'].hasError('required')"
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Total Recipes:</label>
+
+                            <input class="form-control" required type="number" readonly />
+                            <!-- <div *ngIf="validation">
+                                <mat-error *ngIf="TableFieldsForm.controls['totalitems'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                              </div> -->
+                          </div>
+                        </div>
+
+                        <div class="form-group mb-0">
+                          <label for="validationCustom02" class="mb-1">Total Cost:</label>
+                          <input class="form-control" required type="number" readonly />
+                          <!-- <div *ngIf="validation">
+                          <mat-error *ngIf="TableFieldsForm.controls['totalcost'].hasError('required')">
+                              <strong >required</strong>
+                            </mat-error>
+                          </div> -->
+                        </div>
+                        <div class="form-group mb-0">
+                          <label for="validationCustom02" class="mb-1">Assigned To:</label>
+                          <select class="form-control" formControlName="assdto">
+                            <option *ngFor="let all of stalloperator" [value]="all.name">
+                              {{ all.name }}
+                            </option>
+                          </select>
+                          <!-- <div *ngIf="validation">
+                        <mat-error *ngIf="TableFieldsForm.controls['totalcost'].hasError('required')">
+                            <strong >required</strong>
+                          </mat-error>
+                        </div> -->
+                        </div>
+                        <div class="form-group" *ngIf="editMode">
+                          <label for="validationCustom01" class="mb-1">Recipes:</label>
+                          <ng-multiselect-dropdown
+                            [placeholder]="'Recipes'"
+                            [settings]="recipesettings"
+                            [data]="Recipes"
+                            [formControl]="rcpcontrol"
+                          >
+                          </ng-multiselect-dropdown>
+                          <!-- <div *ngIf="validation">
+                            <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+                              <strong >required</strong>
+                            </mat-error>
+                          </div> -->
+                        </div>
+                        <div class="form-group mb-0">
+                          <label for="validationCustom02" class="mb-1">Sequence:</label>
+                          <input type="number" class="form-control" formControlName="seq" />
+                          <!-- <div *ngIf="validation">
+                        <mat-error *ngIf="TableFieldsForm.controls['totalcost'].hasError('required')">
+                            <strong >required</strong>
+                          </mat-error>
+                        </div> -->
+                        </div>
+                        <div class="form-group mb-0">
+                          <label for="validationCustom02" class="mb-1">Type:</label>
+                          <!-- <input type="text" class="form-control" formControlName="type"/> -->
+                          <select class="form-control" formControlName="type">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let all of type" [value]="all">{{ all }}</option>
+                          </select>
+                          <!-- <div *ngIf="validation">
+                      <mat-error *ngIf="TableFieldsForm.controls['totalcost'].hasError('required')">
+                          <strong >required</strong>
+                        </mat-error>
+                      </div> -->
+                        </div>
+                        <div class="form-group">
+                          <label for="instrucitons" class="mb-1">Instructions:</label>
+                          <textarea
+                            rows="6"
+                            class="form-control"
+                            formControlName="instructions"
+                          ></textarea>
+                        </div>
+                        <!-- <div class="form-group">
+                          <label class="mb-1">Menu ID:</label>
+                          <select class="form-control" [formControl]="menuId">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let all of FoodMenuData" [value]="all.menuId">
+                              {{ all.menuId }}-{{ all.menuName }}-{{ all?.day }}-{{ all?.type }}
+                            </option>
+                          </select>
+                        </div> -->
+                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                        <div
+                                class="d-flex flex-row justify-content-between"
+                            >
+                                <button
+                                    class="btn btn-danger"
+                                    type="button"
+                                    (click)="OnDel(deleteDialog)"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    id="savebtnId"
+                                    type="button"
+                                    (click)="OnSaveEvent()"
+
+                                >
+                                    Save
+                                </button>
+                            </div>
+                      </form>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isEventItemsOpened">
+                <div class="flex flex-auto">
+                    <form class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-autoneeds-validation" [formGroup]="eventItemsFormGroup">
+                        <div class="form">
+                            <div class="flex justify-between -mt-3 -ml-4">
+                                <div class="flex items-center">
+                                    <a
+                                        mat-icon-button
+                                        (click)="OnClose(false)"
+                                    >
+                                        <mat-icon
+                                            [svgIcon]="'heroicons_outline:x'"
+                                        ></mat-icon>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <mat-divider class="mt-6 mb-8"></mat-divider>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Event ID:</label>
+                            <!-- <input matInput class="form-control" formControlName="keventid" required type="number" /> -->
+                            <select class="form-control" formControlName="keventid" type="number">
+                              <option value="">--Select--</option>
+                              <option *ngFor="let all of allOpenEvents" [value]="all.keventid">
+                                {{ all.keventid }}-{{ all.keventname }}-({{ all.eventdate }})
+                              </option>
+                            </select>
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="eventItemsFormGroup.controls['keventid'].hasError('required')"
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Recipe ID:</label>
+                            <!-- <input matInput class="form-control" formControlName="recid" required type="number"  /> -->
+                            <!-- <select class="form-control" formControlName="recid" (change)="onrecipechange($event.target.value)" type="number">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let all of Recipes" [value]="all.rcpid">{{all.rcpid}}-{{all.name}}</option>
+                                  </select> -->
+                            <mat-form-field style="width: 100%">
+                              <mat-select
+                                formControlName="recid"
+                                #singleSelect
+                                class="form-control-plain-text"
+                                (selectionChange)="onrecipechange($event.source.value)"
+                              >
+                                <mat-option>
+                                  <ngx-mat-select-search
+                                    [formControl]="rcpcontrol"
+                                    placeholderLabel="Search"
+                                  ></ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option
+                                  *ngFor="let all of filteredrecipe"
+                                  [value]="all.rcpid"
+                                >
+                                  {{ all.rcpid }}-{{ all.name }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="EventReceipes.controls['recid'].hasError('required')"
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Recipe Name:</label>
+
+                            <input
+                              class="form-control"
+                              formControlName="recname"
+                              required
+                              type="text"
+                              readonly
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="eventItemsFormGroup.controls['recname'].hasError('required')"
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Telugu Name:</label>
+
+                            <input
+                              class="form-control"
+                              formControlName="tname"
+                              type="text"
+                              readonly
+                            />
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Recipe Platters:</label>
+
+                            <input
+                              class="form-control"
+                              [formControl]="rcpplatters"
+                              required
+                              type="text"
+                              readonly
+                            />
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                              >Main Ingr Quantity:</label
+                            >
+
+                            <input
+                              class="form-control"
+                              [formControl]="minQuant"
+                              type="number"
+                              readonly
+                            />
+
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                              >Rcp Output Quantity:</label
+                            >
+
+                            <input
+                              class="form-control"
+                              [formControl]="outputqty"
+                              type="number"
+                              readonly
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error *ngIf="TableFieldsForm.controls['platterscount'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Rcp Price:</label>
+
+                            <input
+                              class="form-control"
+                              required
+                              type="number"
+                              readonly
+                              [formControl]="rcpprice"
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error *ngIf="TableFieldsForm.controls['platterscount'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                              >Required Quantity:</label
+                            >
+
+                            <input
+                              class="form-control"
+                              formControlName="platterscount"
+                              required
+                              type="number"
+                              (keyup.enter)="onEnterPress()"
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error
+                                *ngIf="
+                                EventReceipes.controls['platterscount'].hasError('required')
+                                "
+                              >
+                                <strong>required</strong>
+                              </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Output Quantity:</label>
+
+                            <input
+                              class="form-control"
+                              required
+                              type="number"
+                              formControlName="outputqty"
+                            />
+                            <!-- <div *ngIf="validation">
+                              <mat-error *ngIf="TableFieldsForm.controls['platterscount'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                            </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Total Price:</label>
+
+                            <input
+                              class="form-control"
+                              required
+                              type="number"
+                              formControlName="totalprice"
+                            />
+                            <!-- <div *ngIf="validation">
+                                <mat-error *ngIf="TableFieldsForm.controls['platterscount'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                              </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Rcp Status:</label>
+
+                            <select
+                              class="form-control"
+                              placeholder="Status"
+                              formControlName="recstatus"
+                            >
+                              <option *ngFor="let all of Status" [value]="all">{{ all }}</option>
+                            </select>
+
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Group ID:</label>
+
+                            <select class="form-control" formControlName="groupid">
+                              <option>--select--</option>
+                              <option [value]="id" *ngFor="let id of groupidData">
+                                {{ id }}
+                              </option>
+                            </select>
+                            <!-- <div *ngIf="validation">
+                                <mat-error *ngIf="TableFieldsForm.controls['platterscount'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                              </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Time:</label>
+
+                            <input class="form-control" type="time" formControlName="starttime" />
+                            <!-- <div *ngIf="validation">
+                                <mat-error *ngIf="TableFieldsForm.controls['platterscount'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                              </div> -->
+                          </div>
+                          <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Category:</label>
+
+                            <select class="form-control" formControlName="category">
+                              <option value="">--Select--</option>
+                              <option value="Kitchen">Kitchen</option>
+                              <option value="Others">Others</option>
+                            </select>
+                            <!-- <div *ngIf="validation">
+                                <mat-error *ngIf="TableFieldsForm.controls['platterscount'].hasError('required')">
+                                  <strong >required</strong>
+                                </mat-error>
+                              </div> -->
+                          </div>
+                         </div>
+                         <mat-divider class="mt-6 mb-8"></mat-divider>
+                         <div
+                             class="d-flex flex-row justify-content-between"
+                         >
+                             <button
+                                 class="btn btn-danger"
+                                 type="button"
+                                 (click)="OnDel(deleteDialog)"
+                             >
+                                 Delete
+                             </button>
+                             <button
+                                 class="btn btn-primary"
+                                 type="button"
+                                 (click)="OnSaveRcpItem()"
+                             >
+                                 Save
+                             </button>
+                         </div>
+
+                        <!-- <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1">Created Date:</label>
+                            <input type="date" id="inputMDEx" class="form-control"  formControlName="createdDate">
+                          <div *ngIf="validation">
+                          <mat-error *ngIf="TableFieldsForm.controls['createdDate'].hasError('required')">
+                              <strong >required</strong>
+                            </mat-error>
+                          </div>
+                        </div> -->
+                      </form>
+                </div>
+            </ng-container>
+        </div>
+    </mat-drawer>
+    <!-- <div class="flex-auto h-full bg-card dark:bg-transparent overflow-scroll"> -->
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row py-8 px-6 md:px-8">
+                    <!-- Title -->
+                    <div>
+                        <div
+                            class="text-4xl font-extrabold tracking-tight leading-none"
+                        >
+                            Events
+                        </div>
+                    </div>
+                    <form [formGroup]="searchFormGroup" class="mainForm">
+                        <!-- <div class="dates"> -->
+
+                        <div class="form-row flex searchform" style="gap: 10px">
+                            <div>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input
+                                        [rangePicker]="picker"
+                                    >
+                                        <input
+                                            matStartDate
+                                            placeholder="Start date"
+                                            formControlName="startDate"
+                                        />
+                                        <input
+                                            matEndDate
+                                            placeholder="End date"
+                                            formControlName="endDate"
+                                        />
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle
+                                        matSuffix
+                                        [for]="picker"
+                                    ></mat-datepicker-toggle>
+                                    <mat-date-range-picker
+                                        #picker
+                                    ></mat-date-range-picker>
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select formControlName="status">
+                                        <mat-option value="">All</mat-option>
+                                        <mat-option
+                                            *ngFor="let all of eventStatus"
+                                            [value]="all"
+                                            >{{ all }}</mat-option
+                                        >
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="flex">
+                                <div style="align-self: center">
+                                    <button
+                                        class="btn btn-primary mb-1 mt-1"
+                                        (click)="onSearch()"
+                                    >
+                                        Go
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="align-self: center">
+                                <button
+                                  type="button"
+                                  class="btn btn-primary mt-15;"
+                                  (click)="onAddEvents()"
+                                >
+                                  Add Event
+                                </button>
+                              </div>
+                            <div style="align-self: center">
+                                <button
+                                  type="button"
+                                  class="btn btn-primary mt-15;"
+                                  (click)="copyevent(neweventmodal)"
+                                >
+                                  Copy Event
+                                </button>
+                              </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="divide-y">
+                    <ng-container>
+                        <div *ngFor="let event of eventsData">
+                            <div
+                                class="d-flex flex-row items-center pl-3 w-100 p-3 adhoc-po"
+                                (click)="activatingChild(event)"
+                            >
+                                <div class="d-flex flex-column w-50 adhoc" >
+                                    <div
+                                        class="text-lg font-semibold text-primary description"
+                                    >
+                                    <a  class="cursor-pointer" (click)="oneditEvent(event)">  {{ event.keventid }}-{{
+                                        event?.keventname
+                                    }}</a>
+
+                                    </div>
+                                    <!-- purchased by only in desktops -->
+
+                                    <!-- Amount and itemscount in mobile only -->
+                                    <div
+                                        class="d-flex flex-row w-100 adhoc d-lg-none"
+                                    >
+                                        <!-- <div
+                                            class="text-lg font-semibold text-primary"
+                                        >
+                                            Amount: {{ event.totalcost }}
+                                        </div> -->
+                                        <div
+                                            class="h-8 text-lg font-semibold text-primary adhoc"
+                                        >
+                                            Items: {{ event?.totalitems }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="d-flex flex-column w-50 adhoc d-none d-lg-block"
+                                >
+                                    <!-- <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        Amount: {{ event.totalcost }}
+                                    </div> -->
+                                    <div
+                                        class="h-8 text-lg font-semibold text-primary adhoc"
+                                    >
+                                        Items: {{ event?.totalitems }}
+                                    </div>
+                                </div>
+                                <!-- <button (click)="OnPdfPress(event)">PDF</button> -->
+                                <div class="d-flex flex-column w-50 adhoc">
+                                    <div
+                                        class="text-lg font-semibold text-primary"
+                                    >
+                                        <button
+                                            [matMenuTriggerFor]="statusMenu"
+                                        >
+                                            {{ event.status }}
+                                        </button>
+                                        <mat-menu #statusMenu="matMenu">
+                                            <button
+                                                mat-menu-item
+                                                (click)="
+                                                    StatusChange(event, 'Open')
+                                                "
+                                            >
+                                                Open
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                (click)="
+                                                    StatusChange(
+                                                        event,
+                                                        'Preparation'
+                                                    )
+                                                "
+                                            >
+                                                Preparation
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                (click)="
+                                                    StatusChange(
+                                                        event,
+                                                        'Ready for Sale'
+                                                    )
+                                                "
+                                            >
+                                                Ready for Sale
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                (click)="
+                                                    StatusChange(
+                                                        event,
+                                                        'Completed'
+                                                    )
+                                                "
+                                            >
+                                                Completed
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                    <div
+                                        class="h-8 text-lg font-semibold text-primary adhoc"
+                                    >
+                                        {{ event.eventdate }}
+                                    </div>
+                                </div>
+
+                                <div class="adhoc" style="margin-left: auto">
+                                    <button
+                                        mat-icon-button
+                                        color="primary"
+                                        (click)="activatingChild(event)"
+                                    >
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <ng-container
+                                class="accordion-body"
+                                *ngIf="event.childActive"
+                            >
+                                <!-- <div
+                                    class="text-lg font-semibold text-primary category p-2"
+                                >
+                                    Category : {{ selectedPoCategory }}
+                                </div> -->
+                                <div class="example-container">
+                                    <table class="table table-bordernone">
+                                        <thead>
+                                          <tr>
+                                            <th>Event</th>
+
+                                            <th>Recipe ID/Name</th>
+
+                                            <!-- <th>Quantity</th> -->
+
+                                            <th>Quantities</th>
+                                            <!-- <th>Output Quantity</th> -->
+                                            <th>Total Price</th>
+                                            <th>Rcp Status</th>
+                                            <th>Group ID</th>
+                                            <th>Category</th>
+                                            <th >
+
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let table of event.eventItems">
+                                            <td>
+                                              <label
+                                                >{{ table.eventName }}/{{ table.plattersCount }}/{{
+                                                  table.eventType
+                                                }}/{{ table.eventDate }}</label
+                                              >
+                                            </td>
+
+                                            <td>
+                                              <label
+                                                >{{ table.recid }}-{{ table.recname
+                                                }}<span *ngIf="table?.tname"
+                                                  >-({{ table?.tname }})</span
+                                                ></label
+                                              >
+                                            </td>
+                                            <!-- <td>
+                                                              <label>  {{table.minquantity}}</label>
+
+                                                            </td> -->
+                                            <!-- <td>
+                                              <label>{{ table.mainingrquant }}</label>
+                                            </td> -->
+                                            <td>
+                                              <label
+                                                >{{ table.platterscount }}/{{ table?.outputqty }}</label
+                                              >
+                                            </td>
+                                            <!-- <td>
+                                              <label></label>
+                                            </td> -->
+                                            <td>
+                                              <label>{{ table?.totalprice }}</label>
+                                            </td>
+                                            <td>
+                                              <label>{{ table?.recstatus }}</label>
+                                            </td>
+                                            <td>
+                                              <label>{{ table?.groupid }}</label>
+                                            </td>
+                                            <td>
+                                              <label>{{ table?.category }}</label>
+                                            </td>
+                                            <td>
+                                              <div class="all-icons">
+                                                <mat-icon color="accent" (click)="OnEditPress(table)"
+                                                  >edit</mat-icon
+                                                >
+                                                <!-- <mat-icon
+                                                  color="primary"
+                                                  (click)="onDelPopup(template, table)"
+                                                  >delete</mat-icon
+                                                > -->
+                                              </div>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                </div>
+
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <!-- <ng-container *ngIf="todayCompletedTasks.length > 0">
+                        <div
+                            class="completed-heading"
+                            (click)="toggleCompletedTasks()"
+                        >
+                            <span>Today Completed Tasks</span>
+
+                            <div class="down-arrow">
+                                <button mat-icon-button>
+                                    <mat-icon (click)="toggleCompletedTasks()"
+                                        >keyboard_arrow_down</mat-icon
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="isCompletedTasksVisible">
+                            <div
+                                *ngFor="let task of todayCompletedTasks"
+                                class="cont-completed"
+                            >
+                                <div class="completed-task-name">
+                                    {{ task.taskname }}
+                                </div>
+
+                                <div
+                                    class="assd-to"
+                                    *ngIf="user.role == 'admin'"
+                                >
+                                    {{ task.assignedto }}
+                                </div>
+                                <div class="duration-date">
+                                    <div class="duration">
+                                        {{ task.duration }} min
+                                    </div>
+                                    <div
+                                        class="date text-sm whitespace-nowrap text-secondary"
+                                    >
+                                        {{ task.duedate | date: "LLL dd" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container> -->
+                </div>
+            </div>
+        </mat-drawer-content>
+    <!-- </div> -->
+</mat-drawer-container>
+</section>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose</h5>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="OnClose('Cross Click')"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <form class="needs-validation">
+                <div class="form">
+                    <div class="form-group">
+                        <label class="mb-1">Purchase Order:</label>
+                        <select
+                            class="form-control"
+                            [formControl]="purchaseorder"
+                        >
+                            <option value="">--Select--</option>
+                            <option
+                                *ngFor="let adhoc of adhocPoData"
+                                [value]="adhoc.adhocpoid"
+                            >
+                                {{ adhoc.adhocpoid }}-{{ adhoc.description }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-1">Categories:</label>
+                        <select class="form-control" [formControl]="category">
+                            <option value="All">All</option>
+                            <option
+                                [value]="val"
+                                *ngFor="let val of categories"
+                            >
+                                {{ val }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="validationCustom01" class="mb-1"
+                            >Available:</label
+                        >
+                        <select class="form-control" [formControl]="available">
+                            <option value="All">All</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <!-- <div *ngIf="validation">
+                    <mat-error *ngIf="TableFieldsForm.controls['prodname'].hasError('required')">
+                      <strong >required</strong>
+                    </mat-error>
+                  </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+            Save
+        </button>
+        <button
+            class="btn btn-secondary"
+            type="button"
+            data-dismiss="modal"
+            (click)="OnClose('Cross Click')"
+        >
+            Close
+        </button>
+    </div>
+</ng-template>
+<ng-template #ElseBlock>
+    <div
+        style="
+            margin-top: auto;
+
+            margin-left: auto;
+            margin-right: auto;
+        "
+        class="no-items-found h-3"
+    >
+        No Purchase orders assigned to you
+    </div>
+</ng-template>
+
+<!-- Copy Event -->
+<ng-template #neweventmodal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Create New Event</h4>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <form [formGroup]="copyEvent">
+          <div class="form-group mb-0">
+            <label for="validation" class="mb-1">Select Date</label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="selectdate"
+              (change)="ondateSelect($event.target.value)"
+            />
+          </div>
+          <div class="form-group mb-0">
+            <div class="form-group mb-0">
+              <ng-multiselect-dropdown
+                [placeholder]="'Event Name'"
+                [settings]="copydropdownSettings"
+                [data]="selectedDateEvents"
+                formControlName="keventid"
+                class="form-control-plaintext"
+              >
+              </ng-multiselect-dropdown>
+            </div>
+            <!-- <div class="form-group mb-0">
+              <label for="validationCustom02" class="mb-1">Event Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="newkeventname"
+              />
+            </div> -->
+            <div class="form-group mb-0">
+              <label for="validationCustom02" class="mb-1">Event Date:</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="neweventdate"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary"  (click)="OnNewEventCreate()">
+        Save
+      </button>
+      <button
+        class="btn btn-secondary"
+        type="button"
+        data-dismiss="modal"
+        (click)="OnClose('close')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+<!-- Delete -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button
+            mat-icon-button
+            aria-label="close dialog"
+            (click)="CloseDialog()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirm()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
+ <!-- Adding Receipes -->
+ <!-- <ng-container *ngIf="isRecipeItemDetails">
+    <div class="modal-header">
+      <h5 class="modal-title f-w-600" id="exampleModalLabel">Add Menu Recipes</h5>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="OnClose('Cross Click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="onSavePopup()">
+        Save
+      </button>
+      <button
+        class="btn btn-secondary"
+        type="button"
+        data-dismiss="modal"
+        (click)="OnClose('Cross Click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-container> -->

@@ -1,0 +1,853 @@
+<section class="inset-0 flex flex-col min-w-0 h-screen w-full">
+    <!-- <i class="iconsvg icon-mushroom_adobe_express"></i> -->
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent">
+        <mat-drawer
+            class="w-full sm:w-128 h-screen flex flex-auto overflow-y-auto dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="isMatDrawerOpened"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer
+        >
+            <div
+                class="flex flex-auto overflow-y-auto"
+                *ngIf="isMatDrawerOpened"
+            >
+                <ng-container *ngIf="isShowSuppliers">
+                    <form
+                        class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                        [formGroup]="supplierFormGroup"
+                    >
+                        <!-- Header -->
+                        <div class="flex justify-between -mt-3 -ml-4">
+                            <div class="toggle">
+                                <!-- <mat-slide-toggle>Edit Mode</mat-slide-toggle> -->
+                            </div>
+                            <div class="flex items-center">
+                                <!-- Close button -->
+                                <a mat-icon-button (click)="OnCloseDrawer()">
+                                    <mat-icon
+                                        [svgIcon]="'heroicons_outline:x'"
+                                    ></mat-icon>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <mat-icon color="primary" (click)="OnAddSupItem()"
+                                >add</mat-icon
+                            >
+                        </div>
+                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Name:</label
+                            >
+                            <input
+                                class="form-control"
+                                formControlName="name"
+                                type="text"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Email :</label
+                            >
+                            <input
+                                class="form-control"
+                                type="text"
+                                formControlName="email"
+                            />
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >GSTIN :</label
+                            >
+                            <input
+                                class="form-control"
+                                type="text"
+                                formControlName="gstn"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Address:</label
+                            >
+                            <input
+                                class="form-control"
+                                type="text"
+                                formControlName="address"
+                            />
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Category:</label
+                            >
+                            <select
+                                class="form-control"
+                                formControlName="category"
+                            >
+                                <option value="">--Select--</option>
+                                <option
+                                    *ngFor="let all of category"
+                                    [value]="all"
+                                >
+                                    {{ all }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Status:</label
+                            >
+                            <select
+                                class="form-control"
+                                formControlName="status"
+                            >
+                                <option value="">--Select--</option>
+                                <option
+                                    *ngFor="let all of Status"
+                                    [value]="all"
+                                >
+                                    {{ all }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- Title -->
+
+                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                        <div class="d-flex flex-row justify-content-between">
+                            <button
+                                class="btn btn-danger"
+                                (click)="onDelPopup(deleteDialog, 'sup')"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                (click)="OnSaveSup()"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </ng-container>
+                <ng-container *ngIf="isShowSupItems">
+                    <form
+                        class="flex flex-col flex-auto p-6 pt-10 sm:p-8 sm:pt-10 overflow-y-auto"
+                        [formGroup]="supplierItemFormGroup"
+                    >
+                        <!-- Header -->
+                        <div class="flex justify-between -mt-3 -ml-4">
+                            <div class="toggle">
+                                <!-- <mat-slide-toggle>Edit Mode</mat-slide-toggle> -->
+                            </div>
+                            <div class="flex items-center">
+                                <!-- Close button -->
+                                <a mat-icon-button (click)="OnCloseDrawer()">
+                                    <mat-icon
+                                        [svgIcon]="'heroicons_outline:x'"
+                                    ></mat-icon>
+                                </a>
+                            </div>
+                        </div>
+
+                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Supplier ID:</label
+                            >
+
+                            <mat-form-field style="width: 100%">
+                                <mat-select
+                                    formControlName="supid"
+                                    required
+                                    #singleSelect
+                                    class="form-control-plain-text"
+                                    (selectionChange)="onChange()"
+                                >
+                                    <mat-option>
+                                        <ngx-mat-select-search
+                                            [formControl]="suppliersearch"
+                                            placeholderLabel="Search"
+                                        ></ngx-mat-select-search>
+                                    </mat-option>
+
+                                    <mat-option
+                                        *ngFor="let bank of filteredSupplier"
+                                        [value]="bank.supId"
+                                    >
+                                        {{ bank.supId }}-{{ bank.name }}-{{
+                                            bank.catname
+                                        }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Supplier Name:</label
+                            >
+
+                            <mat-form-field style="width: 100%">
+                                <mat-select
+                                    formControlName="supname"
+                                    required
+                                    #singleSelect
+                                    class="form-control-plain-text"
+                                >
+                                    <mat-option>
+                                        <ngx-mat-select-search
+                                            [formControl]="suppliersearch"
+                                            placeholderLabel="Search"
+                                        ></ngx-mat-select-search>
+                                    </mat-option>
+
+                                    <mat-option
+                                        *ngFor="let bank of supplierItemsList"
+                                        [value]="bank.supname"
+                                    >
+                                        {{ bank.supname }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Product ID:</label
+                            >
+
+                            <mat-form-field style="width: 100%">
+                                <mat-label>Products</mat-label>
+                                <mat-select
+                                    formControlName="productId"
+                                    required
+                                    #singleSelect
+                                    class="form-control-plain-text"
+                                    (selectionChange)="onProductChange()"
+                                >
+                                    <mat-option>
+                                        <ngx-mat-select-search
+                                            [formControl]="productsearch"
+                                            placeholderLabel="Search"
+                                        ></ngx-mat-select-search>
+                                    </mat-option>
+
+                                    <mat-option
+                                        *ngFor="
+                                            let bank of filteredProductItems
+                                        "
+                                        [value]="bank.prodId"
+                                    >
+                                        {{ bank.prodId }}-{{ bank.prodName }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="validationCustom01" class="mb-1"
+                                >Quantity:</label
+                            >
+                            <input
+                                class="form-control"
+                                required
+                                formControlName="quantity"
+                                type="number"
+                            />
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >UOM :</label
+                            >
+                            <!-- <input  class="form-control" required type="text" formControlName="uom" /> -->
+                            <select
+                                class="form-control"
+                                required=""
+                                formControlName="uom"
+                            >
+                                <option value="">--Select--</option>
+                                <option
+                                    *ngFor="let all of uomData"
+                                    [value]="all"
+                                >
+                                    {{ all }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Price :</label
+                            >
+                            <input
+                                class="form-control"
+                                type="number"
+                                formControlName="taxAmount"
+                                type="number"
+                            />
+                        </div> -->
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Sale Price :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="salePrice"
+                                type="number"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >GST :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="gst"
+                                type="number"
+                            />
+                        </div>
+                    
+                        <!-- <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >quom :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="quom"
+                                type="number"
+                            />
+                        </div> -->
+                        <!-- <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >muom :</label
+                            >
+                            <select
+                                class="form-control"
+                                
+                                formControlName="muom"
+                            >
+                                <option value="">--Select--</option>
+                                <option
+                                    *ngFor="let all of uomData"
+                                    [value]="all"
+                                >
+                                    {{ all }}
+                                </option>
+                            </select>
+                        </div> -->
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Purchase Price :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="purchasePrice"
+                                type="number"
+                            />
+                        </div>
+                        <!-- <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Purchase Tax :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="purchaseTax"
+                                type="number"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Sale Tax :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="saleTax"
+                                type="number"
+                            />
+                        </div> -->
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Cess :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="cess"
+                                type="number"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Margin :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="margin"
+                                type="number"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Start date :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="startDate"
+                                type="date"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >End date :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="endDate"
+                                type="date"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Available Stock :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="availableStock"
+                                type="number"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Packed date :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="packedDate"
+                                type="date"
+                            />
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="validationCustom02" class="mb-1"
+                                >Expiry  :</label
+                            >
+                            <input
+                                class="form-control"
+
+                                formControlName="expiryInDays"
+                                type="number"
+                            />
+                        </div>
+                        <mat-divider class="mt-6 mb-8"></mat-divider>
+                        <div class="d-flex flex-row justify-content-between">
+                            <button
+                                class="btn btn-danger"
+                                (click)="onDelPopup(deleteDialog)"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                (click)="OnSaveSupItem()"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </ng-container>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex flex-col flex-auto">
+                <!-- Header -->
+                <div class="flex flex-row justify-between py-8 px-6 md:px-8">
+                    <!-- Title -->
+
+                    <div
+                        class="text-4xl font-extrabold tracking-tight leading-none"
+                    >
+                        Purchase Rate Card
+                    </div>
+                    <div class="button">
+                        <button class="btn btn-primary" (click)="AddSup()">
+                            Add Supplier
+                        </button>
+                    </div>
+                </div>
+                <div class="divide-y">
+                    <mat-tab-group>
+                        <mat-tab label="Suppliers Items List">
+                            <ng-template matTabContent>
+                                <div
+                                    *ngFor="
+                                        let sup of suppliersList;
+                                        let i = index
+                                    "
+                                >
+                                    <div
+                                        class="d-flex flex-row items-center pl-3 w-100 h12 p-3 adhoc-po"
+                                        (click)="activatingSupChild(sup)"
+                                        #lastDivRef
+                                    >
+                                        <div
+                                            class="d-flex flex-column w-50 adhoc"
+                                        >
+                                            <div
+                                                class="text-lg font-semibold text-primary description"
+                                            >
+                                                <a
+                                                    class="cursor-pointer"
+                                                    (click)="OnEditSup(sup)"
+                                                >
+                                                    {{ sup.supId }}-{{
+                                                        sup.name
+                                                    }}
+                                                </a>
+                                            </div>
+                                            <div
+                                                class="text-lg font-semibold text-primary adhoc"
+                                            >
+                                                Category : {{ sup?.catname }}
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="d-flex flex-column w-50 adhoc"
+                                        >
+                                            <div
+                                                class="text-lg font-semibold text-primary"
+                                            >
+                                                Address: {{ sup.address }}
+                                            </div>
+                                            <div
+                                                class="h-8 text-lg font-semibold text-primary adhoc"
+                                            >
+                                                Status: {{ sup?.status }}
+                                            </div>
+                                        </div>
+                                        <!-- <button (click)="OnPdfPress(sup)">PDF</button> -->
+                                        <div
+                                            class="d-flex flex-column w-50 adhoc"
+                                        >
+                                            <!-- <div
+                                                class="h-8 text-lg font-semibold text-primary adhoc"
+                                            >
+                                                No. Of Plates:
+                                            </div> -->
+                                        </div>
+
+                                        <div
+                                            class="adhoc"
+                                            style="margin-left: auto"
+                                        >
+                                            <button
+                                                mat-icon-button
+                                                color="primary"
+                                                (click)="
+                                                    activatingSupChild(sup)
+                                                "
+                                            >
+                                                <mat-icon
+                                                    >keyboard_arrow_down</mat-icon
+                                                >
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <ng-container
+                                        class="accordion-body"
+                                        *ngIf="sup.childActive"
+                                    >
+                                        <div
+                                            class="example-container"
+                                            [id]="sup.supId"
+                                        >
+                                            <table
+                                                class="table table-bordernone"
+                                            >
+                                                <thead>
+                                                    <tr>
+                                                        <th>Supplier ID</th>
+                                                        <th>Product ID</th>
+
+                                                        <th class="text-center">
+                                                            Quantity
+                                                        </th>
+                                                        <th>UOM</th>
+
+                                                        <th>Price</th>
+                                                        <th>Sale Price</th>
+                                                        <th
+                                                            (click)="
+                                                                OnAddSupItem()
+                                                            "
+                                                        >
+                                                            <mat-icon
+                                                                >add</mat-icon
+                                                            >
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr
+                                                        *ngFor="
+                                                            let table of sup.itemsList;
+                                                            let i = index
+                                                        "
+                                                    >
+                                                        <td>
+                                                            <label
+                                                                >{{
+                                                                    table.supid
+                                                                }}-{{
+                                                                    table.supname
+                                                                }}</label
+                                                            >
+                                                        </td>
+                                                        <td>
+                                                            <label
+                                                                >{{
+                                                                    table.productId
+                                                                }}-{{
+                                                                    table.productname
+                                                                }}</label
+                                                            >
+                                                        </td>
+                                                        <!-- <td>
+                                                        <label>{{table.prodname}}</label>
+                                                       </td> -->
+                                                        <td class="text-center">
+                                                            <label>{{
+                                                                table.quantity
+                                                            }}</label>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <label>{{
+                                                                table.uom
+                                                            }}</label>
+                                                        </td>
+                                                        <!-- <td>
+                                                        <label>{{table.price}}</label>
+                                                      </td> -->
+                                                        <td class="text-start">
+                                                            <label>{{
+                                                                table.gst
+                                                            }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{
+                                                                table.salePrice
+                                                            }}</label>
+                                                        </td>
+
+                                                        <td>
+                                                            <div
+                                                                class="all-icons"
+                                                            >
+                                                                <mat-icon
+                                                                    (click)="
+                                                                        OnEditSupItem(
+                                                                            table
+                                                                        )
+                                                                    "
+                                                                    color="accent"
+                                                                    >edit</mat-icon
+                                                                >
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                        </mat-tab>
+                        <mat-tab label="Items Supplier List">
+                            <ng-template matTabContent>
+                                <div
+                                    *ngFor="
+                                        let supitem of uniqueSupplierItemsList
+                                    "
+                                >
+                                    <div
+                                        class="flex flex-row items-center pl-3 w-100 h12 p-3"
+                                    >
+                                        <a
+                                            class="cursor-pointer"
+                                            (click)="
+                                                activatingSupItemChild(supitem)
+                                            "
+                                            >Item Name:
+                                            {{ supitem.productId }}-{{
+                                                supitem.productname
+                                            }}</a
+                                        >
+                                        <div
+                                            class="adhoc"
+                                            style="margin-left: auto"
+                                        >
+                                            <button
+                                                mat-icon-button
+                                                color="primary"
+                                                (click)="
+                                                    activatingSupItemChild(
+                                                        supitem
+                                                    )
+                                                "
+                                            >
+                                                <mat-icon
+                                                    >keyboard_arrow_down</mat-icon
+                                                >
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ng-container
+                                        class="accordion-body"
+                                        *ngIf="supitem.childArrayActive"
+                                    >
+                                        <div
+                                            class="example-container"
+                                            [id]="supitem.supId"
+                                        >
+                                            <table
+                                                class="table table-bordernone"
+                                            >
+                                                <thead>
+                                                    <tr>
+                                                        <th>Supplier ID</th>
+                                                        <th>Product ID</th>
+
+                                                        <th class="text-center">
+                                                            Quantity
+                                                        </th>
+                                                        <th>UOM</th>
+
+                                                        <th>Price</th>
+                                                        <th>Sale Price</th>
+                                                        <th
+                                                            (click)="
+                                                                OnAddSupItem()
+                                                            "
+                                                        >
+                                                            <mat-icon
+                                                                >add</mat-icon
+                                                            >
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr
+                                                        *ngFor="
+                                                            let table of supitem.supItems;
+                                                            let i = index
+                                                        "
+                                                    >
+                                                        <td>
+                                                            <label
+                                                                >{{
+                                                                    table.supid
+                                                                }}-{{
+                                                                    table.supname
+                                                                }}</label
+                                                            >
+                                                        </td>
+                                                        <td>
+                                                            <label
+                                                                >{{
+                                                                    table.productId
+                                                                }}-{{
+                                                                    table.productname
+                                                                }}</label
+                                                            >
+                                                        </td>
+                                                        <!-- <td>
+                                                    <label>{{table.prodname}}</label>
+                                                   </td> -->
+                                                        <td class="text-center">
+                                                            <label>{{
+                                                                table.quantity
+                                                            }}</label>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <label>{{
+                                                                table.uom
+                                                            }}</label>
+                                                        </td>
+                                                        <!-- <td>
+                                                    <label>{{table.price}}</label>
+                                                  </td> -->
+                                                        <td class="text-start">
+                                                            <label>{{
+                                                                table.gst
+                                                            }}</label>
+                                                        </td>
+                                                        <td>
+                                                            <label>{{
+                                                                table.salePrice
+                                                            }}</label>
+                                                        </td>
+
+                                                        <td>
+                                                            <div
+                                                                class="all-icons"
+                                                            >
+                                                                <mat-icon
+                                                                    (click)="
+                                                                        OnEditSupItem(
+                                                                            table
+                                                                        )
+                                                                    "
+                                                                    color="accent"
+                                                                    >edit</mat-icon
+                                                                >
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</section>
+<!-- dialog  -->
+<ng-template #deleteDialog>
+    <div mat-dialog-title class="dialog-title flex flex-row justify-between">
+        <h4>Delete Record</h4>
+        <button mat-icon-button aria-label="close dialog" (click)="decline()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content class="mat-typography text-center">
+        <p>Do you really want to delete this record?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="confirmDel()">
+            Yes
+        </button>
+        <button mat-raised-button color="secondary" (click)="decline()">
+            No
+        </button>
+    </mat-dialog-actions>
+</ng-template>
